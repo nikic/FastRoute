@@ -32,13 +32,14 @@ class GroupCountBased implements Dispatcher {
                 return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
             }
 
-            $route = $routes[$httpMethod];
+            list($handler, $varNames) = $routes[$httpMethod];
+
             $vars = [];
             $i = 0;
-            foreach ($route->variables as $var) {
-                $vars[$var] = $matches[++$i];
+            foreach ($varNames as $varName) {
+                $vars[$varName] = $matches[++$i];
             }
-            return [self::FOUND, $route->handler, $vars];
+            return [self::FOUND, $handler, $vars];
         }
 
         return [self::NOT_FOUND];

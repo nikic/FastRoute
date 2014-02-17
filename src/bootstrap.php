@@ -37,7 +37,7 @@ function cachedDispatcher(callable $routeDefinitionCallback, $options = []) {
     }
 
     if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
-        $dispatchData = unserialize(file_get_contents($options['cacheFile']));
+        $dispatchData = require $options['cacheFile'];
         return new $options['dispatcher']($dispatchData);
     }
 
@@ -47,7 +47,10 @@ function cachedDispatcher(callable $routeDefinitionCallback, $options = []) {
     $routeDefinitionCallback($routeCollector);
 
     $dispatchData = $routeCollector->getData();
-    file_put_contents($options['cacheFile'], serialize($dispatchData));
+    file_put_contents(
+        $options['cacheFile'],
+        '<?php return ' . var_export($dispatchData, true) . ';'
+    );
 
     return new $options['dispatcher']($dispatchData);
 }

@@ -97,7 +97,8 @@ class GroupCountBased implements DataGenerator {
             $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
 
             foreach ($routes as $route) {
-                $variableRoutes[$numGroups + 1][$route->httpMethod] = $route;
+                $variableRoutes[$numGroups + 1][$route->httpMethod]
+                    = [$route->handler, $route->variables];
             }
 
             ++$numGroups;

@@ -92,7 +92,8 @@ class GroupPosBased implements DataGenerator {
         $offset = 1;
         foreach ($regexToRoutesMap as $regex => $routes) {
             foreach ($routes as $route) {
-                $variableRoutes[$offset][$route->httpMethod] = $route;
+                $variableRoutes[$offset][$route->httpMethod]
+                    = [$route->handler, $route->variables];
             }
 
             $regexes[] = $regex;

@@ -35,12 +35,13 @@ class GroupPosBased implements Dispatcher {
                 return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
             }
 
-            $route = $routes[$httpMethod];
+            list($handler, $varNames) = $routes[$httpMethod];
+
             $vars = [];
-            foreach ($route->variables as $var) {
-                $vars[$var] = $matches[$j++];
+            foreach ($varNames as $varName) {
+                $vars[$varName] = $matches[$j++];
             }
-            return [self::FOUND, $route->handler, $vars];
+            return [self::FOUND, $handler, $vars];
         }
 
         return [self::NOT_FOUND];
