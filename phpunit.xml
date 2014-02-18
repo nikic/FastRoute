@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         syntaxCheck="false"
+         bootstrap="test/bootstrap.php"
+        >
+    <testsuites>
+        <testsuite name="FastRoute Tests">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src/</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log    type="coverage-text"
+                target="php://stdout"
+                lowUpperBound="35"
+                highLowerBound="70"
+                />
+        <!--
+        <log
+                type="coverage-html"
+                target="./test/coverage"
+                charset="UTF-8"
+                yui="true"
+                lowUpperBound="35"
+                highLowerBound="70"
+                showUncoveredFiles="true"
+                />
+        -->
+    </logging>
+
+</phpunit>
