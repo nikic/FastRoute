@@ -142,6 +142,22 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $argDict = ['name' => 'rdlowrey', 'id' => '12345'];
 
         $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        
+        // 6 -------------------------------------------------------------------------------------->
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler0');
+            $r->addRoute('GET', '/user/12345/extension', 'handler1');
+            $r->addRoute('GET', '/user/{id:[0-9]+}.{extension}', 'handler2');
+            
+        };
+
+        $method = 'GET';
+        $uri = '/user/12345.svg';
+        $handler = 'handler2';
+        $argDict = ['id' => '12345', 'extension' => 'svg'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
 
         // x -------------------------------------------------------------------------------------->
 

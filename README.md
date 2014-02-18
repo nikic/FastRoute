@@ -85,6 +85,10 @@ this method. For example:
 
     [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
 
+> **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
+`Allow:` header to detail available methods for the requested resource. Applications using FastRoute
+should use the second array element to add this header when relaying a 405 response.
+
 For the found status the second array element is the handler that was associated with the route
 and the third array element is a dictionary of placeholder names to their values. For example:
 
