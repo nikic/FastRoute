@@ -165,3 +165,21 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 The above options array corresponds to the defaults. By replacing `GroupCountBased` by
 `GroupPosBased` you could switch to a different dispatching strategy.
 
+#### A Note on HEAD Requests
+
+The HTTP spec requires servers to [support both GET and HEAD methods][2616-511]:
+
+> The methods GET and HEAD MUST be supported by all general-purpose servers
+
+To avoid forcing users to manually register HEAD routes for each resource we fallback to matching an
+available GET route for a given resource. The PHP web SAPI transparently removes the entity body
+from HEAD responses so this behavior has no effect on the vast majority of users.
+
+However, implementors using FastRoute outside the web SAPI environment (e.g. a custom server) MUST
+NOT send entity bodies generated in response to HEAD requests. If you are a non-SAPI user this is
+*your responsibility*; FastRoute has no purview to prevent you from breaking HTTP in such cases.
+
+Finally, note that applications MAY always specify their own HEAD method route for a given
+resource to bypass this behavior entirely.
+
+[2616-511]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.1 "RFC 2616 Section 5.1.1"

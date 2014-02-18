@@ -142,20 +142,63 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $argDict = ['name' => 'rdlowrey', 'id' => '12345'];
 
         $cases[] = [$method, $uri, $callback, $handler, $argDict];
-        
+
         // 6 -------------------------------------------------------------------------------------->
 
         $callback = function(RouteCollector $r) {
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler0');
             $r->addRoute('GET', '/user/12345/extension', 'handler1');
             $r->addRoute('GET', '/user/{id:[0-9]+}.{extension}', 'handler2');
-            
+
         };
 
-        $method = 'GET';
-        $uri = '/user/12345.svg';
+        // 7 ----- Test GET method fallback on HEAD route miss ------------------------------------>
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{name}', 'handler0');
+            $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler1');
+            $r->addRoute('GET', '/static0', 'handler2');
+            $r->addRoute('GET', '/static1', 'handler3');
+            $r->addRoute('HEAD', '/static1', 'handler4');
+        };
+
+        $method = 'HEAD';
+        $uri = '/user/rdlowrey';
+        $handler = 'handler0';
+        $argDict = ['name' => 'rdlowrey'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
+        // 8 ----- Test GET method fallback on HEAD route miss ------------------------------------>
+
+        // reuse $callback from #7
+
+        $method = 'HEAD';
+        $uri = '/user/rdlowrey/1234';
+        $handler = 'handler1';
+        $argDict = ['name' => 'rdlowrey', 'id' => '1234'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
+        // 9 ----- Test GET method fallback on HEAD route miss ------------------------------------>
+
+        // reuse $callback from #8
+
+        $method = 'HEAD';
+        $uri = '/static0';
         $handler = 'handler2';
-        $argDict = ['id' => '12345', 'extension' => 'svg'];
+        $argDict = [];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
+        // 10 ---- Test existing HEAD route used if available (no fallback) ----------------------->
+
+        // reuse $callback from #9
+
+        $method = 'HEAD';
+        $uri = '/static1';
+        $handler = 'handler4';
+        $argDict = [];
 
         $cases[] = [$method, $uri, $callback, $handler, $argDict];
 

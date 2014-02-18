@@ -23,11 +23,14 @@ class GroupCountBased implements Dispatcher {
 
     private function dispatchStaticRoute($httpMethod, $uri) {
         $routes = $this->staticRoutes[$uri];
-        if (!isset($routes[$httpMethod])) {
+
+        if (isset($routes[$httpMethod])) {
+            return [self::FOUND, $routes[$httpMethod], []];
+        } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
+            return [self::FOUND, $routes['GET'], []];
+        } else {
             return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
         }
-
-        return [self::FOUND, $routes[$httpMethod], []];
     }
 
     private function dispatchVariableRoute($httpMethod, $uri) {
@@ -38,7 +41,11 @@ class GroupCountBased implements Dispatcher {
 
             $routes = $this->variableRoutes[$i][count($matches)];
             if (!isset($routes[$httpMethod])) {
-                return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+                if ($httpMethod === 'HEAD' && isset($routes['GET'])) {
+                    $httpMethod = 'GET';
+                } else {
+                    return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+                }
             }
 
             list($handler, $varNames) = $routes[$httpMethod];
