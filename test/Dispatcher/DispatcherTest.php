@@ -152,6 +152,13 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         };
 
+        $method = 'GET';
+        $uri = '/user/12345.svg';
+        $handler = 'handler2';
+        $argDict = ['id' => '12345', 'extension' => 'svg'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
         // 7 ----- Test GET method fallback on HEAD route miss ------------------------------------>
 
         $callback = function(RouteCollector $r) {

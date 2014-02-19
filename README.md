@@ -93,7 +93,7 @@ For the found status the second array element is the handler that was associated
 and the third array element is a dictionary of placeholder names to their values. For example:
 
     /* Routing against GET /user/nikic/42 */
-    
+
     [FastRoute\Dispatcher::FOUND, 'handler0', ['name' => 'nikic', 'id' => '42']]
 
 ### Overriding the route parser and dispatcher
@@ -165,7 +165,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 The above options array corresponds to the defaults. By replacing `GroupCountBased` by
 `GroupPosBased` you could switch to a different dispatching strategy.
 
-#### A Note on HEAD Requests
+### A Note on HEAD Requests
 
 The HTTP spec requires servers to [support both GET and HEAD methods][2616-511]:
 

@@ -21,24 +21,4 @@
             <directory>./src/</directory>
         </whitelist>
     </filter>
-
-    <logging>
-        <log    type="coverage-text"
-                target="php://stdout"
-                lowUpperBound="35"
-                highLowerBound="70"
-                />
-        <!--
-        <log
-                type="coverage-html"
-                target="./test/coverage"
-                charset="UTF-8"
-                yui="true"
-                lowUpperBound="35"
-                highLowerBound="70"
-                showUncoveredFiles="true"
-                />
-        -->
-    </logging>
-
 </phpunit>
