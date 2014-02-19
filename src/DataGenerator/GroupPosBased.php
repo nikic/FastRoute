@@ -2,59 +2,8 @@
 
 namespace FastRoute\DataGenerator;
 
-use FastRoute\BadRouteException;
-use FastRoute\DataGenerator;
-use FastRoute\Route;
-
-class GroupPosBased implements DataGenerator {
+class GroupPosBased extends RegexBasedAbstract {
     const APPROX_CHUNK_SIZE = 10;
-
-    private $staticRoutes = [];
-    private $regexToRoutesMap = [];
-
-    public function addRoute($httpMethod, $routeData, $handler) {
-        if ($this->isStaticRoute($routeData)) {
-            $this->staticRoutes[$routeData[0]][$httpMethod] = $handler;
-        } else {
-            $this->addVariableRoute($httpMethod, $routeData, $handler);
-        }
-    }
-
-    private function isStaticRoute($routeData) {
-        return count($routeData) == 1 && is_string($routeData[0]);
-    }
-
-    private function addVariableRoute($httpMethod, $routeData, $handler) {
-        list($regex, $variables) = $this->buildRegexForRoute($routeData);
-
-        $this->regexToRoutesMap[$regex][] = new Route(
-            $httpMethod, $handler, $regex, $variables
-        );
-    }
-
-    private function buildRegexForRoute($routeData) {
-        $regex = '';
-        $variables = [];
-        foreach ($routeData as $part) {
-            if (is_string($part)) {
-                $regex .= preg_quote($part, '~');
-                continue;
-            }
-
-            list($varName, $regexPart) = $part;
-
-            if (isset($variables[$varName])) {
-                throw new BadRouteException(sprintf(
-                    'Route cannot use the same variable "%s" twice', $varName
-                ));
-            }
-
-            $variables[$varName] = $varName;
-            $regex .= '(' . $regexPart . ')';
-        }
-
-        return [$regex, $variables];
-    }
 
     public function getData() {
         if (empty($this->regexToRoutesMap)) {

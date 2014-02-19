@@ -2,7 +2,13 @@
 
 namespace FastRoute;
 
-function simpleDispatcher(callable $routeDefinitionCallback, $options = []) {
+/**
+ * @param callable $routeDefinitionCallback
+ * @param array $options
+ *
+ * @return Dispatcher
+ */
+function simpleDispatcher(callable $routeDefinitionCallback, array $options = []) {
     $options += [
         'routeParser' => 'FastRoute\\RouteParser\\Std',
         'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
@@ -17,7 +23,13 @@ function simpleDispatcher(callable $routeDefinitionCallback, $options = []) {
     return new $options['dispatcher']($routeCollector->getData());
 }
 
-function cachedDispatcher(callable $routeDefinitionCallback, $options = []) {
+/**
+ * @param callable $routeDefinitionCallback
+ * @param array $options
+ *
+ * @return Dispatcher
+ */
+function cachedDispatcher(callable $routeDefinitionCallback, array $options = []) {
     $options += [
         'routeParser' => 'FastRoute\\RouteParser\\Std',
         'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',

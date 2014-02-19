@@ -64,6 +64,16 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame($availableMethods, $methodArray);
     }
 
+    /**
+     * @expectedException \FastRoute\BadRouteException
+     * @expectedExceptionMessage Cannot use the same placeholder "test" twice
+     */
+    public function testDuplicateVariableNameError() {
+        \FastRoute\simpleDispatcher(function(RouteCollector $r) {
+            $r->addRoute('GET', '/foo/{test}/{test:\d+}', 'handler0');
+        }, $this->generateDispatcherOptions());
+    }
+
     public function provideFoundDispatchCases() {
         $cases = [];
 
