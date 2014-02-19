@@ -7,27 +7,16 @@ class GroupCountBased extends RegexBasedAbstract {
 
     public function getData() {
         if (empty($this->regexToRoutesMap)) {
-            return [$this->staticRoutes, [], []];
+            return [$this->staticRoutes, []];
         }
 
-        list($variableRoutes, $regexes) = $this->generateVariableRouteData();
-        return [$this->staticRoutes, $variableRoutes, $regexes];
+        return [$this->staticRoutes, $this->generateVariableRouteData()];
     }
 
     private function generateVariableRouteData() {
-        $variableRoutes = [];
-        $regexes = [];
-
         $chunkSize = $this->computeChunkSize(count($this->regexToRoutesMap));
         $chunks = array_chunk($this->regexToRoutesMap, $chunkSize, true);
-        foreach ($chunks as $regexToRoutesMap) {
-            list($curVariableRoutes, $curRegex) = $this->processChunk($regexToRoutesMap);
-
-            $variableRoutes[] = $curVariableRoutes;
-            $regexes[] = $curRegex;
-        }
-
-        return [$variableRoutes, $regexes];
+        return array_map([$this, 'processChunk'], $chunks);
     }
 
     private function computeChunkSize($count) {
@@ -36,7 +25,7 @@ class GroupCountBased extends RegexBasedAbstract {
     }
 
     private function processChunk($regexToRoutesMap) {
-        $variableRoutes = [];
+        $routeMap = [];
         $regexes = [];
         $numGroups = 0;
         foreach ($regexToRoutesMap as $regex => $routes) {
@@ -46,7 +35,7 @@ class GroupCountBased extends RegexBasedAbstract {
             $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
 
             foreach ($routes as $route) {
-                $variableRoutes[$numGroups + 1][$route->httpMethod]
+                $routeMap[$numGroups + 1][$route->httpMethod]
                     = [$route->handler, $route->variables];
             }
 
@@ -54,7 +43,7 @@ class GroupCountBased extends RegexBasedAbstract {
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-        return [$variableRoutes, $regex];
+        return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }
 

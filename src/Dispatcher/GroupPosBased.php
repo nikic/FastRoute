@@ -5,16 +5,15 @@ namespace FastRoute\Dispatcher;
 use FastRoute\Dispatcher;
 
 class GroupPosBased implements Dispatcher {
-    private $staticRoutes;
-    private $variableRoutes;
-    private $regexes;
+    private $staticRouteMap;
+    private $variableRouteData;
 
     public function __construct($data) {
-        list($this->staticRoutes, $this->variableRoutes, $this->regexes) = $data;
+        list($this->staticRouteMap, $this->variableRouteData) = $data;
     }
 
     public function dispatch($httpMethod, $uri) {
-        if (isset($this->staticRoutes[$uri])) {
+        if (isset($this->staticRouteMap[$uri])) {
             return $this->dispatchStaticRoute($httpMethod, $uri);
         } else {
             return $this->dispatchVariableRoute($httpMethod, $uri);
@@ -22,7 +21,7 @@ class GroupPosBased implements Dispatcher {
     }
 
     private function dispatchStaticRoute($httpMethod, $uri) {
-        $routes = $this->staticRoutes[$uri];
+        $routes = $this->staticRouteMap[$uri];
 
         if (isset($routes[$httpMethod])) {
             return [self::FOUND, $routes[$httpMethod], []];
@@ -34,15 +33,15 @@ class GroupPosBased implements Dispatcher {
     }
 
     private function dispatchVariableRoute($httpMethod, $uri) {
-        foreach ($this->regexes as $i => $regex) {
-            if (!preg_match($regex, $uri, $matches)) {
+        foreach ($this->variableRouteData as $data) {
+            if (!preg_match($data['regex'], $uri, $matches)) {
                 continue;
             }
 
             // find first non-empty match
-            for ($j = 1; '' === $matches[$j]; ++$j);
+            for ($i = 1; '' === $matches[$i]; ++$i);
 
-            $routes = $this->variableRoutes[$i][$j];
+            $routes = $data['routeMap'][$i];
             if (!isset($routes[$httpMethod])) {
                 if ($httpMethod === 'HEAD' && isset($routes['GET'])) {
                     $httpMethod = 'GET';
@@ -55,7 +54,7 @@ class GroupPosBased implements Dispatcher {
 
             $vars = [];
             foreach ($varNames as $varName) {
-                $vars[$varName] = $matches[$j++];
+                $vars[$varName] = $matches[$i++];
             }
             return [self::FOUND, $handler, $vars];
         }

@@ -7,27 +7,16 @@ class GroupPosBased extends RegexBasedAbstract {
 
     public function getData() {
         if (empty($this->regexToRoutesMap)) {
-            return [$this->staticRoutes, [], []];
+            return [$this->staticRoutes, []];
         }
 
-        list($variableRoutes, $regexes) = $this->generateVariableRouteData();
-        return [$this->staticRoutes, $variableRoutes, $regexes];
+        return [$this->staticRoutes, $this->generateVariableRouteData()];
     }
 
     private function generateVariableRouteData() {
-        $variableRoutes = [];
-        $regexes = [];
-
         $chunkSize = $this->computeChunkSize(count($this->regexToRoutesMap));
         $chunks = array_chunk($this->regexToRoutesMap, $chunkSize, true);
-        foreach ($chunks as $regexToRoutesMap) {
-            list($curVariableRoutes, $curRegex) = $this->processChunk($regexToRoutesMap);
-
-            $variableRoutes[] = $curVariableRoutes;
-            $regexes[] = $curRegex;
-        }
-
-        return [$variableRoutes, $regexes];
+        return array_map([$this, 'processChunk'], $chunks);
     }
 
     private function computeChunkSize($count) {
@@ -36,12 +25,12 @@ class GroupPosBased extends RegexBasedAbstract {
     }
 
     private function processChunk($regexToRoutesMap) {
-        $variableRoutes = [];
+        $routeMap = [];
         $regexes = [];
         $offset = 1;
         foreach ($regexToRoutesMap as $regex => $routes) {
             foreach ($routes as $route) {
-                $variableRoutes[$offset][$route->httpMethod]
+                $routeMap[$offset][$route->httpMethod]
                     = [$route->handler, $route->variables];
             }
 
@@ -50,7 +39,7 @@ class GroupPosBased extends RegexBasedAbstract {
         }
 
         $regex = '~^(?:' . implode('|', $regexes) . ')$~';
-        return [$variableRoutes, $regex];
+        return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }
 
