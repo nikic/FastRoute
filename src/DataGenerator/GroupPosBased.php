@@ -46,7 +46,7 @@ class GroupPosBased extends RegexBasedAbstract {
             }
 
             $regexes[] = $regex;
-            $offset += count($routes[0]->variables);
+            $offset += count(reset($routes)->variables);
         }
 
         $regex = '~^(?:' . implode('|', $regexes) . ')$~';

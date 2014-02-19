@@ -23,13 +23,41 @@ abstract class RegexBasedAbstract implements DataGenerator {
     }
 
     private function addStaticRoute($httpMethod, $routeData, $handler) {
-        $this->staticRoutes[$routeData[0]][$httpMethod] = $handler;
+        $routeStr = $routeData[0];
+
+        if (isset($this->staticRoutes[$routeStr][$httpMethod])) {
+            throw new BadRouteException(sprintf(
+                'Cannot register two routes matching "%s" for method "%s"',
+                $routeStr, $httpMethod
+            ));
+        }
+
+        foreach ($this->regexToRoutesMap as $routes) {
+            if (!isset($routes[$httpMethod])) continue;
+
+            $route = $routes[$httpMethod];
+            if ($route->matches($routeStr)) {
+                throw new BadRouteException(sprintf(
+                    'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
+                    $routeStr, $route->regex, $httpMethod
+                ));
+            }
+        }
+
+        $this->staticRoutes[$routeStr][$httpMethod] = $handler;
     }
 
     private function addVariableRoute($httpMethod, $routeData, $handler) {
         list($regex, $variables) = $this->buildRegexForRoute($routeData);
 
-        $this->regexToRoutesMap[$regex][] = new Route(
+        if (isset($this->regexToRoutesMap[$regex][$httpMethod])) {
+            throw new BadRouteException(sprintf(
+                'Cannot register two routes matching "%s" for method "%s"',
+                $regex, $httpMethod
+            ));
+        }
+
+        $this->regexToRoutesMap[$regex][$httpMethod] = new Route(
             $httpMethod, $handler, $regex, $variables
         );
     }

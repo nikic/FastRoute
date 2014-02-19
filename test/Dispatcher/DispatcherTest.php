@@ -74,6 +74,39 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         }, $this->generateDispatcherOptions());
     }
 
+    /**
+     * @expectedException \FastRoute\BadRouteException
+     * @expectedExceptionMessage Cannot register two routes matching "/user/([^/]+)" for method "GET"
+     */
+    public function testDuplicateVariableRoute() {
+        \FastRoute\simpleDispatcher(function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{id}', 'handler0'); // oops, forgot \d+ restriction ;)
+            $r->addRoute('GET', '/user/{name}', 'handler1');
+        }, $this->generateDispatcherOptions());
+    }
+
+    /**
+     * @expectedException \FastRoute\BadRouteException
+     * @expectedExceptionMessage Cannot register two routes matching "/user" for method "GET"
+     */
+    public function testDuplicateStaticRoute() {
+        \FastRoute\simpleDispatcher(function(RouteCollector $r) {
+            $r->addRoute('GET', '/user', 'handler0');
+            $r->addRoute('GET', '/user', 'handler1');
+        }, $this->generateDispatcherOptions());
+    }
+
+    /**
+     * @expectedException \FastRoute\BadRouteException
+     * @expectedExceptionMessage Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"
+     */
+    public function testShadowedStaticRoute() {
+        \FastRoute\simpleDispatcher(function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{name}', 'handler0');
+            $r->addRoute('GET', '/user/nikic', 'handler1');
+        }, $this->generateDispatcherOptions());
+    }
+
     public function provideFoundDispatchCases() {
         $cases = [];
 
