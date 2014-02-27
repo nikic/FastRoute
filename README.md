@@ -12,7 +12,7 @@ Here's a basic usage example:
 ```php
 <?php
 
-require '/path/to/FastRoute/src/bootstrap.php'
+require '/path/to/FastRoute/src/bootstrap.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
