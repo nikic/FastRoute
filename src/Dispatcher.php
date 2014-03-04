@@ -8,7 +8,7 @@ interface Dispatcher {
     const METHOD_NOT_ALLOWED = 2;
 
     /**
-     * Dispatch against the provided HTTP method verb and URI.
+     * Dispatches against the provided HTTP method verb and URI.
      *
      * Returns array with one of the following formats:
      *
