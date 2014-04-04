@@ -44,7 +44,9 @@ function cachedDispatcher(callable $routeDefinitionCallback, array $options = []
 
     if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
         $dispatchData = require $options['cacheFile'];
-        return new $options['dispatcher']($dispatchData);
+        if ($dispatchData !== 1) {
+            return new $options['dispatcher']($dispatchData);
+        }
     }
 
     $routeCollector = new RouteCollector(
