@@ -35,7 +35,7 @@ function cachedDispatcher(callable $routeDefinitionCallback, array $options = []
         'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
         'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
         'cacheDisabled' => false,
-        'writeCache' => false
+        'writeCache' => true
     ];
 
     if (!isset($options['cacheFile'])) {
