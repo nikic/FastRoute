@@ -1,5 +1,5 @@
 {
-  "name": "quizlet/fast-route",
+  "name": "nikic/fast-route",
   "description": "Fast request router for PHP",
   "keywords": ["routing", "router"],
   "license": "BSD-3-Clause",
