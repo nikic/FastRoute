@@ -28,7 +28,7 @@ class GroupCountBased implements Dispatcher {
         } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
             return [self::FOUND, $routes['GET'], []];
         } else {
-            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+            return [self::METHOD_NOT_ALLOWED, array_keys($routes), $uri];
         }
     }
 
@@ -43,7 +43,7 @@ class GroupCountBased implements Dispatcher {
                 if ($httpMethod === 'HEAD' && isset($routes['GET'])) {
                     $httpMethod = 'GET';
                 } else {
-                    return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+                    return [self::METHOD_NOT_ALLOWED, array_keys($routes), $uri];
                 }
             }
 
