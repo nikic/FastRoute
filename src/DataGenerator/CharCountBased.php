@@ -41,10 +41,10 @@ class CharCountBased extends RegexBasedAbstract {
                 ];
             }
 
-            $regexes[] = '(?:' . $regex . '(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
+            $regexes[] = '(?:' . $regex . '/(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-        return ['regex' => $regex, 'suffix' => $suffix, 'routeMap' => $routeMap];
+        return ['regex' => $regex, 'suffix' => '/' . $suffix, 'routeMap' => $routeMap];
     }
 }
