@@ -34,27 +34,26 @@ class CharCountBased implements Dispatcher {
 
     private function dispatchVariableRoute($httpMethod, $uri) {
         foreach ($this->variableRouteData as $data) {
-            if (!preg_match($data['regex'], $uri . $data['tabs'], $matches)) {
+            if (!preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
                 continue;
             }
 
-            $routes = $data['routeMap'][$matches['id']];
+            $routes = $data['routeMap'][end($matches)];
 
             if (false === isset($routes[$httpMethod])) {
                 if ($httpMethod === 'HEAD' && isset($routes['GET'])) {
                     $httpMethod = 'GET';
-                }
-
-                else {
+                } else {
                     return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
                 }
             }
 
             list($handler, $varNames) = $routes[$httpMethod];
-            $vars = []; $i = 2;
 
+            $vars = [];
+            $i = 0;
             foreach ($varNames as $varName) {
-                $vars[$varName] = $matches[$i++];
+                $vars[$varName] = $matches[++$i];
             }
 
             return [self::FOUND, $handler, $vars];

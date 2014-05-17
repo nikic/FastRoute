@@ -27,24 +27,24 @@ class CharCountBased extends RegexBasedAbstract {
     private function processChunk($regexToRoutesMap) {
         $routeMap = [];
         $regexes = [];
-        $index = 0;
-        $tabs = '';
 
+        $suffixLen = 0;
+        $suffix = '';
+        $count = count($regexToRoutesMap);
         foreach ($regexToRoutesMap as $regex => $routes) {
-            $index++;
-            $tabs .= "\t";
+            $suffixLen++;
+            $suffix .= "\t";
 
             foreach ($routes as $route) {
-                $routeMap[$tabs][$route->httpMethod] = [
+                $routeMap[$suffix][$route->httpMethod] = [
                     $route->handler, $route->variables
                 ];
             }
 
-            $regexes[] = '(?:(' . $regex . ')(?<id>[\t]{' . $index . '}))';
+            $regexes[] = '(?:' . $regex . '(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')~';
-
-        return ['regex' => $regex, 'tabs' => $tabs, 'routeMap' => $routeMap];
+        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+        return ['regex' => $regex, 'suffix' => $suffix, 'routeMap' => $routeMap];
     }
 }
