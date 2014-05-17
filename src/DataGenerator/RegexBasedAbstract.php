@@ -10,12 +10,34 @@ abstract class RegexBasedAbstract implements DataGenerator {
     protected $staticRoutes = [];
     protected $regexToRoutesMap = [];
 
+    protected abstract function getApproxChunkSize();
+    protected abstract function processChunk($regexToRoutesMap);
+
     public function addRoute($httpMethod, $routeData, $handler) {
         if ($this->isStaticRoute($routeData)) {
             $this->addStaticRoute($httpMethod, $routeData, $handler);
         } else {
             $this->addVariableRoute($httpMethod, $routeData, $handler);
         }
+    }
+
+    public function getData() {
+        if (empty($this->regexToRoutesMap)) {
+            return [$this->staticRoutes, []];
+        }
+
+        return [$this->staticRoutes, $this->generateVariableRouteData()];
+    }
+
+    private function generateVariableRouteData() {
+        $chunkSize = $this->computeChunkSize(count($this->regexToRoutesMap));
+        $chunks = array_chunk($this->regexToRoutesMap, $chunkSize, true);
+        return array_map([$this, 'processChunk'], $chunks);
+    }
+
+    private function computeChunkSize($count) {
+        $numParts = max(1, round($count / $this->getApproxChunkSize()));
+        return ceil($count / $numParts);
     }
 
     private function isStaticRoute($routeData) {
