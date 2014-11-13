@@ -20,10 +20,10 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      * Set appropriate options for the specific Dispatcher class we're testing
      */
     private function generateDispatcherOptions() {
-        return [
+        return array(
             'dataGenerator' => $this->getDataGeneratorClass(),
             'dispatcher' => $this->getDispatcherClass()
-        ];
+        );
     }
 
     /**
@@ -108,7 +108,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function provideFoundDispatchCases() {
-        $cases = [];
+        $cases = array();
 
         // 0 -------------------------------------------------------------------------------------->
 
@@ -119,9 +119,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/resource/123/456';
         $handler = 'handler0';
-        $argDict = [];
+        $argDict = array();
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 1 -------------------------------------------------------------------------------------->
 
@@ -134,9 +134,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/handler2';
         $handler = 'handler2';
-        $argDict = [];
+        $argDict = array();
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 2 -------------------------------------------------------------------------------------->
 
@@ -149,9 +149,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/rdlowrey';
         $handler = 'handler2';
-        $argDict = ['name' => 'rdlowrey'];
+        $argDict = array('name' => 'rdlowrey');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 3 -------------------------------------------------------------------------------------->
 
@@ -160,9 +160,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/12345';
         $handler = 'handler1';
-        $argDict = ['id' => '12345'];
+        $argDict = array('id' => '12345');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 4 -------------------------------------------------------------------------------------->
 
@@ -171,9 +171,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/NaN';
         $handler = 'handler2';
-        $argDict = ['name' => 'NaN'];
+        $argDict = array('name' => 'NaN');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 5 -------------------------------------------------------------------------------------->
 
@@ -182,9 +182,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/rdlowrey/12345';
         $handler = 'handler0';
-        $argDict = ['name' => 'rdlowrey', 'id' => '12345'];
+        $argDict = array('name' => 'rdlowrey', 'id' => '12345');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 6 -------------------------------------------------------------------------------------->
 
@@ -198,9 +198,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/12345.svg';
         $handler = 'handler2';
-        $argDict = ['id' => '12345', 'extension' => 'svg'];
+        $argDict = array('id' => '12345', 'extension' => 'svg');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 7 ----- Test GET method fallback on HEAD route miss ------------------------------------>
 
@@ -215,9 +215,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'HEAD';
         $uri = '/user/rdlowrey';
         $handler = 'handler0';
-        $argDict = ['name' => 'rdlowrey'];
+        $argDict = array('name' => 'rdlowrey');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 8 ----- Test GET method fallback on HEAD route miss ------------------------------------>
 
@@ -226,9 +226,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'HEAD';
         $uri = '/user/rdlowrey/1234';
         $handler = 'handler1';
-        $argDict = ['name' => 'rdlowrey', 'id' => '1234'];
+        $argDict = array('name' => 'rdlowrey', 'id' => '1234');
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 9 ----- Test GET method fallback on HEAD route miss ------------------------------------>
 
@@ -237,9 +237,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'HEAD';
         $uri = '/static0';
         $handler = 'handler2';
-        $argDict = [];
+        $argDict = array();
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // 10 ---- Test existing HEAD route used if available (no fallback) ----------------------->
 
@@ -248,9 +248,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'HEAD';
         $uri = '/static1';
         $handler = 'handler4';
-        $argDict = [];
+        $argDict = array();
 
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+        $cases[] = array($method, $uri, $callback, $handler, $argDict);
 
         // x -------------------------------------------------------------------------------------->
 
@@ -258,7 +258,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function provideNotFoundDispatchCases() {
-        $cases = [];
+        $cases = array();
 
         // 0 -------------------------------------------------------------------------------------->
 
@@ -269,7 +269,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // 1 -------------------------------------------------------------------------------------->
 
@@ -277,7 +277,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'POST';
         $uri = '/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // 2 -------------------------------------------------------------------------------------->
 
@@ -285,7 +285,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'PUT';
         $uri = '/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // 3 -------------------------------------------------------------------------------------->
 
@@ -298,7 +298,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // 4 -------------------------------------------------------------------------------------->
 
@@ -311,7 +311,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // 5 -------------------------------------------------------------------------------------->
 
@@ -319,7 +319,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'GET';
         $uri = '/user/rdlowrey/12345/not-found';
 
-        $cases[] = [$method, $uri, $callback];
+        $cases[] = array($method, $uri, $callback);
 
         // x -------------------------------------------------------------------------------------->
 
@@ -327,7 +327,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function provideMethodNotAllowedDispatchCases() {
-        $cases = [];
+        $cases = array();
 
         // 0 -------------------------------------------------------------------------------------->
 
@@ -337,9 +337,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $method = 'POST';
         $uri = '/resource/123/456';
-        $allowedMethods = ['GET'];
+        $allowedMethods = array('GET');
 
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
+        $cases[] = array($method, $uri, $callback, $allowedMethods);
 
         // 1 -------------------------------------------------------------------------------------->
 
@@ -351,9 +351,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $method = 'DELETE';
         $uri = '/resource/123/456';
-        $allowedMethods = ['GET', 'POST', 'PUT'];
+        $allowedMethods = array('GET', 'POST', 'PUT');
 
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
+        $cases[] = array($method, $uri, $callback, $allowedMethods);
 
         // 2 -------------------------------------------------------------------------------------->
 
@@ -366,9 +366,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $method = 'DELETE';
         $uri = '/user/rdlowrey/42';
-        $allowedMethods = ['GET', 'POST', 'PUT', 'PATCH'];
+        $allowedMethods = array('GET', 'POST', 'PUT', 'PATCH');
 
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
+        $cases[] = array($method, $uri, $callback, $allowedMethods);
 
         // x -------------------------------------------------------------------------------------->
 

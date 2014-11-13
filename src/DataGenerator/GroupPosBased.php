@@ -8,13 +8,13 @@ class GroupPosBased extends RegexBasedAbstract {
     }
 
     protected function processChunk($regexToRoutesMap) {
-        $routeMap = [];
-        $regexes = [];
+        $routeMap = array();
+        $regexes = array();
         $offset = 1;
         foreach ($regexToRoutesMap as $regex => $routes) {
             foreach ($routes as $route) {
                 $routeMap[$offset][$route->httpMethod]
-                    = [$route->handler, $route->variables];
+                    = array($route->handler, $route->variables);
             }
 
             $regexes[] = $regex;
@@ -22,7 +22,7 @@ class GroupPosBased extends RegexBasedAbstract {
         }
 
         $regex = '~^(?:' . implode('|', $regexes) . ')$~';
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return array('regex' => $regex, 'routeMap' => $routeMap);
     }
 }
 
