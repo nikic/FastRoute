@@ -24,11 +24,11 @@ class CharCountBased implements Dispatcher {
         $routes = $this->staticRouteMap[$uri];
 
         if (isset($routes[$httpMethod])) {
-            return [self::FOUND, $routes[$httpMethod], []];
+            return array(self::FOUND, $routes[$httpMethod], array());
         } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
-            return [self::FOUND, $routes['GET'], []];
+            return array(self::FOUND, $routes['GET'], array());
         } else {
-            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+            return array(self::METHOD_NOT_ALLOWED, array_keys($routes));
         }
     }
 
@@ -44,21 +44,21 @@ class CharCountBased implements Dispatcher {
                 if ($httpMethod === 'HEAD' && isset($routes['GET'])) {
                     $httpMethod = 'GET';
                 } else {
-                    return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+                    return array(self::METHOD_NOT_ALLOWED, array_keys($routes));
                 }
             }
 
             list($handler, $varNames) = $routes[$httpMethod];
 
-            $vars = [];
+            $vars = array();
             $i = 0;
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $handler, $vars];
+            return array(self::FOUND, $handler, $vars);
         }
 
-        return [self::NOT_FOUND];
+        return array(self::NOT_FOUND);
     }
 }
