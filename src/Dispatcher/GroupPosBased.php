@@ -18,13 +18,13 @@ class GroupPosBased extends RegexBasedAbstract {
 
             list($handler, $varNames) = $data['routeMap'][$i];
 
-            $vars = [];
+            $vars = array();
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[$i++];
             }
-            return [self::FOUND, $handler, $vars];
+            return array(self::FOUND, $handler, $vars);
         }
 
-        return [self::NOT_FOUND];
+        return array(self::NOT_FOUND);
     }
 }

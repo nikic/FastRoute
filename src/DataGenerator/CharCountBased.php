@@ -8,8 +8,8 @@ class CharCountBased extends RegexBasedAbstract {
     }
 
     protected function processChunk($regexToRoutesMap) {
-        $routeMap = [];
-        $regexes = [];
+        $routeMap = array();
+        $regexes = array();
 
         $suffixLen = 0;
         $suffix = '';
@@ -19,10 +19,10 @@ class CharCountBased extends RegexBasedAbstract {
             $suffix .= "\t";
 
             $regexes[] = '(?:' . $regex . '/(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
-            $routeMap[$suffix] = [$route->handler, $route->variables];
+            $routeMap[$suffix] = array($route->handler, $route->variables);
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-        return ['regex' => $regex, 'suffix' => '/' . $suffix, 'routeMap' => $routeMap];
+        return array('regex' => $regex, 'suffix' => '/' . $suffix, 'routeMap' => $routeMap);
     }
 }

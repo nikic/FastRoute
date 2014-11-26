@@ -30,7 +30,7 @@ abstract class RegexBasedAbstract implements Dispatcher {
 
         // Find allowed methods for this URI by matching against all other
         // HTTP methods as well
-        $allowedMethods = [];
+        $allowedMethods = array();
         foreach ($varRouteData as $method => $routeData) {
             if ($method === $httpMethod) {
                 continue;
@@ -44,9 +44,9 @@ abstract class RegexBasedAbstract implements Dispatcher {
 
         // If there are no allowed methods the route simply does not exist
         if ($allowedMethods) {
-            return [self::METHOD_NOT_ALLOWED, $allowedMethods];
+            return array(self::METHOD_NOT_ALLOWED, $allowedMethods);
         } else {
-            return [self::NOT_FOUND];
+            return array(self::NOT_FOUND);
         }
     }
 
@@ -54,11 +54,11 @@ abstract class RegexBasedAbstract implements Dispatcher {
         $routes = $this->staticRouteMap[$uri];
 
         if (isset($routes[$httpMethod])) {
-            return [self::FOUND, $routes[$httpMethod], []];
+            return array(self::FOUND, $routes[$httpMethod], array());
         } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
-            return [self::FOUND, $routes['GET'], []];
+            return array(self::FOUND, $routes['GET'], array());
         } else {
-            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+            return array(self::METHOD_NOT_ALLOWED, array_keys($routes));
         }
     }
 }

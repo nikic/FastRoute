@@ -8,18 +8,18 @@ class GroupPosBased extends RegexBasedAbstract {
     }
 
     protected function processChunk($regexToRoutesMap) {
-        $routeMap = [];
-        $regexes = [];
+        $routeMap = array();
+        $regexes = array();
         $offset = 1;
         foreach ($regexToRoutesMap as $regex => $route) {
             $regexes[] = $regex;
-            $routeMap[$offset] = [$route->handler, $route->variables];
+            $routeMap[$offset] = array($route->handler, $route->variables);
 
             $offset += count($route->variables);
         }
 
         $regex = '~^(?:' . implode('|', $regexes) . ')$~';
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return array('regex' => $regex, 'routeMap' => $routeMap);
     }
 }
 
