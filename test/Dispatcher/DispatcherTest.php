@@ -252,6 +252,35 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $cases[] = [$method, $uri, $callback, $handler, $argDict];
 
+        // 11 ---- More specified routes are not shadowed by less specific of another method ------>
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{name}', 'handler0');
+            $r->addRoute('POST', '/user/{name:[a-z]+}', 'handler1');
+        };
+
+        $method = 'POST';
+        $uri = '/user/rdlowrey';
+        $handler = 'handler1';
+        $argDict = ['name' => 'rdlowrey'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
+        // 12 ---- Handler of more specific routes is used, if it occurs first -------------------->
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('GET', '/user/{name}', 'handler0');
+            $r->addRoute('POST', '/user/{name:[a-z]+}', 'handler1');
+            $r->addRoute('POST', '/user/{name}', 'handler2');
+        };
+
+        $method = 'POST';
+        $uri = '/user/rdlowrey';
+        $handler = 'handler1';
+        $argDict = ['name' => 'rdlowrey'];
+
+        $cases[] = [$method, $uri, $callback, $handler, $argDict];
+
         // x -------------------------------------------------------------------------------------->
 
         return $cases;
@@ -367,6 +396,20 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         $method = 'DELETE';
         $uri = '/user/rdlowrey/42';
         $allowedMethods = ['GET', 'POST', 'PUT', 'PATCH'];
+
+        $cases[] = [$method, $uri, $callback, $allowedMethods];
+
+        // 3 -------------------------------------------------------------------------------------->
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('POST', '/user/{name}', 'handler1');
+            $r->addRoute('PUT', '/user/{name:[a-z]+}', 'handler2');
+            $r->addRoute('PATCH', '/user/{name:[a-z]+}', 'handler3');
+        };
+
+        $method = 'GET';
+        $uri = '/user/rdlowrey';
+        $allowedMethods = ['POST', 'PUT', 'PATCH'];
 
         $cases[] = [$method, $uri, $callback, $allowedMethods];
 

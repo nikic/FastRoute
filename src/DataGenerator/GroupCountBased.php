@@ -11,16 +11,12 @@ class GroupCountBased extends RegexBasedAbstract {
         $routeMap = [];
         $regexes = [];
         $numGroups = 0;
-        foreach ($regexToRoutesMap as $regex => $routes) {
-            $numVariables = count(reset($routes)->variables);
+        foreach ($regexToRoutesMap as $regex => $route) {
+            $numVariables = count($route->variables);
             $numGroups = max($numGroups, $numVariables);
 
             $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
-
-            foreach ($routes as $route) {
-                $routeMap[$numGroups + 1][$route->httpMethod]
-                    = [$route->handler, $route->variables];
-            }
+            $routeMap[$numGroups + 1] = [$route->handler, $route->variables];
 
             ++$numGroups;
         }
