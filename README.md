@@ -130,7 +130,7 @@ array has a certain structure, best understood using an example:
         '/user/',
         ['name', '[^/]+'],
         '/',
-        ['id', [0-9]+'],
+        ['id', '[0-9]+'],
     ]
 
 This array can then be passed to the `addRoute()` method of a data generator. After all routes have
