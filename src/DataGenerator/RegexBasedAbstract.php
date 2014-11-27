@@ -7,8 +7,8 @@ use FastRoute\BadRouteException;
 use FastRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator {
-    protected $staticRoutes = [];
-    protected $methodToRegexToRoutesMap = [];
+    protected $staticRoutes = array();
+    protected $methodToRegexToRoutesMap = array();
 
     protected abstract function getApproxChunkSize();
     protected abstract function processChunk($regexToRoutesMap);
@@ -23,18 +23,18 @@ abstract class RegexBasedAbstract implements DataGenerator {
 
     public function getData() {
         if (empty($this->methodToRegexToRoutesMap)) {
-            return [$this->staticRoutes, []];
+            return array($this->staticRoutes, array());
         }
 
-        return [$this->staticRoutes, $this->generateVariableRouteData()];
+        return array($this->staticRoutes, $this->generateVariableRouteData());
     }
 
     private function generateVariableRouteData() {
-        $data = [];
+        $data = array();
         foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
             $chunkSize = $this->computeChunkSize(count($regexToRoutesMap));
             $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
-            $data[$method] =  array_map([$this, 'processChunk'], $chunks);
+            $data[$method] =  array_map(array($this, 'processChunk'), $chunks);
         }
         return $data;
     }
@@ -89,7 +89,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
 
     private function buildRegexForRoute($routeData) {
         $regex = '';
-        $variables = [];
+        $variables = array();
         foreach ($routeData as $part) {
             if (is_string($part)) {
                 $regex .= preg_quote($part, '~');
@@ -108,6 +108,6 @@ abstract class RegexBasedAbstract implements DataGenerator {
             $regex .= '(' . $regexPart . ')';
         }
 
-        return [$regex, $variables];
+        return array($regex, $variables);
     }
 }

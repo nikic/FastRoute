@@ -8,21 +8,21 @@ class GroupCountBased extends RegexBasedAbstract {
     }
 
     protected function processChunk($regexToRoutesMap) {
-        $routeMap = [];
-        $regexes = [];
+        $routeMap = array();
+        $regexes = array();
         $numGroups = 0;
         foreach ($regexToRoutesMap as $regex => $route) {
             $numVariables = count($route->variables);
             $numGroups = max($numGroups, $numVariables);
 
             $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
-            $routeMap[$numGroups + 1] = [$route->handler, $route->variables];
+            $routeMap[$numGroups + 1] = array($route->handler, $route->variables);
 
             ++$numGroups;
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return array('regex' => $regex, 'routeMap' => $routeMap);
     }
 }
 
