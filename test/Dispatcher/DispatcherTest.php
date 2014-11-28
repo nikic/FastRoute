@@ -364,6 +364,13 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $cases[] = [$method, $uri, $callback];
 
+        // 6 -------------------------------------------------------------------------------------->
+
+        // reuse callback from #5
+        $method = 'HEAD';
+
+        $cases[] = array($method, $uri, $callback);
+
         // x -------------------------------------------------------------------------------------->
 
         return $cases;
