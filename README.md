@@ -81,7 +81,7 @@ appropriately) is your job - this library is not bound to the PHP web SAPIs.
 The `dispatch()` method returns an array those first element contains a status code. It is one
 of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FOUND`. For the
 method not allowed status the second array element contains a list of HTTP methods allowed for
-this method. For example:
+the supplied URI. For example:
 
     [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
 
@@ -130,7 +130,7 @@ array has a certain structure, best understood using an example:
         '/user/',
         ['name', '[^/]+'],
         '/',
-        ['id', [0-9]+'],
+        ['id', '[0-9]+'],
     ]
 
 This array can then be passed to the `addRoute()` method of a data generator. After all routes have

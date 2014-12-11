@@ -2,7 +2,7 @@
 
 namespace FastRoute\Dispatcher;
 
-class GroupCountBased extends RegexBasedAbstract {
+class MarkBased extends RegexBasedAbstract {
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
     }
@@ -13,14 +13,14 @@ class GroupCountBased extends RegexBasedAbstract {
                 continue;
             }
 
-            list($handler, $varNames) = $data['routeMap'][count($matches)];
+            list($handler, $varNames) = $data['routeMap'][$matches['MARK']];
 
             $vars = [];
             $i = 0;
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
-            return [self::FOUND, $handler, $vars, $uri];
+            return [self::FOUND, $handler, $vars];
         }
 
         return [self::NOT_FOUND];

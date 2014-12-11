@@ -2,23 +2,23 @@
 
 namespace FastRoute\DataGenerator;
 
-class GroupPosBased extends RegexBasedAbstract {
+class MarkBased extends RegexBasedAbstract {
     protected function getApproxChunkSize() {
-        return 10;
+        return 30;
     }
 
     protected function processChunk($regexToRoutesMap) {
         $routeMap = [];
         $regexes = [];
-        $offset = 1;
+        $markName = 'a';
         foreach ($regexToRoutesMap as $regex => $route) {
-            $regexes[] = $regex;
-            $routeMap[$offset] = [$route->handler, $route->variables];
+            $regexes[] = $regex . '(*MARK:' . $markName . ')';
+            $routeMap[$markName] = [$route->handler, $route->variables];
 
-            $offset += count($route->variables);
+            ++$markName;
         }
 
-        $regex = '~^(?:' . implode('|', $regexes) . ')$~';
+        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }
