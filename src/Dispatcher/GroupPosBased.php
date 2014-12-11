@@ -22,7 +22,7 @@ class GroupPosBased extends RegexBasedAbstract {
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[$i++];
             }
-            return [self::FOUND, $handler, $vars];
+            return [self::FOUND, $handler, $vars, $uri];
         }
 
         return [self::NOT_FOUND];

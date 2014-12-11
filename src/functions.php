@@ -35,6 +35,7 @@ function cachedDispatcher(callable $routeDefinitionCallback, array $options = []
         'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
         'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
         'cacheDisabled' => false,
+        'writeCache' => true
     ];
 
     if (!isset($options['cacheFile'])) {
@@ -43,7 +44,9 @@ function cachedDispatcher(callable $routeDefinitionCallback, array $options = []
 
     if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
         $dispatchData = require $options['cacheFile'];
-        return new $options['dispatcher']($dispatchData);
+        if ($dispatchData !== 1) {
+            return new $options['dispatcher']($dispatchData);
+        }
     }
 
     $routeCollector = new RouteCollector(
@@ -52,10 +55,12 @@ function cachedDispatcher(callable $routeDefinitionCallback, array $options = []
     $routeDefinitionCallback($routeCollector);
 
     $dispatchData = $routeCollector->getData();
-    file_put_contents(
-        $options['cacheFile'],
-        '<?php return ' . var_export($dispatchData, true) . ';'
-    );
+    if ($options['writeCache'] === true) {
+        file_put_contents(
+            $options['cacheFile'],
+            '<?php return ' . var_export($dispatchData, true) . ';'
+        );
+    }
 
     return new $options['dispatcher']($dispatchData);
 }
