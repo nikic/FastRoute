@@ -78,7 +78,7 @@ A URI is dispatched by calling the `dispatch()` method of the created dispatcher
 accepts the HTTP method and a URI. Getting those two bits of information (and normalizing them
 appropriately) is your job - this library is not bound to the PHP web SAPIs.
 
-The `dispatch()` method returns an array those first element contains a status code. It is one
+The `dispatch()` method returns an array whose first element contains a status code. It is one
 of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FOUND`. For the
 method not allowed status the second array element contains a list of HTTP methods allowed for
 the supplied URI. For example:
