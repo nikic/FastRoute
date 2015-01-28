@@ -22,13 +22,18 @@ class RouteCollector {
      *
      * The syntax used in the $route string depends on the used route parser.
      *
-     * @param string $httpMethod
+     * @param mixed $httpMethod
      * @param string $route
      * @param mixed  $handler
      */
     public function addRoute($httpMethod, $route, $handler) {
         $routeData = $this->routeParser->parse($route);
-        $this->dataGenerator->addRoute($httpMethod, $routeData, $handler);
+        if (!is_array($httpMethod)) {
+            $httpMethod = array($httpMethod);
+        }
+        foreach ($httpMethod as $method) {
+            $this->dataGenerator->addRoute($method, $routeData, $handler);
+        }
     }
 
     /**
