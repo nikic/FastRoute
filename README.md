@@ -52,6 +52,10 @@ and matching the string `[^/]+`. To adjust the pattern the placeholder matches, 
 a custom pattern by writing `{bar:[0-9]+}`. However, it is also possible to adjust the pattern
 syntax by passing using a different route parser.
 
+A custom pattern for a route placeholder must not use capturing groups. For example `{lang:(en|de)}`
+is not a valid placeholder, because `()` is a capturing group. Instead you can use either
+`{lang:en|de}` or `{lang:(?:en|de)}`.
+
 The reason `simpleDispatcher` accepts a callback for defining the routes is to allow seamless
 caching. By using `cachedDispatcher` instead of `simpleDispatcher` you can cache the generated
 routing data and construct the dispatcher from the cached information:
