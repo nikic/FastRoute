@@ -53,10 +53,6 @@ abstract class RegexBasedAbstract implements Dispatcher {
     {
         $allowedMethods = [];
         foreach ($varRouteData as $method => $routeData) {
-            if ($method === $httpMethod) {
-                continue;
-            }
-
             $result = $this->dispatchVariableRoute($routeData, $uri);
             if ($result[0] === self::FOUND) {
                 $allowedMethods[] = $method;
