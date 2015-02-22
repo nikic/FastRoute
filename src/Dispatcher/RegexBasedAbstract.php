@@ -16,20 +16,41 @@ abstract class RegexBasedAbstract implements Dispatcher {
         }
 
         $varRouteData = $this->variableRouteData;
-        if (isset($varRouteData[$httpMethod])) {
-            $result = $this->dispatchVariableRoute($varRouteData[$httpMethod], $uri);
-            if ($result[0] === self::FOUND) {
-                return $result;
-            }
-        } else if ($httpMethod === 'HEAD' && isset($varRouteData['GET'])) {
-            $result = $this->dispatchVariableRoute($varRouteData['GET'], $uri);
-            if ($result[0] === self::FOUND) {
-                return $result;
-            }
+        if (count($varRouteData) == 0) {
+            return [self::NOT_FOUND];
         }
 
-        // Find allowed methods for this URI by matching against all other
-        // HTTP methods as well
+        if (!isset($varRouteData[$httpMethod])) {
+            $httpMethod = $this->checkFallbacks($varRouteData, $httpMethod);
+        }
+
+        if (count($varRouteData) && $httpMethod === NULL) {
+            return [self::METHOD_NOT_ALLOWED, $this->getAllowedMethods($varRouteData, $uri)];
+        }
+
+        $result = $this->dispatchVariableRoute($varRouteData[$httpMethod], $uri);
+        if ($result[0] === self::FOUND) {
+            return $result;
+        }
+
+        return [self::NOT_FOUND];
+    }
+
+    protected function dispatchStaticRoute($httpMethod, $uri) {
+        $routes = $this->staticRouteMap[$uri];
+        if (!isset($routes[$httpMethod])) {
+            $httpMethod = $this->checkFallbacks($routes, $httpMethod);
+        }
+
+        if ($httpMethod === NULL) {
+            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+        }
+
+        return [self::FOUND, $routes[$httpMethod], []];
+    }
+
+    protected function getAllowedMethods($varRouteData, $uri)
+    {
         $allowedMethods = [];
         foreach ($varRouteData as $method => $routeData) {
             if ($method === $httpMethod) {
@@ -42,23 +63,23 @@ abstract class RegexBasedAbstract implements Dispatcher {
             }
         }
 
-        // If there are no allowed methods the route simply does not exist
-        if ($allowedMethods) {
-            return [self::METHOD_NOT_ALLOWED, $allowedMethods];
-        } else {
-            return [self::NOT_FOUND];
-        }
+        return $allowedMethods;
     }
 
-    protected function dispatchStaticRoute($httpMethod, $uri) {
-        $routes = $this->staticRouteMap[$uri];
+    protected function checkFallbacks($routes, $httpMethod)
+    {
+        $additional = ['ANY'];
 
-        if (isset($routes[$httpMethod])) {
-            return [self::FOUND, $routes[$httpMethod], []];
-        } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
-            return [self::FOUND, $routes['GET'], []];
-        } else {
-            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
+        if($httpMethod == 'HEAD') {
+            $additional[] = 'GET';
         }
+
+        foreach($additional as $method) {
+            if(isset($routes[$method])) {
+                return $method;
+            }
+        }
+
+        return NULL;
     }
 }
