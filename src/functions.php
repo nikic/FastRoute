@@ -14,9 +14,11 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             'routeParser' => 'FastRoute\\RouteParser\\Std',
             'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
             'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
+            'routeCollector' => 'FastRoute\\RouteCollector',
         ];
 
-        $routeCollector = new RouteCollector(
+        /** @var RouteCollector $routeCollector */
+        $routeCollector = new $options['routeCollector'](
             new $options['routeParser'], new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
@@ -35,6 +37,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             'routeParser' => 'FastRoute\\RouteParser\\Std',
             'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
             'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
+            'routeCollector' => 'FastRoute\\RouteCollector',
             'cacheDisabled' => false,
         ];
 
@@ -50,11 +53,12 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             return new $options['dispatcher']($dispatchData);
         }
 
-        $routeCollector = new RouteCollector(
+        $routeCollector = new $options['routeCollector'](
             new $options['routeParser'], new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
 
+        /** @var RouteCollector $routeCollector */
         $dispatchData = $routeCollector->getData();
         file_put_contents(
             $options['cacheFile'],
