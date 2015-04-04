@@ -107,6 +107,16 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
         }, $this->generateDispatcherOptions());
     }
 
+    /**
+     * @expectedException \FastRoute\BadRouteException
+     * @expectedExceptionMessage Regex "(en|de)" for parameter "lang" contains a capturing group
+     */
+    public function testCapturing() {
+        \FastRoute\simpleDispatcher(function(RouteCollector $r) {
+            $r->addRoute('GET', '/{lang:(en|de)}', 'handler0');
+        }, $this->generateDispatcherOptions());
+    }
+
     public function provideFoundDispatchCases() {
         $cases = [];
 
