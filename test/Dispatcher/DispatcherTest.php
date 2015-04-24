@@ -42,11 +42,11 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      */
     public function testNotFoundDispatches($method, $uri, $callback) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
+        $routeInfo = $dispatcher->dispatch($method, $uri);
         $this->assertFalse(isset($routeInfo[1]),
             "NOT_FOUND result must only contain a single element in the returned info array"
         );
-        list($routedStatus) = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::NOT_FOUND, $routedStatus);
+        $this->assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
     }
 
     /**
