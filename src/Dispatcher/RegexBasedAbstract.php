@@ -11,8 +11,12 @@ abstract class RegexBasedAbstract implements Dispatcher {
     protected abstract function dispatchVariableRoute($routeData, $uri);
 
     public function dispatch($httpMethod, $uri) {
-        if (isset($this->staticRouteMap[$uri])) {
-            return $this->dispatchStaticRoute($httpMethod, $uri);
+        if (isset($this->staticRouteMap[$httpMethod][$uri])) {
+            $handler = $this->staticRouteMap[$httpMethod][$uri];
+            return [self::FOUND, $handler, []];
+        } else if ($httpMethod === 'HEAD' && isset($this->staticRouteMap['GET'][$uri])) {
+            $handler = $this->staticRouteMap['GET'][$uri];
+            return [self::FOUND, $handler, []];
         }
 
         $varRouteData = $this->variableRouteData;
@@ -28,9 +32,15 @@ abstract class RegexBasedAbstract implements Dispatcher {
             }
         }
 
-        // Find allowed methods for this URI by matching against all other
-        // HTTP methods as well
+        // Find allowed methods for this URI by matching against all other HTTP methods as well
         $allowedMethods = [];
+
+        foreach ($this->staticRouteMap as $method => $uriMap) {
+            if ($method !== $httpMethod && isset($uriMap[$uri])) {
+                $allowedMethods[] = $method;
+            }
+        }
+
         foreach ($varRouteData as $method => $routeData) {
             if ($method === $httpMethod) {
                 continue;
@@ -47,18 +57,6 @@ abstract class RegexBasedAbstract implements Dispatcher {
             return [self::METHOD_NOT_ALLOWED, $allowedMethods];
         } else {
             return [self::NOT_FOUND];
-        }
-    }
-
-    protected function dispatchStaticRoute($httpMethod, $uri) {
-        $routes = $this->staticRouteMap[$uri];
-
-        if (isset($routes[$httpMethod])) {
-            return [self::FOUND, $routes[$httpMethod], []];
-        } elseif ($httpMethod === 'HEAD' && isset($routes['GET'])) {
-            return [self::FOUND, $routes['GET'], []];
-        } else {
-            return [self::METHOD_NOT_ALLOWED, array_keys($routes)];
         }
     }
 }
