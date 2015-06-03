@@ -14,7 +14,6 @@ interface RouteParser {
      * ]
      *
      * @param string $route Route to parse
-     * 
      * @return array Parsed route data
      */
     public function parse($route);

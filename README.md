@@ -20,18 +20,19 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{name}', 'handler2');
 });
 
-$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
+$result = $dispatcher->dispatch($httpMethod, $uri);
+$resultClass = get_class($result);
+switch ($resultClass) {
+    case FastRoute\DispatcherResult\NotFoundResult:
         // ... 404 Not Found
         break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        $allowedMethods = $routeInfo[1];
+    case FastRoute\DispatcherResult\MethodNotAllowedResult:
+        $allowedMethods = $result->getAllowedMethods();
         // ... 405 Method Not Allowed
         break;
-    case FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
-        $vars = $routeInfo[2];
+    case FastRoute\DispatcherResult\FoundResult:
+        $handler = $result->getHandler();
+        $vars = $result->getVars();
         // ... call $handler with $vars
         break;
 }
@@ -82,23 +83,15 @@ A URI is dispatched by calling the `dispatch()` method of the created dispatcher
 accepts the HTTP method and a URI. Getting those two bits of information (and normalizing them
 appropriately) is your job - this library is not bound to the PHP web SAPIs.
 
-The `dispatch()` method returns an array whose first element contains a status code. It is one
-of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FOUND`. For the
-method not allowed status the second array element contains a list of HTTP methods allowed for
-the supplied URI. For example:
-
-    [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
+The `dispatch()` method returns a `DispatcherResult` object, that can be one of `DispatcherResult\NotFoundResult`,
+`DispatcherResult\MethodNotAllowedResult` or `DispatcherResult\FoundResult`, each one containing a different set of
+useful information, like the allowed methods in the method not allowed case and the handler and variables in the
+found one.
 
 > **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
 `Allow:` header to detail available methods for the requested resource. Applications using FastRoute
-should use the second array element to add this header when relaying a 405 response.
-
-For the found status the second array element is the handler that was associated with the route
-and the third array element is a dictionary of placeholder names to their values. For example:
-
-    /* Routing against GET /user/nikic/42 */
-
-    [FastRoute\Dispatcher::FOUND, 'handler0', ['name' => 'nikic', 'id' => '42']]
+should use the `DispatcherResult\MethodNotAllowedResult::getAllowedMethods()` method to add this
+header when relaying a 405 response.
 
 ### Overriding the route parser and dispatcher
 
@@ -120,8 +113,6 @@ interface DataGenerator {
 }
 
 interface Dispatcher {
-    const NOT_FOUND = 0, FOUND = 1, METHOD_NOT_ALLOWED = 2;
-
     public function dispatch($httpMethod, $uri);
 }
 ```

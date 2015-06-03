@@ -1,0 +1,10 @@
+*~
+.DS_Store
+Thumbs.db
+/vendor
+/coverage
+/nbproject
+.idea
+.env
+composer.lock
+.phpstorm.meta.php
