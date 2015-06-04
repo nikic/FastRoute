@@ -2,6 +2,9 @@
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\DispatcherResult\FoundResult;
+use FastRoute\DispatcherResult\MethodNotAllowedResult;
+use FastRoute\DispatcherResult\NotFoundResult;
 use FastRoute\RouteCollector;
 
 abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
@@ -31,10 +34,10 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFoundDispatches($method, $uri, $callback, $handler, $argDict) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $info = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::FOUND, $info[0]);
-        $this->assertSame($handler, $info[1]);
-        $this->assertSame($argDict, $info[2]);
+        $result = $dispatcher->dispatch($method, $uri);
+        $this->assertInstanceOf(get_class(new FoundResult(null)), $result);
+        $this->assertSame($handler, $result->handler);
+        $this->assertSame($argDict, $result->vars);
     }
 
     /**
@@ -42,11 +45,8 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      */
     public function testNotFoundDispatches($method, $uri, $callback) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertFalse(isset($routeInfo[1]),
-            "NOT_FOUND result must only contain a single element in the returned info array"
-        );
-        $this->assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
+        $result = $dispatcher->dispatch($method, $uri);
+        $this->assertInstanceOf(get_class(new NotFoundResult()), $result);
     }
 
     /**
@@ -54,14 +54,9 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      */
     public function testMethodNotAllowedDispatches($method, $uri, $callback, $availableMethods) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertTrue(isset($routeInfo[1]),
-            "METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1"
-        );
-
-        list($routedStatus, $methodArray) = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
-        $this->assertSame($availableMethods, $methodArray);
+        $result = $dispatcher->dispatch($method, $uri);
+        $this->assertInstanceOf(get_class(new MethodNotAllowedResult()), $result);
+        $this->assertSame($availableMethods, $result->allowedMethods);
     }
 
     /**

@@ -2,6 +2,9 @@
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\DispatcherResult\FoundResult;
+use FastRoute\DispatcherResult\NotFoundResult;
+
 class CharCountBased extends RegexBasedAbstract {
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
@@ -20,9 +23,9 @@ class CharCountBased extends RegexBasedAbstract {
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
-            return [self::FOUND, $handler, $vars];
+            return new FoundResult($handler, $vars);
         }
 
-        return [self::NOT_FOUND];
+        return new NotFoundResult();
     }
 }
