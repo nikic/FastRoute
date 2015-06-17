@@ -10,6 +10,13 @@ class StdTest extends \PhpUnit_Framework_TestCase {
         $this->assertSame($expectedRouteDatas, $routeDatas);
     }
 
+    /** @dataProvider provideTestParseError */
+    public function testParseError($routeString, $expectedExceptionMessage) {
+        $parser = new Std();
+        $this->setExpectedException('FastRoute\\BadRouteException', $expectedExceptionMessage);
+        $parser->parse($routeString);
+    }
+
     public function provideTestParse() {
         return [
             [
@@ -47,7 +54,57 @@ class StdTest extends \PhpUnit_Framework_TestCase {
                 [
                     ['/test/', ['param', '\d{1,9}']]
                 ]
+            ],
+            [
+                '/test[opt]',
+                [
+                    ['/test'],
+                    ['/testopt'],
+                ]
+            ],
+            [
+                '/test[/{param}]',
+                [
+                    ['/test'],
+                    ['/test/', ['param', '[^/]+']],
+                ]
+            ],
+            [
+                '/{param}[opt]',
+                [
+                    ['/', ['param', '[^/]+']],
+                    ['/', ['param', '[^/]+'], 'opt']
+                ]
+            ],
+            [
+                '/test[/{name}[/{id:[0-9]+}]]',
+                [
+                    ['/test'],
+                    ['/test/', ['name', '[^/]+']],
+                    ['/test/', ['name', '[^/]+'], '/', ['id', '[0-9]+']],
+                ]
             ]
+        ];
+    }
+
+    public function provideTestParseError() {
+        return [
+            [
+                '/test[opt[opt2]',
+                "Found more opening '[' than closing ']'"
+            ],
+            [
+                '/testopt]',
+                "Found more closing ']' than opening '['"
+            ],
+            [
+                '/test[]',
+                "Empty optional part"
+            ],
+            [
+                '/test[[opt]]',
+                "Empty optional part"
+            ],
         ];
     }
 }
