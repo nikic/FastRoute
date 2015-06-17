@@ -27,9 +27,11 @@ class RouteCollector {
      * @param mixed  $handler
      */
     public function addRoute($httpMethod, $route, $handler) {
-        $routeData = $this->routeParser->parse($route);
+        $routeDatas = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
-            $this->dataGenerator->addRoute($method, $routeData, $handler);
+            foreach ($routeDatas as $routeData) {
+                $this->dataGenerator->addRoute($method, $routeData, $handler);
+            }
         }
     }
 

@@ -24,7 +24,7 @@ REGEX;
         if (!preg_match_all(
             self::VARIABLE_REGEX, $route, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER
         )) {
-            return [$route];
+            return [[$route]];
         }
 
         $offset = 0;
@@ -44,6 +44,6 @@ REGEX;
             $routeData[] = substr($route, $offset);
         }
 
-        return $routeData;
+        return [$routeData];
     }
 }
