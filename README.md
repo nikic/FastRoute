@@ -15,9 +15,10 @@ Here's a basic usage example:
 require '/path/to/FastRoute/src/bootstrap.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
-    $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
-    $r->addRoute('GET', '/user/{name}', 'handler2');
+    $r->addRoute('GET', '/user/{id:\d+}', 'handler1');
+    $r->addRoute('GET', '/user/{id:\d+}/{name}', 'handler2');
+    // Or alternatively
+    $r->addRoute('GET', '/user/{id:\d+}[/{name}]', 'common_handler');
 });
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
@@ -49,8 +50,11 @@ class name or any other kind of data you wish to associate with the route).
 
 By default a route pattern syntax is used where `{foo}` specified a placeholder with name `foo`
 and matching the string `[^/]+`. To adjust the pattern the placeholder matches, you can specify
-a custom pattern by writing `{bar:[0-9]+}`. However, it is also possible to adjust the pattern
-syntax by passing using a different route parser.
+a custom pattern by writing `{bar:[0-9]+}`.
+
+Furthermore parts of the route enclosed in `[...]` are considered optional, so that `/foo[bar]`
+will match both `/foo` and `/foobar`. Optional parts are only supported in a trailing position,
+not in the middle of a route.
 
 A custom pattern for a route placeholder must not use capturing groups. For example `{lang:(en|de)}`
 is not a valid placeholder, because `()` is a capturing group. Instead you can use either
@@ -126,15 +130,21 @@ interface Dispatcher {
 }
 ```
 
-The route parser takes a route pattern string and converts it into an array of it's parts. The
-array has a certain structure, best understood using an example:
+The route parser takes a route pattern string and converts it into an array of route infos, where
+each route info is again an array of it's parts. The structure is best understood using an example:
 
-    /* The route /user/{name}/{id:[0-9]+} converts to the following array: */
+    /* The route /user/{id:\d+}[/{name}] converts to the following array: */
     [
-        '/user/',
-        ['name', '[^/]+'],
-        '/',
-        ['id', '[0-9]+'],
+        [
+            '/user/',
+            ['name', '[^/]+'],
+        ],
+        [
+            '/user/',
+            ['name', '[^/]+'],
+            '/',
+            ['id', '[0-9]+'],
+        ],
     ]
 
 This array can then be passed to the `addRoute()` method of a data generator. After all routes have
