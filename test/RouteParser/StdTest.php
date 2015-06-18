@@ -83,19 +83,23 @@ class StdTest extends \PhpUnit_Framework_TestCase {
                     ['/test/', ['name', '[^/]+']],
                     ['/test/', ['name', '[^/]+'], '/', ['id', '[0-9]+']],
                 ]
-            ]
+            ],
         ];
     }
 
     public function provideTestParseError() {
         return [
             [
+                '/test[opt',
+                "Number of opening '[' and closing ']' does not match"
+            ],
+            [
                 '/test[opt[opt2]',
-                "Found more opening '[' than closing ']'"
+                "Number of opening '[' and closing ']' does not match"
             ],
             [
                 '/testopt]',
-                "Found more closing ']' than opening '['"
+                "Number of opening '[' and closing ']' does not match"
             ],
             [
                 '/test[]',
