@@ -4,6 +4,15 @@ FastRoute - Fast request router for PHP
 This library provides a fast implementation of a regular expression based router. [Blog post explaining how the
 implementation works and why it is fast.][blog_post]
 
+Install
+-------
+
+To install with composer:
+
+```sh
+composer require nikic/fast-route
+```
+
 Usage
 -----
 
@@ -12,7 +21,7 @@ Here's a basic usage example:
 ```php
 <?php
 
-require '/path/to/FastRoute/src/bootstrap.php';
+require '/path/to/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{id:\d+}', 'handler1');
