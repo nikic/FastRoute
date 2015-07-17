@@ -34,7 +34,7 @@ REGEX;
         $currentRoute = '';
         $routeDatas = [];
         foreach ($segments as $segment) {
-            if ($segment === '') {
+            if ($segment === '' && $currentRoute !== '') {
                 throw new BadRouteException("Empty optional part");
             }
 
