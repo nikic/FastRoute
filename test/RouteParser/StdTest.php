@@ -84,6 +84,19 @@ class StdTest extends \PhpUnit_Framework_TestCase {
                     ['/test/', ['name', '[^/]+'], '/', ['id', '[0-9]+']],
                 ]
             ],
+            [
+                '',
+                [
+                    [''],
+                ]
+            ],
+            [
+                '[test]',
+                [
+                    [''],
+                    ['test'],
+                ]
+            ],
         ];
     }
 
@@ -107,6 +120,10 @@ class StdTest extends \PhpUnit_Framework_TestCase {
             ],
             [
                 '/test[[opt]]',
+                "Empty optional part"
+            ],
+            [
+                '[[test]]',
                 "Empty optional part"
             ],
         ];
