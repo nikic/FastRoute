@@ -28,6 +28,10 @@ REGEX;
         // Split on [ while skipping placeholders
         $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
         if ($numOptionals !== count($segments) - 1) {
+            // If there are any ] in the middle of the route, throw a more specific error message
+            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
+                throw new BadRouteException("Optional segments can only occur at the end of a route");
+            }
             throw new BadRouteException("Number of opening '[' and closing ']' does not match");
         }
 

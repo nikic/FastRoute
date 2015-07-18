@@ -126,6 +126,10 @@ class StdTest extends \PhpUnit_Framework_TestCase {
                 '[[test]]',
                 "Empty optional part"
             ],
+            [
+                '/test[/opt]/required',
+                "Optional segments can only occur at the end of a route"
+            ],
         ];
     }
 }
