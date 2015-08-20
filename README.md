@@ -30,6 +30,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{id:\d+}[/{name}]', 'common_handler');
 });
 
+// Fetch method and URI from somewhere
+$httpMethod = $_SERVER['REQUEST_METHOD'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
@@ -49,25 +53,64 @@ switch ($routeInfo[0]) {
 
 ### Defining routes
 
-The routes are defined by calling the `FastRoute\simpleDispatcher` function, which accepts
+The routes are defined by calling the `FastRoute\simpleDispatcher()` function, which accepts
 a callable taking a `FastRoute\RouteCollector` instance. The routes are added by calling
-`addRoute()` on the collector instance.
+`addRoute()` on the collector instance:
 
-This method accepts the HTTP method the route must match, the route pattern and an associated
-handler. The handler does not necessarily have to be a callback (it could also be a controller
-class name or any other kind of data you wish to associate with the route).
+```php
+$r->addRoute($method, $routePattern, $handler);
+```
 
-By default a route pattern syntax is used where `{foo}` specified a placeholder with name `foo`
-and matching the string `[^/]+`. To adjust the pattern the placeholder matches, you can specify
-a custom pattern by writing `{bar:[0-9]+}`.
+The `$method` is an uppercase HTTP method string for which a certain route should match. It
+is possible to specify multiple valid methods using an array:
+
+```php
+// These two calls
+$r->addRoute('GET', '/test', 'handler');
+$r->addRoute('POST', '/test', 'handler');
+// Are equivalent to this one call
+$r->addRoute(['GET', 'POST'], '/test', 'handler');
+```
+
+By default the `$routePattern` uses a syntax where `{foo}` specifies a placeholder with name `foo`
+and matching the regex `[^/]+`. To adjust the pattern the placeholder matches, you can specify
+a custom pattern by writing `{bar:[0-9]+}`. Some examples:
+
+```php
+// Matches /user/42, but not /user/xyz
+$r->addRoute('GET', '/user/{id:\d+}', 'handler');
+
+// Matches /user/foobar, but not /user/foo/bar
+$r->addRoute('GET', '/user/{name}', 'handler');
+
+// Matches /user/foo/bar as well
+$r->addRoute('GET', '/user/{name:.+}, 'handler');
+```
+
+Custom patterns for route placeholders cannot use capturing groups. For example `{lang:(en|de)}`
+is not a valid placeholder, because `()` is a capturing group. Instead you can use either
+`{lang:en|de}` or `{lang:(?:en|de)}`.
 
 Furthermore parts of the route enclosed in `[...]` are considered optional, so that `/foo[bar]`
 will match both `/foo` and `/foobar`. Optional parts are only supported in a trailing position,
 not in the middle of a route.
 
-A custom pattern for a route placeholder must not use capturing groups. For example `{lang:(en|de)}`
-is not a valid placeholder, because `()` is a capturing group. Instead you can use either
-`{lang:en|de}` or `{lang:(?:en|de)}`.
+```php
+// This route
+$r->addRoute('GET', '/user/{id:\d+}[/{name}]', 'handler');
+// Is equivalent to these two routes
+$r->addRoute('GET', '/user/{id:\d+}', 'handler');
+$r->addRoute('GET', '/user/{id:\d+}/{name}', 'handler');
+
+// This route is NOT valid, because optional parts can only occur at the end
+$r->addRoute('GET', '/user[/{id:\d+}]/{name}', 'handler');
+```
+
+The `$handler` parameter does not necessarily have to be a callback, it could also be a controller
+class name or any other kind of data you wish to associate with the route. FastRoute only tells you
+which handler corresponds to your URI, how you interpret it is up to you.
+
+### Caching
 
 The reason `simpleDispatcher` accepts a callback for defining the routes is to allow seamless
 caching. By using `cachedDispatcher` instead of `simpleDispatcher` you can cache the generated
@@ -198,7 +241,7 @@ To avoid forcing users to manually register HEAD routes for each resource we fal
 available GET route for a given resource. The PHP web SAPI transparently removes the entity body
 from HEAD responses so this behavior has no effect on the vast majority of users.
 
-However, implementors using FastRoute outside the web SAPI environment (e.g. a custom server) MUST
+However, implementers using FastRoute outside the web SAPI environment (e.g. a custom server) MUST
 NOT send entity bodies generated in response to HEAD requests. If you are a non-SAPI user this is
 *your responsibility*; FastRoute has no purview to prevent you from breaking HTTP in such cases.
 
