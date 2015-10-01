@@ -1,6 +1,6 @@
 <?hh // decl
 
-namespace FastRoute;
+namespace FastRoute {
 
 
 class BadRouteException extends \LogicException {
@@ -118,4 +118,6 @@ REGEX;
         const string DEFAULT_DISPATCH_REGEX = '[^/]+';
         public function parse(string $route): array<array>;
     }
+}
+
 }
