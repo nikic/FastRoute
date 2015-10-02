@@ -1,31 +1,43 @@
 <?hh // decl
 
-namespace FastRoute;
+namespace FastRoute {
+    class BadRouteException extends \LogicException {
+    }
 
+    interface RouteParser {
+        public function parse(string $route): array<array>;
+    }
 
-class BadRouteException extends \LogicException {
-}
+    class RouteCollector {
+        public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator);
+        public function addRoute(mixed $httpMethod, string $route, mixed $handler): void;
+        public function getData(): array;
+    }
 
-interface RouteParser {
-    public function parse(string $route): array<array>;
-}
+    class Route {
+        public function __construct(string $httpMethod, mixed $handler, string $regex, array $variables);
+        public function matches(string $str): bool;
+    }
 
-class RouteCollector {
-    public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator);
-    public function addRoute(mixed $httpMethod, string $route, mixed $handler): void;
-    public function getData(): array;
-}
+    interface DataGenerator {
+        public function addRoute(string $httpMethod, array $routeData, mixed $handler);
+        public function getData(): array;
+    }
 
-class Route {
-    public function __construct(string $httpMethod, mixed $handler, string $regex, array $variables);
-    public function matches(string $str): bool;
-}
+    interface Dispatcher {
+        const int NOT_FOUND = 0;
+        const int FOUND = 1;
+        const int METHOD_NOT_ALLOWED = 2;
+        public function dispatch(string $httpMethod, string $uri): array;
+    }
 
-/* Data Generators */
+    function simpleDispatcher(
+        (function(RouteCollector): void) $routeDefinitionCallback,
+        array<string, string> $options = []): Dispatcher;
 
-interface DataGenerator {
-    public function addRoute(string $httpMethod, array $routeData, mixed $handler);
-    public function getData(): array;
+    function cachedDispatcher(
+        (function(RouteCollector): void) $routeDefinitionCallback,
+        array<string, string> $options = []): Dispatcher;
 }
 
 namespace FastRoute\DataGenerator {
@@ -36,7 +48,6 @@ namespace FastRoute\DataGenerator {
         public function addRoute(string $httpMethod, array $routeData, mixed $handler): void;
         public function getData(): array;
     }
-
 
     class CharCountBased extends RegexBasedAbstract {
         protected function getApproxChunkSize(): int;
@@ -57,23 +68,6 @@ namespace FastRoute\DataGenerator {
         protected function getApproxChunkSize(): int;
         protected function processChunk(array<string, string> $regexToRoutesMap): array<string, mixed>;
     }
-}
-
-/* Dispatchers */
-
-function simpleDispatcher(
-    (function(RouteCollector): void) $routeDefinitionCallback,
-    array<string, string> $options = []): Dispatcher;
-
-function cachedDispatcher(
-    (function(RouteCollector): void) $routeDefinitionCallback,
-    array<string, string> $options = []): Dispatcher;
-
-interface Dispatcher {
-    const int NOT_FOUND = 0;
-    const int FOUND = 1;
-    const int METHOD_NOT_ALLOWED = 2;
-    public function dispatch(string $httpMethod, string $uri): array;
 }
 
 namespace FastRoute\Dispatcher {
@@ -103,7 +97,6 @@ namespace FastRoute\Dispatcher {
         protected function dispatchVariableRoute(array<array> $routeData, string $uri): array;
     }
 }
-
 
 namespace FastRoute\RouteParser {
     class Std implements RouteParser {
