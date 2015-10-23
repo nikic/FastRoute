@@ -24,15 +24,16 @@ Here's a basic usage example:
 require '/path/to/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/user/{id:\d+}', 'handler1');
-    $r->addRoute('GET', '/user/{id:\d+}/{name}', 'handler2');
-    // Or alternatively
-    $r->addRoute('GET', '/user/{id:\d+}[/{name}]', 'common_handler');
+    $r->addRoute('GET', '/users', 'get_all_users_handler');
+    // {id} must be a number (\d+)
+    $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
+    // The /{title} suffix is optional
+    $r->addRoute('GET', '/articles/{id:\d+}[/{title}]', 'get_article_handler');
 });
 
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
