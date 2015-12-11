@@ -33,11 +33,23 @@ namespace FastRoute {
 
     function simpleDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
-        array<string, string> $options = []): Dispatcher;
+        shape(
+          'routeParser' => ?string,
+          'dataGenerator' => ?string,
+          'dispatcher' => ?string,
+          'routeCollector' => ?string,
+        ) $options = shape()): Dispatcher;
 
     function cachedDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
-        array<string, string> $options = []): Dispatcher;
+        shape(
+          'routeParser' => ?string,
+          'dataGenerator' => ?string,
+          'dispatcher' => ?string,
+          'routeCollector' => ?string,
+          'cacheDisabled' => ?bool,
+          'cacheFile' => ?string,
+        ) $options = shape()): Dispatcher;
 }
 
 namespace FastRoute\DataGenerator {
