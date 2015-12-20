@@ -33,15 +33,27 @@ namespace FastRoute {
 
     function simpleDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
-        array<string, string> $options = []): Dispatcher;
+        shape(
+          'routeParser' => ?classname<RouteParser>,
+          'dataGenerator' => ?classname<DataGenerator>,
+          'dispatcher' => ?classname<Dispatcher>,
+          'routeCollector' => ?classname<RouteCollector>,
+        ) $options = shape()): Dispatcher;
 
     function cachedDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
-        array<string, string> $options = []): Dispatcher;
+        shape(
+          'routeParser' => ?classname<RouteParser>,
+          'dataGenerator' => ?classname<DataGenerator>,
+          'dispatcher' => ?classname<Dispatcher>,
+          'routeCollector' => ?classname<RouteCollector>,
+          'cacheDisabled' => ?bool,
+          'cacheFile' => ?string,
+        ) $options = shape()): Dispatcher;
 }
 
 namespace FastRoute\DataGenerator {
-    abstract class RegexBasedAbstract implements DataGenerator {
+    abstract class RegexBasedAbstract implements \FastRoute\DataGenerator {
         protected abstract function getApproxChunkSize();
         protected abstract function processChunk($regexToRoutesMap);
 
@@ -71,7 +83,7 @@ namespace FastRoute\DataGenerator {
 }
 
 namespace FastRoute\Dispatcher {
-    abstract class RegexBasedAbstract implements Dispatcher {
+    abstract class RegexBasedAbstract implements \FastRoute\Dispatcher {
         protected abstract function dispatchVariableRoute(array<array> $routeData, string $uri): array;
 
         public function dispatch(string $httpMethod, string $uri): array;
@@ -99,7 +111,7 @@ namespace FastRoute\Dispatcher {
 }
 
 namespace FastRoute\RouteParser {
-    class Std implements RouteParser {
+    class Std implements \FastRoute\RouteParser {
         const string VARIABLE_REGEX = <<<'REGEX'
 \{
     \s* ([a-zA-Z][a-zA-Z0-9_]*) \s*
