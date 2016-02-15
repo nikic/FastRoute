@@ -13,11 +13,11 @@ abstract class RegexBasedAbstract implements DataGenerator {
     protected abstract function getApproxChunkSize();
     protected abstract function processChunk($regexToRoutesMap);
 
-    public function addRoute($httpMethod, $routeData, $handler) {
+    public function addRoute($httpMethod, $routeData, $handler, $extra = []) {
         if ($this->isStaticRoute($routeData)) {
-            $this->addStaticRoute($httpMethod, $routeData, $handler);
+            $this->addStaticRoute($httpMethod, $routeData, $handler, $extra);
         } else {
-            $this->addVariableRoute($httpMethod, $routeData, $handler);
+            $this->addVariableRoute($httpMethod, $routeData, $handler, $extra);
         }
     }
 
@@ -47,8 +47,8 @@ abstract class RegexBasedAbstract implements DataGenerator {
     private function isStaticRoute($routeData) {
         return count($routeData) == 1 && is_string($routeData[0]);
     }
-
-    private function addStaticRoute($httpMethod, $routeData, $handler) {
+// TODO:
+    private function addStaticRoute($httpMethod, $routeData, $handler, $extra) {
         $routeStr = $routeData[0];
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
@@ -69,10 +69,10 @@ abstract class RegexBasedAbstract implements DataGenerator {
             }
         }
 
-        $this->staticRoutes[$httpMethod][$routeStr] = $handler;
+        $this->staticRoutes[$httpMethod][$routeStr] = [$handler, $extra];
     }
 
-    private function addVariableRoute($httpMethod, $routeData, $handler) {
+    private function addVariableRoute($httpMethod, $routeData, $handler, $extra) {
         list($regex, $variables) = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
@@ -83,7 +83,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
         }
 
         $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod, $handler, $regex, $variables
+            $httpMethod, $handler, $regex, $variables, $extra
         );
     }
 
