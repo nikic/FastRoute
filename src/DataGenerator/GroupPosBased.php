@@ -13,7 +13,7 @@ class GroupPosBased extends RegexBasedAbstract {
         $offset = 1;
         foreach ($regexToRoutesMap as $regex => $route) {
             $regexes[] = $regex;
-            $routeMap[$offset] = [$route->handler, $route->variables];
+            $routeMap[$offset] = [$route->handler, $route->variables, $route->extra];
 
             $offset += count($route->variables);
         }
@@ -22,4 +22,3 @@ class GroupPosBased extends RegexBasedAbstract {
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }
-
