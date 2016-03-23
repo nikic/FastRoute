@@ -190,13 +190,13 @@ each route info is again an array of it's parts. The structure is best understoo
     [
         [
             '/user/',
-            ['name', '[^/]+'],
+            ['id', '\d+'],
         ],
         [
             '/user/',
-            ['name', '[^/]+'],
+            ['id', '\d+'],
             '/',
-            ['id', '[0-9]+'],
+            ['name', '[^/]+'],
         ],
     ]
 
