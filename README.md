@@ -86,6 +86,9 @@ $r->addRoute('GET', '/user/{name}', 'handler');
 
 // Matches /user/foo/bar as well
 $r->addRoute('GET', '/user/{name:.+}', 'handler');
+
+// Matches /en/user/4 or /en/user/42 or /en/user/420 but not /en/user/4200,
+$r->addRoute('GET', '/{lang:\w{2}}/user/{id:\d{1,3}+}', 'handler');
 ```
 
 Custom patterns for route placeholders cannot use capturing groups. For example `{lang:(en|de)}`
