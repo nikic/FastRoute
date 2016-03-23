@@ -13,7 +13,7 @@ use FastRoute\RouteParser;
 class Std implements RouteParser {
     const VARIABLE_REGEX = <<<'REGEX'
 \{
-    \s* ([a-zA-Z][a-zA-Z0-9_]*) \s*
+    \s* ([a-zA-Z][a-zA-Z0-9_-]*) \s*
     (?:
         : \s* ([^{}]*(?:\{(?-1)\}[^{}]*)*)
     )?
