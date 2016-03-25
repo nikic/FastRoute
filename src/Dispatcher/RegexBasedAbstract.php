@@ -25,7 +25,8 @@ abstract class RegexBasedAbstract implements Dispatcher {
             if ($result[0] === self::FOUND) {
                 return $result;
             }
-        } else if ($httpMethod === 'HEAD' && isset($varRouteData['GET'])) {
+        }
+        if ($httpMethod === 'HEAD' && isset($varRouteData['GET'])) {
             $result = $this->dispatchVariableRoute($varRouteData['GET'], $uri);
             if ($result[0] === self::FOUND) {
                 return $result;
