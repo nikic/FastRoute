@@ -38,6 +38,18 @@ abstract class RegexBasedAbstract implements Dispatcher {
             }
         }
 
+        // If nothing else matches, try fallback routes
+        if (isset($this->staticRouteMap['*'][$uri])) {
+            $handler = $this->staticRouteMap['*'][$uri];
+            return [self::FOUND, $handler, []];
+        }
+        if (isset($varRouteData['*'])) {
+            $result = $this->dispatchVariableRoute($varRouteData['*'], $uri);
+            if ($result[0] === self::FOUND) {
+                return $result;
+            }
+        }
+
         // Find allowed methods for this URI by matching against all other HTTP methods as well
         $allowedMethods = [];
 
