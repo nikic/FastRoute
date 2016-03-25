@@ -353,6 +353,15 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
         $cases[] = ['HEAD', '/b', $callback, 'handler1', []];
 
+        // 19 ----
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('GET', '/foo', 'handler0');
+            $r->addRoute('HEAD', '/{bar}', 'handler1');
+        };
+
+        $cases[] = ['HEAD', '/foo', $callback, 'handler1', ['bar' => 'foo']];
+
         // x -------------------------------------------------------------------------------------->
 
         return $cases;
