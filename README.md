@@ -109,6 +109,9 @@ $r->addRoute('GET', '/user/{id:\d+}[/{name}]', 'handler');
 $r->addRoute('GET', '/user/{id:\d+}', 'handler');
 $r->addRoute('GET', '/user/{id:\d+}/{name}', 'handler');
 
+// Multiple nested optional parts are possible as well
+$r->addRoute('GET', '/user[/{id:\d+}[/{name}]]', 'handler');
+
 // This route is NOT valid, because optional parts can only occur at the end
 $r->addRoute('GET', '/user[/{id:\d+}]/{name}', 'handler');
 ```
