@@ -13,6 +13,8 @@ To install with composer:
 composer require nikic/fast-route
 ```
 
+Requires PHP 5.4 or newer.
+
 Usage
 -----
 
