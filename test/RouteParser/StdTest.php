@@ -103,6 +103,12 @@ class StdTest extends \PhpUnit_Framework_TestCase {
                     ['/', ['foo-bar', '[^/]+']]
                 ]
             ],
+            [
+                '/{_foo:.*}',
+                [
+                    ['/', ['_foo', '.*']]
+                ]
+            ],
         ];
     }
 
