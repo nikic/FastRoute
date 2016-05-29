@@ -45,7 +45,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
     }
 
     private function isStaticRoute($routeData) {
-        return count($routeData) == 1 && is_string($routeData[0]);
+        return count($routeData) === 1 && is_string($routeData[0]);
     }
 
     private function addStaticRoute($httpMethod, $routeData, $handler) {
