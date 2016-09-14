@@ -60,10 +60,12 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
 
         /** @var RouteCollector $routeCollector */
         $dispatchData = $routeCollector->getData();
-        file_put_contents(
-            $options['cacheFile'],
-            '<?php return ' . var_export($dispatchData, true) . ';'
-        );
+        if (!$options['cacheDisabled']) {
+            file_put_contents(
+                $options['cacheFile'],
+                '<?php return ' . var_export($dispatchData, true) . ';'
+            );
+        }
 
         return new $options['dispatcher']($dispatchData);
     }
