@@ -1,5 +1,5 @@
 /test export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-.travis.yml
-phpunit.xml
+.travis.yml export-ignore
+phpunit.xml export-ignore
