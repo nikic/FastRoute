@@ -5,6 +5,7 @@ namespace FastRoute;
 class RouteCollector {
     private $routeParser;
     private $dataGenerator;
+    private $currentGroupPrefix;
 
     /**
      * Constructs a route collector.
@@ -15,6 +16,7 @@ class RouteCollector {
     public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator) {
         $this->routeParser = $routeParser;
         $this->dataGenerator = $dataGenerator;
+        $this->currentGroupPrefix = '';
     }
 
     /**
@@ -27,12 +29,38 @@ class RouteCollector {
      * @param mixed  $handler
      */
     public function addRoute($httpMethod, $route, $handler) {
+        $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
             foreach ($routeDatas as $routeData) {
                 $this->dataGenerator->addRoute($method, $routeData, $handler);
             }
         }
+    }
+
+    /**
+     * Prepend the group prefix to a route
+     *
+     * @param string $route
+     * @return string
+     */
+    protected function prependGroupPrefix($route) {
+        return $this->currentGroupPrefix . $route;
+    }
+
+    /**
+     * Create a route group with a common prefix.
+     *
+     * All routes created in the passed callback will have the given group prefix prepended.
+     *
+     * @param string $prefix
+     * @param callable $callback
+     */
+    public function addGroup($prefix, callable $callback) {
+        $previousGroupPrefix = $this->currentGroupPrefix;
+        $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
+        $callback($this);
+        $this->currentGroupPrefix = $previousGroupPrefix;
     }
     
     /**
