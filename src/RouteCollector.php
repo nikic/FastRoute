@@ -5,7 +5,7 @@ namespace FastRoute;
 class RouteCollector {
     private $routeParser;
     private $dataGenerator;
-    public $currentRouteGroup;
+    private $currentRouteGroup;
 
     /**
      * Constructs a route collector.
@@ -59,7 +59,7 @@ class RouteCollector {
     private function prependRouteWithGroupsRoute($route, $group)
     {
         if (is_object($group)) {
-            $route = "{$group->route}/" . ltrim($route, '/');
+            $route = $group->route . $route;
         }
         return $route;
     }

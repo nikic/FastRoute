@@ -53,6 +53,13 @@ class RouteCollectorTest extends \PHPUnit_Framework_TestCase {
             });
         });
 
+        $r->addGroup('/admin', function (DummyRouteCollector $r) {
+            $r->get('-some-info', 'admin-some-info');
+        });
+        $r->addGroup('/admin-', function (DummyRouteCollector $r) {
+            $r->get('more-info', 'admin-more-info');
+        });
+
         $expected = [
             ['DELETE', '/delete', 'delete'],
             ['GET', '/get', 'get'],
@@ -72,6 +79,8 @@ class RouteCollectorTest extends \PHPUnit_Framework_TestCase {
             ['PATCH', '/group-one/group-two/patch', 'patch'],
             ['POST', '/group-one/group-two/post', 'post'],
             ['PUT', '/group-one/group-two/put', 'put'],
+            ['GET', '/admin-some-info', 'admin-some-info'],
+            ['GET', '/admin-more-info', 'admin-more-info'],
         ];
 
         $this->assertSame($expected, $r->routes);
