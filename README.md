@@ -122,6 +122,30 @@ The `$handler` parameter does not necessarily have to be a callback, it could al
 class name or any other kind of data you wish to associate with the route. FastRoute only tells you
 which handler corresponds to your URI, how you interpret it is up to you.
 
+#### Route Groups
+
+Additionally, you can specify routes inside of a group. This is useful when you have a lot of routes under a specific url.
+
+E.g. Defining your routes as below...
+
+```php
+$r->addGroup('/admin', function ($r) {
+    $r->addRoute('GET', '/do-something', 'handler');
+    $r->addRoute('GET', '/do-another-thing', 'handler');
+    $r->addRoute('GET', '/do-something-else', 'handler');
+});
+```
+
+... will have the same result as follows...
+
+ ```php
+$r->addRoute('GET', '/admin/do-something', 'handler');
+$r->addRoute('GET', '/admin/do-another-thing', 'handler');
+$r->addRoute('GET', '/admin/do-something-else', 'handler');
+ ```
+
+Sub-groups are also supported.
+
 ### Caching
 
 The reason `simpleDispatcher` accepts a callback for defining the routes is to allow seamless
