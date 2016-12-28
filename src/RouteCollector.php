@@ -5,7 +5,7 @@ namespace FastRoute;
 class RouteCollector {
     private $routeParser;
     private $dataGenerator;
-    private $currentRouteGroup;
+    private $currentRouteGroupPrefix;
 
     /**
      * Constructs a route collector.
@@ -45,7 +45,7 @@ class RouteCollector {
      */
     protected function prependRouteWithRouteGroup($route)
     {
-        return $this->prependRouteWithGroupsRoute($route, $this->currentRouteGroup);
+        return $this->prependRouteWithGroupsRoute($route, $this->currentRouteGroupPrefix);
     }
 
 
@@ -53,13 +53,13 @@ class RouteCollector {
      * Prepends the provided route with the route inside the provided route group.
      *
      * @param string $route
-     * @param null|\stdClass $group
+     * @param null|string $groupPrefix
      * @return string
      */
-    private function prependRouteWithGroupsRoute($route, $group)
+    private function prependRouteWithGroupsRoute($route, $groupPrefix)
     {
-        if (is_object($group)) {
-            $route = $group->route . $route;
+        if (! is_null($groupPrefix)) {
+            $route = $groupPrefix . $route;
         }
         return $route;
     }
@@ -69,17 +69,13 @@ class RouteCollector {
      * If a previous group was passed it, it will prepend the groups route with the previous groups route.
      *
      * @param string $route
-     * @param callable $callback
-     * @param null|\stdClass $previousGroup
+     * @param null|string $previousGroupPrefix
      * @return \stdClass
      */
-    private function createGroup($route, callable $callback, $previousGroup) {
-        $route = $this->prependRouteWithGroupsRoute($route, $previousGroup);
-        $group = new \stdClass();
-        $group->route = $route;
-        $group->callback = $callback;
-        $group->groups = [];
-        return $group;
+    private function createGroup($route, $previousGroupPrefix) {
+        $route = $this->prependRouteWithGroupsRoute($route, $previousGroupPrefix);
+        $groupPrefix = $route;
+        return $groupPrefix;
     }
 
     /**
@@ -90,11 +86,10 @@ class RouteCollector {
      */
     public function addGroup($route, callable $callback)
     {
-        $route = rtrim($route, '/');
-        $previousGroup = $this->currentRouteGroup;
-        $this->currentRouteGroup = $this->createGroup($route, $callback, $previousGroup);
+        $previousGroupPrefix = $this->currentRouteGroupPrefix;
+        $this->currentRouteGroupPrefix = $this->createGroup($route, $previousGroupPrefix);
         $callback($this);
-        $this->currentRouteGroup = $previousGroup;
+        $this->currentRouteGroupPrefix = $previousGroupPrefix;
     }
     
     /**
