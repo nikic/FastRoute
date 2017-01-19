@@ -3,9 +3,9 @@
 namespace FastRoute;
 
 class RouteCollector {
-    private $routeParser;
-    private $dataGenerator;
-    private $currentGroupPrefix;
+    protected $routeParser;
+    protected $dataGenerator;
+    protected $currentGroupPrefix;
 
     /**
      * Constructs a route collector.
@@ -36,16 +36,6 @@ class RouteCollector {
                 $this->dataGenerator->addRoute($method, $routeData, $handler);
             }
         }
-    }
-
-    /**
-     * Prepend the group prefix to a route
-     *
-     * @param string $route
-     * @return string
-     */
-    protected function prependGroupPrefix($route) {
-        return $this->currentGroupPrefix . $route;
     }
 
     /**

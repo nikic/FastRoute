@@ -91,7 +91,7 @@ class DummyRouteCollector extends RouteCollector {
     public $routes = [];
     public function __construct() {}
     public function addRoute($method, $route, $handler) {
-        $route = $this->prependGroupPrefix($route);
+        $route = $this->currentGroupPrefix . $route;
         $this->routes[] = [$method, $route, $handler];
     }
 }
