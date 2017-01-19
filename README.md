@@ -122,6 +122,22 @@ The `$handler` parameter does not necessarily have to be a callback, it could al
 class name or any other kind of data you wish to associate with the route. FastRoute only tells you
 which handler corresponds to your URI, how you interpret it is up to you.
 
+#### Shorcut methods for common request methods
+
+For the `GET`, `POST`, `PUT`, `PATCH`, `DELETE` and `HEAD` request methods shortcut methods are available. For example:
+
+```php
+$r->get('/get-route', 'get_handler');
+$r->post('/post-route', 'post_handler');
+```
+
+Is equivalent to:
+
+```php
+$r->addRoute('GET', '/get-route', 'get_handler');
+$r->addRoute('POST', '/post-route', 'post_handler');
+```
+
 #### Route Groups
 
 Additionally, you can specify routes inside of a group. All routes defined inside a group will have a common prefix.
