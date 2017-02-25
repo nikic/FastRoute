@@ -2,6 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Exception\HttpNotFoundException;
+
 class MarkBased extends RegexBasedAbstract {
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
@@ -17,7 +19,7 @@ class MarkBased extends RegexBasedAbstract {
 
             $vars = [];
             $i = 0;
-            foreach ($varNames as $varName) {
+            foreach ($route->variables as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
             $route->variables = $vars;

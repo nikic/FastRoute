@@ -2,6 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Exception\HttpNotFoundException;
+
 class GroupPosBased extends RegexBasedAbstract {
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
@@ -19,7 +21,7 @@ class GroupPosBased extends RegexBasedAbstract {
             $route = $data['routeMap'][$i];
 
             $vars = [];
-            foreach ($varNames as $varName) {
+            foreach ($route->variables as $varName) {
                 $vars[$varName] = $matches[$i++];
             }
             $route->variables = $vars;
