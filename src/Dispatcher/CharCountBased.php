@@ -13,16 +13,17 @@ class CharCountBased extends RegexBasedAbstract {
                 continue;
             }
 
-            list($handler, $varNames) = $data['routeMap'][end($matches)];
+            $route = $data['routeMap'][end($matches)];
 
             $vars = [];
             $i = 0;
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
-            return [self::FOUND, $handler, $vars];
+            $route->variables = $vars;
+            return $route;
         }
 
-        return [self::NOT_FOUND];
+        throw new HttpNotFoundException;
     }
 }

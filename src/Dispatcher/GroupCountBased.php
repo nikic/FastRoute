@@ -2,6 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Exception\HttpNotFoundException;
+
 class GroupCountBased extends RegexBasedAbstract {
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
@@ -13,16 +15,18 @@ class GroupCountBased extends RegexBasedAbstract {
                 continue;
             }
 
-            list($handler, $varNames) = $data['routeMap'][count($matches)];
+            // list($handler, $varNames) = $data['routeMap'][count($matches)];
+            $route = $data['routeMap'][count($matches)];
 
             $vars = [];
             $i = 0;
-            foreach ($varNames as $varName) {
+            foreach ($route->variables as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
-            return [self::FOUND, $handler, $vars];
+            $route->variables = $vars;
+            return $route;
         }
 
-        return [self::NOT_FOUND];
+        throw new HttpNotFoundException;
     }
 }
