@@ -13,14 +13,16 @@ abstract class RegexBasedAbstract implements Dispatcher {
     protected abstract function dispatchVariableRoute($routeData, $uri);
 
     public function dispatch($httpMethod, $uri) {
-        if (isset($this->staticRouteMap[$httpMethod][$uri])) {
-            return $this->staticRouteMap[$httpMethod][$uri];
-        }
+        try {
+            if (isset($this->staticRouteMap[$httpMethod][$uri])) {
+                return $this->staticRouteMap[$httpMethod][$uri];
+            }
 
-        $varRouteData = $this->variableRouteData;
-        if (isset($varRouteData[$httpMethod])) {
-            return $this->dispatchVariableRoute($varRouteData[$httpMethod], $uri);
-        }
+            $varRouteData = $this->variableRouteData;
+            if (isset($varRouteData[$httpMethod])) {
+                return $this->dispatchVariableRoute($varRouteData[$httpMethod], $uri);
+            }
+        } catch (HttpNotFoundException $e) {}
 
         // For HEAD requests, attempt fallback to GET
         if ($httpMethod === 'HEAD') {
