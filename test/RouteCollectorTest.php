@@ -90,7 +90,7 @@ class RouteCollectorTest extends \PHPUnit_Framework_TestCase {
 class DummyRouteCollector extends RouteCollector {
     public $routes = [];
     public function __construct() {}
-    public function addRoute($method, $route, $handler) {
+    public function addRoute($method, $route, $handler, array $data = []) {
         $route = $this->currentGroupPrefix . $route;
         $this->routes[] = [$method, $route, $handler];
     }
