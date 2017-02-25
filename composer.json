@@ -1,5 +1,5 @@
 {
-  "name": "nikic/fast-route",
+  "name": "pedrofaria/fastroute",
   "description": "Fast request router for PHP",
   "keywords": ["routing", "router"],
   "license": "BSD-3-Clause",
@@ -7,7 +7,11 @@
     {
       "name": "Nikita Popov",
       "email": "nikic@php.net"
-    }
+    },
+    {
+      "name": "Pedro Faria",
+      "email": "eu@eusouopedro.com"
+    },
   ],
   "require": {
     "php": ">=5.4.0"
