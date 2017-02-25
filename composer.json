@@ -11,7 +11,7 @@
     {
       "name": "Pedro Faria",
       "email": "eu@eusouopedro.com"
-    },
+    }
   ],
   "require": {
     "php": ">=5.4.0"
