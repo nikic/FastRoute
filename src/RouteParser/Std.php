@@ -2,7 +2,7 @@
 
 namespace FastRoute\RouteParser;
 
-use FastRoute\BadRouteException;
+use FastRoute\Exception\BadRouteException;
 use FastRoute\RouteParser;
 
 /**
