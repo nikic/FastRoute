@@ -31,6 +31,8 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
     // The /{title} suffix is optional
     $r->addRoute('GET', '/articles/{id:\d+}[/{title}]', 'get_article_handler');
+    // Pass extra data for check ahead.
+    $r->addRoute('DELETE', '/user/{id:\d+}', ['auth']);
 });
 
 // Fetch method and URI from somewhere
@@ -43,20 +45,21 @@ if (false !== $pos = strpos($uri, '?')) {
 }
 $uri = rawurldecode($uri);
 
-$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
-        // ... 404 Not Found
-        break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        $allowedMethods = $routeInfo[1];
-        // ... 405 Method Not Allowed
-        break;
-    case FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
-        $vars = $routeInfo[2];
-        // ... call $handler with $vars
-        break;
+try {
+    $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
+    $handler = $routeInfo->handler;
+    $vars = $routeInfo->variables;
+
+    if (in_array('auth', $routeInfo->data]) {
+        // Check if current user is authenticated before continue
+    }
+    
+    // ... call $handler with $vars
+} catch (\FastRoute\Exception\HttpNotFoundException $e) {
+    // ... 404 Not Found
+} catch (\FastRoute\Exception\HttpMethodNotAllowedException $e) {
+    // ... 405 Method Not Allowed
 }
 ```
 
@@ -67,7 +70,7 @@ a callable taking a `FastRoute\RouteCollector` instance. The routes are added by
 `addRoute()` on the collector instance:
 
 ```php
-$r->addRoute($method, $routePattern, $handler);
+$r->addRoute($method, $routePattern, $handler, $data = []);
 ```
 
 The `$method` is an uppercase HTTP method string for which a certain route should match. It
@@ -122,6 +125,8 @@ The `$handler` parameter does not necessarily have to be a callback, it could al
 class name or any other kind of data you wish to associate with the route. FastRoute only tells you
 which handler corresponds to your URI, how you interpret it is up to you.
 
+The `$data` array parameter is optional and you can use it to set informations that can be used before or after $handler call. 
+
 #### Shorcut methods for common request methods
 
 For the `GET`, `POST`, `PUT`, `PATCH`, `DELETE` and `HEAD` request methods shortcut methods are available. For example:
@@ -147,17 +152,17 @@ For example, defining your routes as:
 ```php
 $r->addGroup('/admin', function (RouteCollector $r) {
     $r->addRoute('GET', '/do-something', 'handler');
-    $r->addRoute('GET', '/do-another-thing', 'handler');
+    $r->addRoute('GET', '/do-another-thing', 'handler', ['other-data']);
     $r->addRoute('GET', '/do-something-else', 'handler');
-});
+}, ['extra_data']);
 ```
 
 Will have the same result as:
 
  ```php
-$r->addRoute('GET', '/admin/do-something', 'handler');
-$r->addRoute('GET', '/admin/do-another-thing', 'handler');
-$r->addRoute('GET', '/admin/do-something-else', 'handler');
+$r->addRoute('GET', '/admin/do-something', 'handler', ['extra_data']);
+$r->addRoute('GET', '/admin/do-another-thing', 'handler', ['extra_data', 'other-data']);
+$r->addRoute('GET', '/admin/do-something-else', 'handler', ['extra_data']);
  ```
 
 Nested groups are also supported, in which case the prefixes of all the nested groups are combined.
