@@ -32,7 +32,7 @@ class RouteCollector {
     public function addRoute($httpMethod, $route, $handler, array $data = []) {
         $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
-        $data = array_merge($data, $this->currentGroupData);
+        $data = array_merge($this->currentGroupData, $data);
         foreach ((array) $httpMethod as $method) {
             foreach ($routeDatas as $routeData) {
                 $this->dataGenerator->addRoute($method, $routeData, $handler, $data);
@@ -52,7 +52,7 @@ class RouteCollector {
         $previousGroupPrefix = $this->currentGroupPrefix;
         $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
         $previousGroupData = $this->currentGroupData;
-        $this->currentGroupData = $previousGroupData + $data;
+        $this->currentGroupData = array_merge($previousGroupData, $data);
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
         $this->currentGroupData = $previousGroupData;
