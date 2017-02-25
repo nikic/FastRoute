@@ -13,7 +13,7 @@ class StdTest extends \PhpUnit_Framework_TestCase {
     /** @dataProvider provideTestParseError */
     public function testParseError($routeString, $expectedExceptionMessage) {
         $parser = new Std();
-        $this->setExpectedException('FastRoute\\BadRouteException', $expectedExceptionMessage);
+        $this->setExpectedException('FastRoute\\Exception\\BadRouteException', $expectedExceptionMessage);
         $parser->parse($routeString);
     }
 
