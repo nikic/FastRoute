@@ -28,6 +28,7 @@ class RouteCollector {
      * @param string|string[] $httpMethod
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function addRoute($httpMethod, $route, $handler, array $data = []) {
         $route = $this->currentGroupPrefix . $route;
@@ -47,6 +48,7 @@ class RouteCollector {
      *
      * @param string $prefix
      * @param callable $callback
+     * @param array    $data
      */
     public function addGroup($prefix, callable $callback, array $data = []) {
         $previousGroupPrefix = $this->currentGroupPrefix;
@@ -65,6 +67,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function get($route, $handler, array $data = []) {
         $this->addRoute('GET', $route, $handler, $data);
@@ -77,6 +80,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function post($route, $handler, array $data = []) {
         $this->addRoute('POST', $route, $handler, $data);
@@ -89,6 +93,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function put($route, $handler, array $data = []) {
         $this->addRoute('PUT', $route, $handler, $data);
@@ -101,6 +106,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function delete($route, $handler, array $data = []) {
         $this->addRoute('DELETE', $route, $handler, $data);
@@ -113,6 +119,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function patch($route, $handler, array $data = []) {
         $this->addRoute('PATCH', $route, $handler, $data);
@@ -125,6 +132,7 @@ class RouteCollector {
      *
      * @param string $route
      * @param mixed  $handler
+     * @param array  $data
      */
     public function head($route, $handler, array $data = []) {
         $this->addRoute('HEAD', $route, $handler, $data);
