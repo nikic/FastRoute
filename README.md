@@ -31,6 +31,8 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
     // The /{title} suffix is optional
     $r->addRoute('GET', '/articles/{id:\d+}[/{title}]', 'get_article_handler');
+    // Pass extra data for check ahead.
+    $r->addRoute('DELETE', '/user/{id:\d+}', ['auth']);
 });
 
 // Fetch method and URI from somewhere
@@ -43,20 +45,21 @@ if (false !== $pos = strpos($uri, '?')) {
 }
 $uri = rawurldecode($uri);
 
-$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
-        // ... 404 Not Found
-        break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        $allowedMethods = $routeInfo[1];
-        // ... 405 Method Not Allowed
-        break;
-    case FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
-        $vars = $routeInfo[2];
-        // ... call $handler with $vars
-        break;
+try {
+    $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
+    $handler = $routeInfo->handler;
+    $vars = $routeInfo->variables;
+
+    if (in_array('auth', $routeInfo->data)) {
+        // Check if current user is authenticated before continue
+    }
+    
+    // ... call $handler with $vars
+} catch (\FastRoute\Exception\HttpNotFoundException $e) {
+    // ... 404 Not Found
+} catch (\FastRoute\Exception\HttpMethodNotAllowedException $e) {
+    // ... 405 Method Not Allowed
 }
 ```
 
@@ -67,7 +70,7 @@ a callable taking a `FastRoute\RouteCollector` instance. The routes are added by
 `addRoute()` on the collector instance:
 
 ```php
-$r->addRoute($method, $routePattern, $handler);
+$r->addRoute($method, $routePattern, $handler, $data = []);
 ```
 
 The `$method` is an uppercase HTTP method string for which a certain route should match. It
@@ -122,6 +125,8 @@ The `$handler` parameter does not necessarily have to be a callback, it could al
 class name or any other kind of data you wish to associate with the route. FastRoute only tells you
 which handler corresponds to your URI, how you interpret it is up to you.
 
+The `$data` array parameter is optional and you can use it to set informations that can be used before or after $handler call. 
+
 #### Shorcut methods for common request methods
 
 For the `GET`, `POST`, `PUT`, `PATCH`, `DELETE` and `HEAD` request methods shortcut methods are available. For example:
@@ -147,17 +152,17 @@ For example, defining your routes as:
 ```php
 $r->addGroup('/admin', function (RouteCollector $r) {
     $r->addRoute('GET', '/do-something', 'handler');
-    $r->addRoute('GET', '/do-another-thing', 'handler');
+    $r->addRoute('GET', '/do-another-thing', 'handler', ['other-data']);
     $r->addRoute('GET', '/do-something-else', 'handler');
-});
+}, ['extra_data']);
 ```
 
 Will have the same result as:
 
  ```php
-$r->addRoute('GET', '/admin/do-something', 'handler');
-$r->addRoute('GET', '/admin/do-another-thing', 'handler');
-$r->addRoute('GET', '/admin/do-something-else', 'handler');
+$r->addRoute('GET', '/admin/do-something', 'handler', ['extra_data']);
+$r->addRoute('GET', '/admin/do-another-thing', 'handler', ['extra_data', 'other-data']);
+$r->addRoute('GET', '/admin/do-something-else', 'handler', ['extra_data']);
  ```
 
 Nested groups are also supported, in which case the prefixes of all the nested groups are combined.
@@ -184,18 +189,26 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 The second parameter to the function is an options array, which can be used to specify the cache
 file location, among other things.
 
+CAUTION: You can't cache routes with handlers as Closures.
+
 ### Dispatching a URI
 
 A URI is dispatched by calling the `dispatch()` method of the created dispatcher. This method
 accepts the HTTP method and a URI. Getting those two bits of information (and normalizing them
 appropriately) is your job - this library is not bound to the PHP web SAPIs.
 
-The `dispatch()` method returns an array whose first element contains a status code. It is one
-of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FOUND`. For the
-method not allowed status the second array element contains a list of HTTP methods allowed for
-the supplied URI. For example:
+The `dispatch()` method returns an object (see the object structure below). If the route was not
+founded or the HTTP method was not allowed, the `dispatch()` method will throw an exception.
+FastRoute\Exception\HttpNotFoundException or FastRoute\Exception\HttpMethodNotAllowedException.
+For the method not allowed exception you can retrieve a list of HTTP methods allowed for the
+supplied URI using the method `getAllowedMethod()`.
 
-    [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
+```php
+//...
+catch (FastRoute\Exception\HttpMethodNotAllowedException $e) {
+    $allowedMethods = $e->getAllowedMethod();
+}
+```
 
 > **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
 `Allow:` header to detail available methods for the requested resource. Applications using FastRoute
@@ -204,9 +217,28 @@ should use the second array element to add this header when relaying a 405 respo
 For the found status the second array element is the handler that was associated with the route
 and the third array element is a dictionary of placeholder names to their values. For example:
 
-    /* Routing against GET /user/nikic/42 */
+```php
+/* Routing against GET /user/nikic/42 */
 
-    [FastRoute\Dispatcher::FOUND, 'handler0', ['name' => 'nikic', 'id' => '42']]
+object(FastRoute\Route)#7 (5) {
+  ["httpMethod"]=>
+  string(3) "GET"
+  ["regex"]=>
+  string(21) "/user/([^/]+)/([^/]+)"
+  ["variables"]=>
+  array(2) {
+    ["name"]=>
+    string(5) "nikic"
+    ["id"]=>
+    string(2) "42"
+  }
+  ["handler"]=>
+  string(8) "handler0"
+  ["data"]=>
+  array(0) {
+  }
+}
+```
 
 ### Overriding the route parser and dispatcher
 
@@ -223,7 +255,7 @@ interface RouteParser {
 }
 
 interface DataGenerator {
-    public function addRoute($httpMethod, $routeData, $handler);
+    public function addRoute($httpMethod, $routeData, $handler, array $data = []);
     public function getData();
 }
 

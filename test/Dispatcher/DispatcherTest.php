@@ -31,41 +31,44 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
      */
     public function testFoundDispatches($method, $uri, $callback, $handler, $argDict) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $info = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::FOUND, $info[0]);
-        $this->assertSame($handler, $info[1]);
-        $this->assertSame($argDict, $info[2]);
+        $route = $dispatcher->dispatch($method, $uri);
+        // $this->assertSame($dispatcher::FOUND, $info[0]);
+        $this->assertSame($handler, $route->handler);
+        $this->assertSame($argDict, $route->variables);
     }
 
     /**
-     * @dataProvider provideNotFoundDispatchCases
+     * @dataProvider      provideNotFoundDispatchCases
+     * @expectedException FastRoute\Exception\HttpNotFoundException
      */
     public function testNotFoundDispatches($method, $uri, $callback) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
+        $route = $dispatcher->dispatch($method, $uri);
+    }
+
+    /**
+     * @dataProvider      provideMethodNotAllowedDispatchCases
+     * @expectedException FastRoute\Exception\HttpMethodNotAllowedException
+     */
+    public function testMethodNotAllowedDispatches($method, $uri, $callback, $availableMethods) {
+        $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertFalse(isset($routeInfo[1]),
-            "NOT_FOUND result must only contain a single element in the returned info array"
-        );
-        $this->assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
     }
 
     /**
      * @dataProvider provideMethodNotAllowedDispatchCases
      */
-    public function testMethodNotAllowedDispatches($method, $uri, $callback, $availableMethods) {
+    public function testMethodNotAllowedAvailableMethodsDispatches($method, $uri, $callback, $availableMethods) {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertTrue(isset($routeInfo[1]),
-            "METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1"
-        );
-
-        list($routedStatus, $methodArray) = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
-        $this->assertSame($availableMethods, $methodArray);
+        try {
+            $routeInfo = $dispatcher->dispatch($method, $uri);
+        } catch (\FastRoute\Exception\HttpMethodNotAllowedException $e) {
+            $this->assertSame($e->getAllowedMethod(), $availableMethods);
+        }
     }
 
     /**
-     * @expectedException \FastRoute\BadRouteException
+     * @expectedException \FastRoute\Exception\BadRouteException
      * @expectedExceptionMessage Cannot use the same placeholder "test" twice
      */
     public function testDuplicateVariableNameError() {
@@ -75,7 +78,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \FastRoute\BadRouteException
+     * @expectedException \FastRoute\Exception\BadRouteException
      * @expectedExceptionMessage Cannot register two routes matching "/user/([^/]+)" for method "GET"
      */
     public function testDuplicateVariableRoute() {
@@ -86,7 +89,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \FastRoute\BadRouteException
+     * @expectedException \FastRoute\Exception\BadRouteException
      * @expectedExceptionMessage Cannot register two routes matching "/user" for method "GET"
      */
     public function testDuplicateStaticRoute() {
@@ -97,7 +100,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \FastRoute\BadRouteException
+     * @expectedException \FastRoute\Exception\BadRouteException
      * @expectedExceptionMessage Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"
      */
     public function testShadowedStaticRoute() {
@@ -108,7 +111,7 @@ abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \FastRoute\BadRouteException
+     * @expectedException \FastRoute\Exception\BadRouteException
      * @expectedExceptionMessage Regex "(en|de)" for parameter "lang" contains a capturing group
      */
     public function testCapturing() {

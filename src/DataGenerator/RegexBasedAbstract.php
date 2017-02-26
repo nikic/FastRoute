@@ -3,7 +3,7 @@
 namespace FastRoute\DataGenerator;
 
 use FastRoute\DataGenerator;
-use FastRoute\BadRouteException;
+use FastRoute\Exception\BadRouteException;
 use FastRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator {
@@ -13,11 +13,11 @@ abstract class RegexBasedAbstract implements DataGenerator {
     protected abstract function getApproxChunkSize();
     protected abstract function processChunk($regexToRoutesMap);
 
-    public function addRoute($httpMethod, $routeData, $handler) {
+    public function addRoute($httpMethod, $routeData, $handler, array $data = []) {
         if ($this->isStaticRoute($routeData)) {
-            $this->addStaticRoute($httpMethod, $routeData, $handler);
+            $this->addStaticRoute($httpMethod, $routeData, $handler, $data);
         } else {
-            $this->addVariableRoute($httpMethod, $routeData, $handler);
+            $this->addVariableRoute($httpMethod, $routeData, $handler, $data);
         }
     }
 
@@ -48,7 +48,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
-    private function addStaticRoute($httpMethod, $routeData, $handler) {
+    private function addStaticRoute($httpMethod, $routeData, $handler, array $data = []) {
         $routeStr = $routeData[0];
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
@@ -69,10 +69,13 @@ abstract class RegexBasedAbstract implements DataGenerator {
             }
         }
 
-        $this->staticRoutes[$httpMethod][$routeStr] = $handler;
+        // $this->staticRoutes[$httpMethod][$routeStr] = $handler;
+        $this->staticRoutes[$httpMethod][$routeStr] = new Route(
+            $httpMethod, $handler, $data
+        );
     }
 
-    private function addVariableRoute($httpMethod, $routeData, $handler) {
+    private function addVariableRoute($httpMethod, $routeData, $handler, $data) {
         list($regex, $variables) = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
@@ -83,7 +86,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
         }
 
         $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod, $handler, $regex, $variables
+            $httpMethod, $handler, $data, $regex, $variables
         );
     }
 

@@ -46,7 +46,9 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         }
 
         if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
-            $dispatchData = require $options['cacheFile'];
+            $cachedData = file_get_contents($options['cacheFile']);
+            $dispatchData = unserialize($cachedData);
+            
             if (!is_array($dispatchData)) {
                 throw new \RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
             }
@@ -63,7 +65,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         if (!$options['cacheDisabled']) {
             file_put_contents(
                 $options['cacheFile'],
-                '<?php return ' . var_export($dispatchData, true) . ';'
+                serialize($dispatchData)
             );
         }
 

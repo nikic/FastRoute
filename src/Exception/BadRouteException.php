@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute;
+namespace FastRoute\Exception;
 
 class BadRouteException extends \LogicException {
 }

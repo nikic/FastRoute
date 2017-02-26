@@ -14,8 +14,9 @@ interface DataGenerator {
      * @param string $httpMethod
      * @param array $routeData
      * @param mixed $handler
+     * @param array $data
      */
-    public function addRoute($httpMethod, $routeData, $handler);
+    public function addRoute($httpMethod, $routeData, $handler, array $data = []);
 
     /**
      * Returns dispatcher data in some unspecified format, which
