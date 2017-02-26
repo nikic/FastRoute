@@ -51,7 +51,7 @@ try {
     $handler = $routeInfo->handler;
     $vars = $routeInfo->variables;
 
-    if (in_array('auth', $routeInfo->data]) {
+    if (in_array('auth', $routeInfo->data)) {
         // Check if current user is authenticated before continue
     }
     
@@ -188,6 +188,8 @@ $dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
 
 The second parameter to the function is an options array, which can be used to specify the cache
 file location, among other things.
+
+CAUTION: You can't cache routes with handlers as Closures.
 
 ### Dispatching a URI
 
