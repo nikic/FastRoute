@@ -197,12 +197,17 @@ A URI is dispatched by calling the `dispatch()` method of the created dispatcher
 accepts the HTTP method and a URI. Getting those two bits of information (and normalizing them
 appropriately) is your job - this library is not bound to the PHP web SAPIs.
 
-The `dispatch()` method returns an array whose first element contains a status code. It is one
-of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FOUND`. For the
-method not allowed status the second array element contains a list of HTTP methods allowed for
-the supplied URI. For example:
+The `dispatch()` method returns an object (see the object structure below). If the route was not
+founded or the HTTP method was not allowed, the `dispatch()` method will throw an exception.
+FastRoute\Exception\HttpNotFoundException or FastRoute\Exception\HttpMethodNotAllowedException.
+For the method not allowed exception you can retrieve a list of HTTP methods allowed for the
+supplied URI using the method `getAllowedMethod()`.
 
-    [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
+```php
+//...
+catch (FastRoute\Exception\HttpMethodNotAllowedException $e) {
+    $allowedMethods = $e->getAllowedMethod();
+}
 
 > **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
 `Allow:` header to detail available methods for the requested resource. Applications using FastRoute
@@ -211,9 +216,28 @@ should use the second array element to add this header when relaying a 405 respo
 For the found status the second array element is the handler that was associated with the route
 and the third array element is a dictionary of placeholder names to their values. For example:
 
-    /* Routing against GET /user/nikic/42 */
+```php
+/* Routing against GET /user/nikic/42 */
 
-    [FastRoute\Dispatcher::FOUND, 'handler0', ['name' => 'nikic', 'id' => '42']]
+object(FastRoute\Route)#7 (5) {
+  ["httpMethod"]=>
+  string(3) "GET"
+  ["regex"]=>
+  string(21) "/user/([^/]+)/([^/]+)"
+  ["variables"]=>
+  array(2) {
+    ["name"]=>
+    string(5) "nikic"
+    ["id"]=>
+    string(2) "42"
+  }
+  ["handler"]=>
+  string(8) "handler0"
+  ["data"]=>
+  array(0) {
+  }
+}
+```
 
 ### Overriding the route parser and dispatcher
 
