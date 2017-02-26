@@ -208,6 +208,7 @@ supplied URI using the method `getAllowedMethod()`.
 catch (FastRoute\Exception\HttpMethodNotAllowedException $e) {
     $allowedMethods = $e->getAllowedMethod();
 }
+```
 
 > **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
 `Allow:` header to detail available methods for the requested resource. Applications using FastRoute
@@ -254,7 +255,7 @@ interface RouteParser {
 }
 
 interface DataGenerator {
-    public function addRoute($httpMethod, $routeData, $handler);
+    public function addRoute($httpMethod, $routeData, $handler, array $data = []);
     public function getData();
 }
 
