@@ -3,8 +3,19 @@
 namespace FastRoute;
 
 class RouteCollector {
+    /**
+     * @var RouteParser
+     */
     protected $routeParser;
+
+    /**
+     * @var DataGenerator
+     */
     protected $dataGenerator;
+
+    /**
+     * @var string
+     */
     protected $currentGroupPrefix;
 
     /**
