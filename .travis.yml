@@ -14,9 +14,10 @@ matrix:
     - php: 7.0
 script:
   - ./vendor/bin/phpunit
+  - ./vendor/bin/psalm
   
 before_install:
   - travis_retry composer self-update
 
 install:
-  - composer install
+  - composer --prefer-source --ignore-platform-reqs install

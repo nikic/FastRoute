@@ -21,6 +21,9 @@ class Std implements RouteParser {
 REGEX;
     const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
+    /**
+     * @return mixed[][]
+     */
     public function parse($route) {
         $routeWithoutClosingOptionals = rtrim($route, ']');
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
@@ -36,6 +39,10 @@ REGEX;
         }
 
         $currentRoute = '';
+
+        /**
+         * @var array[] $routeDatas
+         */
         $routeDatas = [];
         foreach ($segments as $n => $segment) {
             if ($segment === '' && $n !== 0) {
@@ -50,6 +57,7 @@ REGEX;
 
     /**
      * Parses a route string that does not contain optional segments.
+     * @return mixed[]
      */
     private function parsePlaceholders($route) {
         if (!preg_match_all(
