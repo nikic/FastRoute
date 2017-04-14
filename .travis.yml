@@ -1,3 +1,4 @@
+sudo:false
 language: php
 
 php:
@@ -11,3 +12,11 @@ php:
 matrix:
   allow_failures:
     - php: 7.0
+script:
+  - ./vendor/bin/phpunit
+  
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - composer install
