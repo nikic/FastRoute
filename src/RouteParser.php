@@ -30,7 +30,7 @@ interface RouteParser {
      *
      * @param string $route Route string to parse
      *
-     * @return (mixed[])[] Array of route data arrays
+     * @return mixed[][] Array of route data arrays
      */
     public function parse($route);
 }
