@@ -12,10 +12,9 @@ php:
 matrix:
   allow_failures:
     - php: 7.0
+
 script:
   - ./vendor/bin/phpunit
-  - composer require --dev --update-with-dependencies --ignore-platform-reqs --prefer-source vimeo/psalm:dev-master
-  - ./vendor/bin/psalm
 
 before_install:
   - travis_retry composer self-update

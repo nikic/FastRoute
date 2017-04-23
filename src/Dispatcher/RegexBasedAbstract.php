@@ -5,14 +5,10 @@ namespace FastRoute\Dispatcher;
 use FastRoute\Dispatcher;
 
 abstract class RegexBasedAbstract implements Dispatcher {
-    /**
-     * @var array
-     */
+    /** @var mixed[][] */
     protected $staticRouteMap = [];
 
-    /**
-     * @var array
-     */
+    /** @var mixed[] */
     protected $variableRouteData = [];
 
     /**

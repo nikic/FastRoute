@@ -13,9 +13,6 @@ class GroupPosBased extends RegexBasedAbstract {
                 continue;
             }
 
-            // to resolve vimeo/psalm PossiblyUndefinedVariable
-            $i = 1;
-
             // find first non-empty match
             for ($i = 1; '' === $matches[$i]; ++$i);
 

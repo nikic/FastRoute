@@ -36,7 +36,6 @@ REGEX;
         }
 
         $currentRoute = '';
-
         $routeDatas = [];
         foreach ($segments as $n => $segment) {
             if ($segment === '' && $n !== 0) {
@@ -51,6 +50,8 @@ REGEX;
 
     /**
      * Parses a route string that does not contain optional segments.
+     *
+     * @param string
      * @return mixed[]
      */
     private function parsePlaceholders($route) {

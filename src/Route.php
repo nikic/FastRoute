@@ -3,24 +3,16 @@
 namespace FastRoute;
 
 class Route {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $httpMethod;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $regex;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $variables;
 
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     public $handler;
 
     /**

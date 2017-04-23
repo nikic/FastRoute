@@ -7,14 +7,10 @@ use FastRoute\BadRouteException;
 use FastRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator {
-    /**
-     * @var array
-     */
+    /** @var mixed[][] */
     protected $staticRoutes = [];
 
-    /**
-     * @var array
-     */
+    /** @var Route[][] */
     protected $methodToRegexToRoutesMap = [];
 
     /**
@@ -53,7 +49,6 @@ abstract class RegexBasedAbstract implements DataGenerator {
         $data = [];
         foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
             $chunkSize = $this->computeChunkSize(count($regexToRoutesMap));
-            $chunkSize = (int)$chunkSize;
             $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
             $data[$method] =  array_map([$this, 'processChunk'], $chunks);
         }
@@ -61,14 +56,16 @@ abstract class RegexBasedAbstract implements DataGenerator {
     }
 
     /**
-     * @return float|int
+     * @param int
+     * @return int
      */
     private function computeChunkSize($count) {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
-        return ceil($count / $numParts);
+        return (int) ceil($count / $numParts);
     }
 
     /**
+     * @param mixed[]
      * @return bool
      */
     private function isStaticRoute($routeData) {
@@ -115,6 +112,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
     }
 
     /**
+     * @param mixed[]
      * @return mixed[]
      */
     private function buildRegexForRoute($routeData) {
@@ -149,7 +147,8 @@ abstract class RegexBasedAbstract implements DataGenerator {
     }
 
     /**
-     * @return int|false
+     * @param string
+     * @return bool
      */
     private function regexHasCapturingGroups($regex) {
         if (false === strpos($regex, '(')) {
@@ -158,7 +157,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
         }
 
         // Semi-accurate detection for capturing groups
-        return preg_match(
+        return (bool) preg_match(
             '~
                 (?:
                     \(\?\(
