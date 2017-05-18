@@ -38,10 +38,7 @@ $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 
 // Strip query string (?foo=bar) and decode URI
-if (false !== $pos = strpos($uri, '?')) {
-    $uri = substr($uri, 0, $pos);
-}
-$uri = rawurldecode($uri);
+$uri = urldecode(parse_url($uri, PHP_URL_PATH));
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
