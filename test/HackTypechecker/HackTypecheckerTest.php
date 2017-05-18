@@ -2,7 +2,7 @@
 
 namespace FastRoute;
 
-class HackTypecheckerTest extends \PhpUnit_Framework_TestCase {
+class HackTypecheckerTest extends \PHPUnit_Framework_TestCase {
     const SERVER_ALREADY_RUNNING_CODE = 77;
     public function testTypechecks($recurse = true) {
         if (!defined('HHVM_VERSION')) {
