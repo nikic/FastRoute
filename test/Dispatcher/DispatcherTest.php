@@ -3,8 +3,9 @@
 namespace FastRoute\Dispatcher;
 
 use FastRoute\RouteCollector;
+use PHPUnit\Framework\TestCase;
 
-abstract class DispatcherTest extends \PHPUnit_Framework_TestCase {
+abstract class DispatcherTest extends TestCase {
 
     /**
      * Delegate dispatcher selection to child test classes
