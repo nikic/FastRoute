@@ -3,7 +3,7 @@
 namespace FastRoute\TestFixtures;
 
 function empty_options_simple(): \FastRoute\Dispatcher {
-    if(version_compare(HHVM_VERSION, "3.23") < 0){
+    if(version_compare(HHVM_VERSION, '3.23', '<')){
         // UNSAFE
         return \FastRoute\simpleDispatcher($collector ==> {}, shape());
     }
@@ -11,7 +11,7 @@ function empty_options_simple(): \FastRoute\Dispatcher {
 }
 
 function empty_options_cached(): \FastRoute\Dispatcher {
-    if(version_compare(HHVM_VERSION, "3.23") < 0){
+    if(version_compare(HHVM_VERSION, '3.23', '<')){
         // UNSAFE
         return \FastRoute\cachedDispatcher($collector ==> {}, shape());
     }
