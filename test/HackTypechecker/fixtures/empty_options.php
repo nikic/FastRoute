@@ -3,9 +3,17 @@
 namespace FastRoute\TestFixtures;
 
 function empty_options_simple(): \FastRoute\Dispatcher {
-    return \FastRoute\simpleDispatcher($collector ==> {}, shape());
+    if(version_compare(HHVM_VERSION, "3.23") < 0){
+        // UNSAFE
+        return \FastRoute\simpleDispatcher($collector ==> {}, shape());
+    }
+    return no_options_simple();
 }
 
 function empty_options_cached(): \FastRoute\Dispatcher {
-    return \FastRoute\cachedDispatcher($collector ==> {}, shape());
+    if(version_compare(HHVM_VERSION, "3.23") < 0){
+        // UNSAFE
+        return \FastRoute\cachedDispatcher($collector ==> {}, shape());
+    }
+    return no_options_cached();
 }

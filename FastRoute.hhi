@@ -38,7 +38,12 @@ namespace FastRoute {
           'dataGenerator' => ?classname<DataGenerator>,
           'dispatcher' => ?classname<Dispatcher>,
           'routeCollector' => ?classname<RouteCollector>,
-        ) $options = shape()): Dispatcher;
+        ) $options = shape(
+          'routeParser' => \FastRoute\RouteParser\Std::class,
+          'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
+          'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
+          'routeCollector' => \FastRoute\RouteCollector::class
+        )): Dispatcher;
 
     function cachedDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
@@ -49,7 +54,14 @@ namespace FastRoute {
           'routeCollector' => ?classname<RouteCollector>,
           'cacheDisabled' => ?bool,
           'cacheFile' => ?string,
-        ) $options = shape()): Dispatcher;
+        ) $options = shape(
+          'routeParser' => \FastRoute\RouteParser\Std::class,
+          'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
+          'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
+          'routeCollector' => \FastRoute\RouteCollector::class,
+          'cacheDisabled' => false,
+          'cacheFile' => null
+        )): Dispatcher;
 }
 
 namespace FastRoute\DataGenerator {
