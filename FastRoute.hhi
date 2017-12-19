@@ -37,7 +37,7 @@ namespace FastRoute {
           ?'routeParser' => classname<RouteParser>,
           ?'dataGenerator' => classname<DataGenerator>,
           ?'dispatcher' => classname<Dispatcher>,
-          ?'routeCollector' => classname<RouteCollector>,
+          ?'routeCollector' => classname<RouteCollector>
         ) $options = shape()): Dispatcher;
 
     function cachedDispatcher(
@@ -48,7 +48,7 @@ namespace FastRoute {
           ?'dispatcher' => classname<Dispatcher>,
           ?'routeCollector' => classname<RouteCollector>,
           ?'cacheDisabled' => bool,
-          ?'cacheFile' => string,
+          ?'cacheFile' => string
         ) $options = shape()): Dispatcher;
 }
 
