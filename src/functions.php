@@ -11,10 +11,10 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []) {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => '\\FastRoute\\RouteParser\\Std',
+            'dataGenerator' => '\\FastRoute\\DataGenerator\\GroupCountBased',
+            'dispatcher' => '\\FastRoute\\Dispatcher\\GroupCountBased',
+            'routeCollector' => '\\FastRoute\\RouteCollector',
         ];
 
         /** @var RouteCollector $routeCollector */
@@ -34,10 +34,10 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
      */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []) {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => '\\FastRoute\\RouteParser\\Std',
+            'dataGenerator' => '\\FastRoute\\DataGenerator\\GroupCountBased',
+            'dispatcher' => '\\FastRoute\\Dispatcher\\GroupCountBased',
+            'routeCollector' => '\\FastRoute\\RouteCollector',
             'cacheDisabled' => false,
         ];
 
