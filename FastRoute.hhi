@@ -34,34 +34,22 @@ namespace FastRoute {
     function simpleDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
         shape(
-          'routeParser' => ?classname<RouteParser>,
-          'dataGenerator' => ?classname<DataGenerator>,
-          'dispatcher' => ?classname<Dispatcher>,
-          'routeCollector' => ?classname<RouteCollector>,
-        ) $options = shape(
-          'routeParser' => \FastRoute\RouteParser\Std::class,
-          'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
-          'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
-          'routeCollector' => \FastRoute\RouteCollector::class
-        )): Dispatcher;
+          ?'routeParser' => classname<RouteParser>,
+          ?'dataGenerator' => classname<DataGenerator>,
+          ?'dispatcher' => classname<Dispatcher>,
+          ?'routeCollector' => classname<RouteCollector>,
+        ) $options = shape()): Dispatcher;
 
     function cachedDispatcher(
         (function(RouteCollector): void) $routeDefinitionCallback,
         shape(
-          'routeParser' => ?classname<RouteParser>,
-          'dataGenerator' => ?classname<DataGenerator>,
-          'dispatcher' => ?classname<Dispatcher>,
-          'routeCollector' => ?classname<RouteCollector>,
-          'cacheDisabled' => ?bool,
-          'cacheFile' => ?string,
-        ) $options = shape(
-          'routeParser' => \FastRoute\RouteParser\Std::class,
-          'dataGenerator' => \FastRoute\DataGenerator\GroupCountBased::class,
-          'dispatcher' => \FastRoute\Dispatcher\GroupCountBased::class,
-          'routeCollector' => \FastRoute\RouteCollector::class,
-          'cacheDisabled' => false,
-          'cacheFile' => null
-        )): Dispatcher;
+          ?'routeParser' => classname<RouteParser>,
+          ?'dataGenerator' => classname<DataGenerator>,
+          ?'dispatcher' => classname<Dispatcher>,
+          ?'routeCollector' => classname<RouteCollector>,
+          ?'cacheDisabled' => bool,
+          ?'cacheFile' => string,
+        ) $options = shape()): Dispatcher;
 }
 
 namespace FastRoute\DataGenerator {

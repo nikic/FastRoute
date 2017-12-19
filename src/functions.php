@@ -41,7 +41,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             'cacheDisabled' => false,
         ];
 
-        if (!isset($options['cacheFile']) || $options['cacheFile'] === null) {
+        if (!isset($options['cacheFile'])) {
             throw new \LogicException('Must specify "cacheFile" option');
         }
 
