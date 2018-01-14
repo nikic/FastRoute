@@ -61,7 +61,7 @@ class RouteCollector
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
     }
-    
+
     /**
      * Adds a GET route to the collection
      * 
@@ -74,7 +74,7 @@ class RouteCollector
     {
         $this->addRoute('GET', $route, $handler);
     }
-    
+
     /**
      * Adds a POST route to the collection
      * 
@@ -87,7 +87,7 @@ class RouteCollector
     {
         $this->addRoute('POST', $route, $handler);
     }
-    
+
     /**
      * Adds a PUT route to the collection
      * 
@@ -100,7 +100,7 @@ class RouteCollector
     {
         $this->addRoute('PUT', $route, $handler);
     }
-    
+
     /**
      * Adds a DELETE route to the collection
      * 
@@ -113,7 +113,7 @@ class RouteCollector
     {
         $this->addRoute('DELETE', $route, $handler);
     }
-    
+
     /**
      * Adds a PATCH route to the collection
      * 
