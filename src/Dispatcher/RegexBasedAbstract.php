@@ -81,8 +81,8 @@ abstract class RegexBasedAbstract implements Dispatcher
         // If there are no allowed methods the route simply does not exist
         if ($allowedMethods) {
             return [self::METHOD_NOT_ALLOWED, $allowedMethods];
-        } else {
-            return [self::NOT_FOUND];
         }
+
+        return [self::NOT_FOUND];
     }
 }
