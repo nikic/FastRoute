@@ -4,11 +4,13 @@ namespace FastRoute\DataGenerator;
 
 class GroupCountBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize() {
+    protected function getApproxChunkSize()
+    {
         return 10;
     }
 
-    protected function processChunk($regexToRoutesMap) {
+    protected function processChunk($regexToRoutesMap)
+    {
         $routeMap = [];
         $regexes = [];
         $numGroups = 0;

@@ -21,7 +21,8 @@ abstract class DispatcherTest extends TestCase
     /**
      * Set appropriate options for the specific Dispatcher class we're testing
      */
-    private function generateDispatcherOptions() {
+    private function generateDispatcherOptions()
+    {
         return [
             'dataGenerator' => $this->getDataGeneratorClass(),
             'dispatcher' => $this->getDispatcherClass()
@@ -31,7 +32,8 @@ abstract class DispatcherTest extends TestCase
     /**
      * @dataProvider provideFoundDispatchCases
      */
-    public function testFoundDispatches($method, $uri, $callback, $handler, $argDict) {
+    public function testFoundDispatches($method, $uri, $callback, $handler, $argDict)
+    {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
         $this->assertSame($dispatcher::FOUND, $info[0]);
@@ -42,7 +44,8 @@ abstract class DispatcherTest extends TestCase
     /**
      * @dataProvider provideNotFoundDispatchCases
      */
-    public function testNotFoundDispatches($method, $uri, $callback) {
+    public function testNotFoundDispatches($method, $uri, $callback)
+    {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
         $this->assertArrayNotHasKey(1, $routeInfo,
@@ -54,7 +57,8 @@ abstract class DispatcherTest extends TestCase
     /**
      * @dataProvider provideMethodNotAllowedDispatchCases
      */
-    public function testMethodNotAllowedDispatches($method, $uri, $callback, $availableMethods) {
+    public function testMethodNotAllowedDispatches($method, $uri, $callback, $availableMethods)
+    {
         $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
         $this->assertArrayHasKey(1, $routeInfo,
@@ -70,7 +74,8 @@ abstract class DispatcherTest extends TestCase
      * @expectedException \FastRoute\BadRouteException
      * @expectedExceptionMessage Cannot use the same placeholder "test" twice
      */
-    public function testDuplicateVariableNameError() {
+    public function testDuplicateVariableNameError()
+    {
         \FastRoute\simpleDispatcher(function(RouteCollector $r) {
             $r->addRoute('GET', '/foo/{test}/{test:\d+}', 'handler0');
         }, $this->generateDispatcherOptions());
@@ -80,7 +85,8 @@ abstract class DispatcherTest extends TestCase
      * @expectedException \FastRoute\BadRouteException
      * @expectedExceptionMessage Cannot register two routes matching "/user/([^/]+)" for method "GET"
      */
-    public function testDuplicateVariableRoute() {
+    public function testDuplicateVariableRoute()
+    {
         \FastRoute\simpleDispatcher(function(RouteCollector $r) {
             $r->addRoute('GET', '/user/{id}', 'handler0'); // oops, forgot \d+ restriction ;)
             $r->addRoute('GET', '/user/{name}', 'handler1');
@@ -91,7 +97,8 @@ abstract class DispatcherTest extends TestCase
      * @expectedException \FastRoute\BadRouteException
      * @expectedExceptionMessage Cannot register two routes matching "/user" for method "GET"
      */
-    public function testDuplicateStaticRoute() {
+    public function testDuplicateStaticRoute()
+    {
         \FastRoute\simpleDispatcher(function(RouteCollector $r) {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('GET', '/user', 'handler1');
@@ -102,7 +109,8 @@ abstract class DispatcherTest extends TestCase
      * @expectedException \FastRoute\BadRouteException
      * @expectedExceptionMessage Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"
      */
-    public function testShadowedStaticRoute() {
+    public function testShadowedStaticRoute()
+    {
         \FastRoute\simpleDispatcher(function(RouteCollector $r) {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/nikic', 'handler1');
@@ -113,13 +121,15 @@ abstract class DispatcherTest extends TestCase
      * @expectedException \FastRoute\BadRouteException
      * @expectedExceptionMessage Regex "(en|de)" for parameter "lang" contains a capturing group
      */
-    public function testCapturing() {
+    public function testCapturing()
+    {
         \FastRoute\simpleDispatcher(function(RouteCollector $r) {
             $r->addRoute('GET', '/{lang:(en|de)}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
 
-    public function provideFoundDispatchCases() {
+    public function provideFoundDispatchCases()
+    {
         $cases = [];
 
         // 0 -------------------------------------------------------------------------------------->
@@ -204,7 +214,6 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler0');
             $r->addRoute('GET', '/user/12345/extension', 'handler1');
             $r->addRoute('GET', '/user/{id:[0-9]+}.{extension}', 'handler2');
-
         };
 
         $method = 'GET';
@@ -401,7 +410,8 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
-    public function provideNotFoundDispatchCases() {
+    public function provideNotFoundDispatchCases()
+    {
         $cases = [];
 
         // 0 -------------------------------------------------------------------------------------->
@@ -477,7 +487,8 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
-    public function provideMethodNotAllowedDispatchCases() {
+    public function provideMethodNotAllowedDispatchCases()
+    {
         $cases = [];
 
         // 0 -------------------------------------------------------------------------------------->
@@ -559,5 +570,4 @@ abstract class DispatcherTest extends TestCase
 
         return $cases;
     }
-
 }

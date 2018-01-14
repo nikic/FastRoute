@@ -7,7 +7,8 @@ use PHPUnit\Framework\TestCase;
 class HackTypecheckerTest extends TestCase
 {
     const SERVER_ALREADY_RUNNING_CODE = 77;
-    public function testTypechecks($recurse = true) {
+    public function testTypechecks($recurse = true)
+    {
         if (!defined('HHVM_VERSION')) {
             $this->markTestSkipped("HHVM only");
         }

@@ -6,7 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 class RouteCollectorTest extends TestCase
 {
-    public function testShortcuts() {
+    public function testShortcuts()
+    {
         $r = new DummyRouteCollector();
 
         $r->delete('/delete', 'delete');
@@ -28,7 +29,8 @@ class RouteCollectorTest extends TestCase
         $this->assertSame($expected, $r->routes);
     }
 
-    public function testGroups() {
+    public function testGroups()
+    {
         $r = new DummyRouteCollector();
 
         $r->delete('/delete', 'delete');
@@ -93,8 +95,11 @@ class RouteCollectorTest extends TestCase
 class DummyRouteCollector extends RouteCollector
 {
     public $routes = [];
-    public function __construct() {}
-    public function addRoute($method, $route, $handler) {
+    public function __construct()
+    {
+    }
+    public function addRoute($method, $route, $handler)
+    {
         $route = $this->currentGroupPrefix . $route;
         $this->routes[] = [$method, $route, $handler];
     }
