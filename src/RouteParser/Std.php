@@ -78,7 +78,7 @@ REGEX;
             $offset = $set[0][1] + strlen($set[0][0]);
         }
 
-        if ($offset != strlen($route)) {
+        if ($offset !== strlen($route)) {
             $routeData[] = substr($route, $offset);
         }
 
