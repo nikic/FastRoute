@@ -11,7 +11,7 @@ class HackTypecheckerTest extends TestCase
     public function testTypechecks($recurse = true)
     {
         if (!defined('HHVM_VERSION')) {
-            $this->markTestSkipped("HHVM only");
+            $this->markTestSkipped('HHVM only');
         }
         if (!version_compare(HHVM_VERSION, '3.9.0', '>=')) {
           $this->markTestSkipped('classname<T> requires HHVM 3.9+');
@@ -30,7 +30,7 @@ class HackTypecheckerTest extends TestCase
         if ($exit_code === self::SERVER_ALREADY_RUNNING_CODE) {
             $this->assertTrue(
               $recurse,
-              "Typechecker still running after running hh_client stop"
+              'Typechecker still running after running hh_client stop'
             );
             // Server already running - 3.10 => 3.11 regression:
             // https://github.com/facebook/hhvm/issues/6646

@@ -135,19 +135,19 @@ class StdTest extends TestCase
             ],
             [
                 '/test[]',
-                "Empty optional part"
+                'Empty optional part'
             ],
             [
                 '/test[[opt]]',
-                "Empty optional part"
+                'Empty optional part'
             ],
             [
                 '[[test]]',
-                "Empty optional part"
+                'Empty optional part'
             ],
             [
                 '/test[/opt]/required',
-                "Optional segments can only occur at the end of a route"
+                'Optional segments can only occur at the end of a route'
             ],
         ];
     }

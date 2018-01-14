@@ -32,7 +32,7 @@ REGEX;
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
             if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
-                throw new BadRouteException("Optional segments can only occur at the end of a route");
+                throw new BadRouteException('Optional segments can only occur at the end of a route');
             }
             throw new BadRouteException("Number of opening '[' and closing ']' does not match");
         }
@@ -41,7 +41,7 @@ REGEX;
         $routeDatas = [];
         foreach ($segments as $n => $segment) {
             if ($segment === '' && $n !== 0) {
-                throw new BadRouteException("Empty optional part");
+                throw new BadRouteException('Empty optional part');
             }
 
             $currentRoute .= $segment;
