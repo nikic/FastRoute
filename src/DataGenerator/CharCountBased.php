@@ -2,7 +2,8 @@
 
 namespace FastRoute\DataGenerator;
 
-class CharCountBased extends RegexBasedAbstract {
+class CharCountBased extends RegexBasedAbstract
+{
     protected function getApproxChunkSize() {
         return 30;
     }

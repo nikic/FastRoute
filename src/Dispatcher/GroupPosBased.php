@@ -2,7 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
-class GroupPosBased extends RegexBasedAbstract {
+class GroupPosBased extends RegexBasedAbstract
+{
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
     }

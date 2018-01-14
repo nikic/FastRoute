@@ -2,7 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
-class MarkBased extends RegexBasedAbstract {
+class MarkBased extends RegexBasedAbstract
+{
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
     }

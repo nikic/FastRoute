@@ -4,7 +4,8 @@ namespace FastRoute\RouteParser;
 
 use PHPUnit\Framework\TestCase;
 
-class StdTest extends TestCase {
+class StdTest extends TestCase
+{
     /** @dataProvider provideTestParse */
     public function testParse($routeString, $expectedRouteDatas) {
         $parser = new Std();

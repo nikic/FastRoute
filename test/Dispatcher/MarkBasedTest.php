@@ -2,7 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
-class MarkBasedTest extends DispatcherTest {
+class MarkBasedTest extends DispatcherTest
+{
     public function setUp() {
         preg_match('/(*MARK:A)a/', 'a', $matches);
         if (!isset($matches['MARK'])) {

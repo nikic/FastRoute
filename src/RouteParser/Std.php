@@ -10,7 +10,8 @@ use FastRoute\RouteParser;
  *
  * "/user/{name}[/{id:[0-9]+}]"
  */
-class Std implements RouteParser {
+class Std implements RouteParser
+{
     const VARIABLE_REGEX = <<<'REGEX'
 \{
     \s* ([a-zA-Z_][a-zA-Z0-9_-]*) \s*

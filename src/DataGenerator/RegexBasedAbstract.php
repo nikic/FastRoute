@@ -6,7 +6,8 @@ use FastRoute\DataGenerator;
 use FastRoute\BadRouteException;
 use FastRoute\Route;
 
-abstract class RegexBasedAbstract implements DataGenerator {
+abstract class RegexBasedAbstract implements DataGenerator
+{
     /** @var mixed[][] */
     protected $staticRoutes = [];
 

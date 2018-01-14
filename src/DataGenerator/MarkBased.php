@@ -2,7 +2,8 @@
 
 namespace FastRoute\DataGenerator;
 
-class MarkBased extends RegexBasedAbstract {
+class MarkBased extends RegexBasedAbstract
+{
     protected function getApproxChunkSize() {
         return 30;
     }
@@ -22,4 +23,3 @@ class MarkBased extends RegexBasedAbstract {
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }
-

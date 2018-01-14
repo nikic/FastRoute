@@ -2,7 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
-class CharCountBased extends RegexBasedAbstract {
+class CharCountBased extends RegexBasedAbstract
+{
     public function __construct($data) {
         list($this->staticRouteMap, $this->variableRouteData) = $data;
     }

@@ -2,7 +2,8 @@
 
 namespace FastRoute;
 
-class RouteCollector {
+class RouteCollector
+{
     /** @var RouteParser */
     protected $routeParser;
 

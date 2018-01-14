@@ -4,7 +4,8 @@ namespace FastRoute\Dispatcher;
 
 use FastRoute\Dispatcher;
 
-abstract class RegexBasedAbstract implements Dispatcher {
+abstract class RegexBasedAbstract implements Dispatcher
+{
     /** @var mixed[][] */
     protected $staticRouteMap = [];
 

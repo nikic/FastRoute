@@ -2,7 +2,8 @@
 
 namespace FastRoute\Dispatcher;
 
-class GroupPosBasedTest extends DispatcherTest {
+class GroupPosBasedTest extends DispatcherTest
+{
     protected function getDispatcherClass() {
         return 'FastRoute\\Dispatcher\\GroupPosBased';
     }

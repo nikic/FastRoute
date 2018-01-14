@@ -2,7 +2,8 @@
 
 namespace FastRoute;
 
-class Route {
+class Route
+{
     /** @var string */
     public $httpMethod;
 
