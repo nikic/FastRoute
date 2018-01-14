@@ -17,12 +17,12 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return int
      */
-    protected abstract function getApproxChunkSize();
+    abstract protected function getApproxChunkSize();
 
     /**
      * @return mixed[]
      */
-    protected abstract function processChunk($regexToRoutesMap);
+    abstract protected function processChunk($regexToRoutesMap);
 
     public function addRoute($httpMethod, $routeData, $handler)
     {
