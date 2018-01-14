@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class DispatcherTest extends TestCase
 {
-
     /**
      * Delegate dispatcher selection to child test classes
      */
