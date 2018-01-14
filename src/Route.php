@@ -45,4 +45,3 @@ class Route
         return (bool) preg_match($regex, $str);
     }
 }
-
