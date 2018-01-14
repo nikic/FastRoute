@@ -23,7 +23,7 @@ class HackTypecheckerTest extends TestCase
         $output = [];
         $exit_code = null;
         exec(
-            'hh_server --check '.escapeshellarg(__DIR__.'/../../').' 2>&1',
+            'hh_server --check ' . escapeshellarg(__DIR__ . '/../../') . ' 2>&1',
             $output,
             $exit_code
         );
