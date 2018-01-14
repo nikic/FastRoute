@@ -2,8 +2,8 @@
 
 namespace FastRoute\DataGenerator;
 
-use FastRoute\DataGenerator;
 use FastRoute\BadRouteException;
+use FastRoute\DataGenerator;
 use FastRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator
