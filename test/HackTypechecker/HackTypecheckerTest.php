@@ -17,7 +17,7 @@ class HackTypecheckerTest extends TestCase {
         // The typechecker recurses the whole tree, so it makes sure
         // that everything in fixtures/ is valid when this runs.
 
-        $output = array();
+        $output = [];
         $exit_code = null;
         exec(
             'hh_server --check '.escapeshellarg(__DIR__.'/../../').' 2>&1',

@@ -469,7 +469,7 @@ abstract class DispatcherTest extends TestCase {
         // reuse callback from #5
         $method = 'HEAD';
 
-        $cases[] = array($method, $uri, $callback);
+        $cases[] = [$method, $uri, $callback];
 
         // x -------------------------------------------------------------------------------------->
 
