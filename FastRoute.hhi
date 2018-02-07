@@ -1,4 +1,4 @@
-<?hh // decl
+<?php // decl
 
 namespace FastRoute {
     class BadRouteException extends \LogicException {
