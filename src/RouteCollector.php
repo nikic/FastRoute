@@ -2,7 +2,8 @@
 
 namespace FastRoute;
 
-class RouteCollector {
+class RouteCollector
+{
     /** @var RouteParser */
     protected $routeParser;
 
@@ -18,7 +19,8 @@ class RouteCollector {
      * @param RouteParser   $routeParser
      * @param DataGenerator $dataGenerator
      */
-    public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator) {
+    public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
+    {
         $this->routeParser = $routeParser;
         $this->dataGenerator = $dataGenerator;
         $this->currentGroupPrefix = '';
@@ -33,7 +35,8 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function addRoute($httpMethod, $route, $handler) {
+    public function addRoute($httpMethod, $route, $handler)
+    {
         $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
@@ -51,13 +54,14 @@ class RouteCollector {
      * @param string $prefix
      * @param callable $callback
      */
-    public function addGroup($prefix, callable $callback) {
+    public function addGroup($prefix, callable $callback)
+    {
         $previousGroupPrefix = $this->currentGroupPrefix;
         $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
     }
-    
+
     /**
      * Adds a GET route to the collection
      * 
@@ -66,10 +70,11 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function get($route, $handler) {
+    public function get($route, $handler)
+    {
         $this->addRoute('GET', $route, $handler);
     }
-    
+
     /**
      * Adds a POST route to the collection
      * 
@@ -78,10 +83,11 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function post($route, $handler) {
+    public function post($route, $handler)
+    {
         $this->addRoute('POST', $route, $handler);
     }
-    
+
     /**
      * Adds a PUT route to the collection
      * 
@@ -90,10 +96,11 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function put($route, $handler) {
+    public function put($route, $handler)
+    {
         $this->addRoute('PUT', $route, $handler);
     }
-    
+
     /**
      * Adds a DELETE route to the collection
      * 
@@ -102,10 +109,11 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function delete($route, $handler) {
+    public function delete($route, $handler)
+    {
         $this->addRoute('DELETE', $route, $handler);
     }
-    
+
     /**
      * Adds a PATCH route to the collection
      * 
@@ -114,7 +122,8 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function patch($route, $handler) {
+    public function patch($route, $handler)
+    {
         $this->addRoute('PATCH', $route, $handler);
     }
 
@@ -126,7 +135,8 @@ class RouteCollector {
      * @param string $route
      * @param mixed  $handler
      */
-    public function head($route, $handler) {
+    public function head($route, $handler)
+    {
         $this->addRoute('HEAD', $route, $handler);
     }
 
@@ -135,7 +145,8 @@ class RouteCollector {
      *
      * @return array
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->dataGenerator->getData();
     }
 }
