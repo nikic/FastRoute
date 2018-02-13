@@ -50,7 +50,7 @@ abstract class RegexBasedAbstract implements DataGenerator {
         foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
             $chunkSize = $this->computeChunkSize(count($regexToRoutesMap));
             $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
-            $data[$method] =  array_map([$this, 'processChunk'], $chunks);
+            $data[$method] = array_map([$this, 'processChunk'], $chunks);
         }
         return $data;
     }
