@@ -413,6 +413,14 @@ abstract class DispatcherTest extends TestCase
 
         $cases[] = ['POST', '/bar', $callback, 'handler1', ['foo' => 'bar']];
 
+        // 27 ----
+
+        $callback = function(RouteCollector $r) {
+            $r->addRoute('OPTIONS', '/about', 'handler0');
+        };
+
+        $cases[] = ['OPTIONS', '/about', $callback, 'handler0', []];
+
         // x -------------------------------------------------------------------------------------->
 
         return $cases;
