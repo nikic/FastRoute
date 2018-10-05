@@ -1,7 +1,8 @@
 <?php
 
-namespace FastRoute\RouteParser;
+namespace FastRoute\Test\RouteParser;
 
+use FastRoute\RouteParser\Std;
 use PHPUnit\Framework\TestCase;
 
 class StdTest extends TestCase

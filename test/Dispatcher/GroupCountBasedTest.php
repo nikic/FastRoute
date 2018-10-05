@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace FastRoute\Test\Dispatcher;
 
 class GroupCountBasedTest extends DispatcherTest
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace FastRoute\Test\Dispatcher;
 
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
