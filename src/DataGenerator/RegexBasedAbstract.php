@@ -105,7 +105,7 @@ abstract class RegexBasedAbstract implements DataGenerator
 
     private function addVariableRoute(string $httpMethod, array $routeData, $handler):void
     {
-        list($regex, $variables) = $this->buildRegexForRoute($routeData);
+        [$regex, $variables] = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
             throw new BadRouteException(sprintf(
@@ -133,7 +133,7 @@ abstract class RegexBasedAbstract implements DataGenerator
                 continue;
             }
 
-            list($varName, $regexPart) = $part;
+            [$varName, $regexPart] = $part;
 
             if (isset($variables[$varName])) {
                 throw new BadRouteException(sprintf(

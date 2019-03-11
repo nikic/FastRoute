@@ -4,11 +4,6 @@ namespace FastRoute\Dispatcher;
 
 class MarkBased extends RegexBasedAbstract
 {
-    public function __construct(array $data)
-    {
-        list($this->staticRouteMap, $this->variableRouteData) = $data;
-    }
-
     protected function dispatchVariableRoute(array $routeData, string $uri):array
     {
         foreach ($routeData as $data) {
@@ -16,7 +11,7 @@ class MarkBased extends RegexBasedAbstract
                 continue;
             }
 
-            list($handler, $varNames) = $data['routeMap'][$matches['MARK']];
+            [$handler, $varNames] = $data['routeMap'][$matches['MARK']];
 
             $vars = [];
             $i = 0;

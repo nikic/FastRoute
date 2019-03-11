@@ -64,7 +64,7 @@ abstract class DispatcherTest extends TestCase
             'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1'
         );
 
-        list($routedStatus, $methodArray) = $dispatcher->dispatch($method, $uri);
+        [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);
         $this->assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
         $this->assertSame($availableMethods, $methodArray);
     }

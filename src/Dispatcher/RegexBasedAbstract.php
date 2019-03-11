@@ -12,6 +12,11 @@ abstract class RegexBasedAbstract implements Dispatcher
     /** @var mixed[] */
     protected $variableRouteData = [];
 
+    public function __construct(array $data)
+    {
+        [$this->staticRouteMap, $this->variableRouteData] = $data;
+    }
+
     /**
      * @return mixed[]
      */
