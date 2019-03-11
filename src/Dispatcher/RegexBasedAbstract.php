@@ -15,9 +15,9 @@ abstract class RegexBasedAbstract implements Dispatcher
     /**
      * @return mixed[]
      */
-    abstract protected function dispatchVariableRoute($routeData, $uri);
+    abstract protected function dispatchVariableRoute(array $routeData, string $uri):array;
 
-    public function dispatch($httpMethod, $uri)
+    public function dispatch(string $httpMethod, string $uri):array
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];

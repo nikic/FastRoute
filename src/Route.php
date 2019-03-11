@@ -24,7 +24,7 @@ class Route
      * @param string $regex
      * @param array  $variables
      */
-    public function __construct($httpMethod, $handler, $regex, $variables)
+    public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
         $this->httpMethod = $httpMethod;
         $this->handler = $handler;
@@ -39,7 +39,7 @@ class Route
      *
      * @return bool
      */
-    public function matches($str)
+    public function matches(string $str):bool
     {
         $regex = '~^' . $this->regex . '$~';
         return (bool) preg_match($regex, $str);

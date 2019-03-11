@@ -33,5 +33,5 @@ interface RouteParser
      *
      * @return mixed[][] Array of route data arrays
      */
-    public function parse($route);
+    public function parse(string $route):array;
 }
