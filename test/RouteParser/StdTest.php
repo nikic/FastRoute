@@ -19,7 +19,8 @@ class StdTest extends TestCase
     public function testParseError($routeString, $expectedExceptionMessage)
     {
         $parser = new Std();
-        $this->setExpectedException('FastRoute\\BadRouteException', $expectedExceptionMessage);
+        $this->expectException('FastRoute\\BadRouteException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $parser->parse($routeString);
     }
 
