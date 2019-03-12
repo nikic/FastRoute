@@ -1,5 +1,5 @@
 {
-  "name": "nikic/fast-route",
+  "name": "codemasher/fast-route",
   "description": "Fast request router for PHP",
   "keywords": ["routing", "router"],
   "license": "BSD-3-Clause",
@@ -23,7 +23,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0-dev"
+      "dev-php71-breaking": "2.0-dev"
     }
   }
 }
