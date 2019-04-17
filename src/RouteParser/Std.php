@@ -24,29 +24,62 @@ REGEX;
 
     public function parse($route)
     {
-        $routeWithoutClosingOptionals = rtrim($route, ']');
-        $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
+        if (strcspn($route, '[]') === strlen($route)) {
+            return [$this->parsePlaceholders($route)];
+        }
 
-        // Split on [ while skipping placeholders
-        $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
-        if ($numOptionals !== count($segments) - 1) {
-            // If there are any ] in the middle of the route, throw a more specific error message
-            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
-                throw new BadRouteException('Optional segments can only occur at the end of a route');
+        $routeDatas = $this->consume($route);
+
+        return array_map([$this, 'parsePlaceholders'], $routeDatas);
+    }
+
+    private function consume(& $route, $recursion = false)
+    {
+        $routeDatas = [''];
+
+        do {
+            $segments = preg_split(
+                '~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | ( \[ | ] )~x',
+                $route,
+                2
+            );
+
+            foreach ($routeDatas as $key => $data) {
+                $routeDatas[$key] = $data . $segments[0];
             }
+
+            if (isset($segments[1])) {
+                $delimiter = $route[strlen($segments[0])];
+                $route = $segments[1];
+
+                if ($delimiter === ']') {
+                    if (!$recursion) {
+                        throw new BadRouteException("Number of opening '[' and closing ']' does not match");
+                    }
+
+                    if (in_array('', $routeDatas, true)) {
+                        throw new BadRouteException('Empty optional part');
+                    }
+
+                    return $routeDatas;
+                }
+
+                $forks = $this->consume($route, true);
+
+                foreach ($routeDatas as $data) {
+                    foreach ($forks as $fork) {
+                        $routeDatas[] = $data . $fork;
+                    }
+                }
+            } else {
+                $route = '';
+            }
+        } while (isset($segments[1]));
+
+        if ($recursion) {
             throw new BadRouteException("Number of opening '[' and closing ']' does not match");
         }
 
-        $currentRoute = '';
-        $routeDatas = [];
-        foreach ($segments as $n => $segment) {
-            if ($segment === '' && $n !== 0) {
-                throw new BadRouteException('Empty optional part');
-            }
-
-            $currentRoute .= $segment;
-            $routeDatas[] = $this->parsePlaceholders($currentRoute);
-        }
         return $routeDatas;
     }
 
