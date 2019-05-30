@@ -17,6 +17,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "FastRoute\\Benchmark\\": "benchmark/",
       "FastRoute\\Test\\": "test/"
     }
   },
@@ -24,7 +25,8 @@
     "php": ">=7.1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.5"
+    "phpunit/phpunit": "^7.5",
+    "phpbench/phpbench": "^0.16.9"
   },
   "extra": {
     "branch-alias": {
