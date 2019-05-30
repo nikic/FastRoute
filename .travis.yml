@@ -8,6 +8,10 @@ php:
   - 7.4snapshot
   - nightly
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 script:
   - ./vendor/bin/phpunit
 
