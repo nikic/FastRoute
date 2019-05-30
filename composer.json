@@ -15,6 +15,11 @@
     },
     "files": ["src/functions.php"]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "FastRoute\\Test\\": "test/"
+    }
+  },
   "require": {
     "php": ">=5.4.0"
   },

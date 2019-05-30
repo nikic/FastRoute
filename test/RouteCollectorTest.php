@@ -1,7 +1,8 @@
 <?php
 
-namespace FastRoute;
+namespace FastRoute\Test;
 
+use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
 
 class RouteCollectorTest extends TestCase

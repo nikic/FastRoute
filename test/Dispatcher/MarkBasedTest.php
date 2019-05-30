@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace FastRoute\Test\Dispatcher;
 
 class MarkBasedTest extends DispatcherTest
 {
