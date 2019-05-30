@@ -2,6 +2,7 @@
 
 namespace FastRoute\Test\Dispatcher;
 
+use FastRoute\BadRouteException;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
 
@@ -64,64 +65,59 @@ abstract class DispatcherTest extends TestCase
             'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1'
         );
 
-        list($routedStatus, $methodArray) = $dispatcher->dispatch($method, $uri);
+        [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);
         $this->assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
         $this->assertSame($availableMethods, $methodArray);
     }
 
-    /**
-     * @expectedException \FastRoute\BadRouteException
-     * @expectedExceptionMessage Cannot use the same placeholder "test" twice
-     */
     public function testDuplicateVariableNameError()
     {
+        $this->expectException(BadRouteException::class);
+        $this->expectExceptionMessage('Cannot use the same placeholder "test" twice');
+
         \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/foo/{test}/{test:\d+}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
 
-    /**
-     * @expectedException \FastRoute\BadRouteException
-     * @expectedExceptionMessage Cannot register two routes matching "/user/([^/]+)" for method "GET"
-     */
     public function testDuplicateVariableRoute()
     {
+	    $this->expectException(BadRouteException::class);
+        $this->expectExceptionMessage('Cannot register two routes matching "/user/([^/]+)" for method "GET"');
+
         \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/user/{id}', 'handler0'); // oops, forgot \d+ restriction ;)
             $r->addRoute('GET', '/user/{name}', 'handler1');
         }, $this->generateDispatcherOptions());
     }
 
-    /**
-     * @expectedException \FastRoute\BadRouteException
-     * @expectedExceptionMessage Cannot register two routes matching "/user" for method "GET"
-     */
     public function testDuplicateStaticRoute()
     {
+	    $this->expectException(BadRouteException::class);
+        $this->expectExceptionMessage('Cannot register two routes matching "/user" for method "GET"');
+
         \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('GET', '/user', 'handler1');
         }, $this->generateDispatcherOptions());
     }
 
-    /**
-     * @expectedException \FastRoute\BadRouteException
-     * @expectedExceptionMessage Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"
-     */
     public function testShadowedStaticRoute()
     {
+	    $this->expectException(BadRouteException::class);
+        $this->expectExceptionMessage('Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"');
+
         \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/nikic', 'handler1');
         }, $this->generateDispatcherOptions());
     }
 
-    /**
-     * @expectedException \FastRoute\BadRouteException
-     * @expectedExceptionMessage Regex "(en|de)" for parameter "lang" contains a capturing group
-     */
     public function testCapturing()
     {
+	    $this->expectException(BadRouteException::class);
+        $this->expectExceptionMessage('Regex "(en|de)" for parameter "lang" contains a capturing group');
+
         \FastRoute\simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/{lang:(en|de)}', 'handler0');
         }, $this->generateDispatcherOptions());

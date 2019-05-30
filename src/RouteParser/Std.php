@@ -22,7 +22,7 @@ class Std implements RouteParser
 REGEX;
     const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
-    public function parse($route)
+    public function parse(string $route):array
     {
         $routeWithoutClosingOptionals = rtrim($route, ']');
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
@@ -56,7 +56,7 @@ REGEX;
      * @param string
      * @return mixed[]
      */
-    private function parsePlaceholders($route)
+    private function parsePlaceholders(string $route):array
     {
         if (!preg_match_all(
             '~' . self::VARIABLE_REGEX . '~x', $route, $matches,
