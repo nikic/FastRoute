@@ -1,6 +1,8 @@
 FastRoute - Fast request router for PHP
 =======================================
 
+[![Build Status](https://travis-ci.org/nikic/FastRoute.svg?branch=master)](https://travis-ci.org/nikic/FastRoute)
+
 This library provides a fast implementation of a regular expression based router. [Blog post explaining how the
 implementation works and why it is fast.][blog_post]
 
@@ -13,7 +15,7 @@ To install with composer:
 composer require nikic/fast-route
 ```
 
-Requires PHP 5.4 or newer.
+Requires PHP 7.1 or newer.
 
 Usage
 -----

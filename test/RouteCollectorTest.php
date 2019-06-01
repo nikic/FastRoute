@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute;
+namespace FastRoute\Test;
 
 use PHPUnit\Framework\TestCase;
 
@@ -100,17 +100,3 @@ class RouteCollectorTest extends TestCase
     }
 }
 
-class DummyRouteCollector extends RouteCollector
-{
-    public $routes = [];
-
-    public function __construct()
-    {
-    }
-
-    public function addRoute($method, $route, $handler)
-    {
-        $route = $this->currentGroupPrefix . $route;
-        $this->routes[] = [$method, $route, $handler];
-    }
-}
