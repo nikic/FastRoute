@@ -10,13 +10,15 @@ class RouteCollectorTest extends TestCase
     {
         $r = new DummyRouteCollector();
 
-        $r->delete('/delete', 'delete');
-        $r->get('/get', 'get');
-        $r->head('/head', 'head');
-        $r->patch('/patch', 'patch');
-        $r->post('/post', 'post');
-        $r->put('/put', 'put');
-        $r->options('/options', 'options');
+        $r
+            ->delete('/delete', 'delete')
+            ->get('/get', 'get')
+            ->head('/head', 'head')
+            ->patch('/patch', 'patch')
+            ->post('/post', 'post')
+            ->put('/put', 'put')
+            ->options('/options', 'options')
+        ;
 
         $expected = [
             ['DELETE', '/delete', 'delete'],
@@ -35,31 +37,37 @@ class RouteCollectorTest extends TestCase
     {
         $r = new DummyRouteCollector();
 
-        $r->delete('/delete', 'delete');
-        $r->get('/get', 'get');
-        $r->head('/head', 'head');
-        $r->patch('/patch', 'patch');
-        $r->post('/post', 'post');
-        $r->put('/put', 'put');
-        $r->options('/options', 'options');
+        $r
+            ->delete('/delete', 'delete')
+            ->get('/get', 'get')
+            ->head('/head', 'head')
+            ->patch('/patch', 'patch')
+            ->post('/post', 'post')
+            ->put('/put', 'put')
+            ->options('/options', 'options')
+        ;
 
         $r->addGroup('/group-one', function (DummyRouteCollector $r) {
-            $r->delete('/delete', 'delete');
-            $r->get('/get', 'get');
-            $r->head('/head', 'head');
-            $r->patch('/patch', 'patch');
-            $r->post('/post', 'post');
-            $r->put('/put', 'put');
-            $r->options('/options', 'options');
+            $r
+                ->delete('/delete', 'delete')
+                ->get('/get', 'get')
+                ->head('/head', 'head')
+                ->patch('/patch', 'patch')
+                ->post('/post', 'post')
+                ->put('/put', 'put')
+                ->options('/options', 'options')
+            ;
 
             $r->addGroup('/group-two', function (DummyRouteCollector $r) {
-                $r->delete('/delete', 'delete');
-                $r->get('/get', 'get');
-                $r->head('/head', 'head');
-                $r->patch('/patch', 'patch');
-                $r->post('/post', 'post');
-                $r->put('/put', 'put');
-                $r->options('/options', 'options');
+                $r
+                    ->delete('/delete', 'delete')
+                    ->get('/get', 'get')
+                    ->head('/head', 'head')
+                    ->patch('/patch', 'patch')
+                    ->post('/post', 'post')
+                    ->put('/put', 'put')
+                    ->options('/options', 'options')
+                ;
             });
         });
 
