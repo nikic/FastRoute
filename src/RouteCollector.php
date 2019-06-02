@@ -49,6 +49,12 @@ class RouteCollector
         $this->currentGroupPrefix = $previousGroupPrefix;
     }
 
+    /** @param mixed $handler */
+    public function any(string $route, $handler): void
+    {
+        $this->addRoute('*', $route, $handler);
+    }
+
     /**
      * Adds a GET route to the collection
      *
