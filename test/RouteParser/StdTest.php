@@ -118,6 +118,46 @@ class StdTest extends TestCase
                     ['/', ['_foo', '.*']]
                 ]
             ],
+            [
+                '/test[/opt]/required',
+                [
+                    ['/test/required'],
+                    ['/test/opt/required'],
+                ]
+            ],
+            [
+                '/test[/opt[/sub1][/sub2]]/required[/end]',
+                [
+                    ['/test/required'],
+                    ['/test/opt/required'],
+                    ['/test/opt/sub1/required'],
+                    ['/test/opt/sub2/required'],
+                    ['/test/opt/sub1/sub2/required'],
+                    ['/test/required/end'],
+                    ['/test/opt/required/end'],
+                    ['/test/opt/sub1/required/end'],
+                    ['/test/opt/sub2/required/end'],
+                    ['/test/opt/sub1/sub2/required/end'],
+                ]
+            ],
+            [
+                '/test[/[opt[/]]]',
+                [
+                    ['/test'],
+                    ['/test/'],
+                    ['/test/opt'],
+                    ['/test/opt/'],
+                ]
+            ],
+            [
+                '/test[/opt][/]',
+                [
+                    ['/test'],
+                    ['/test/opt'],
+                    ['/test/'],
+                    ['/test/opt/'],
+                ]
+            ]
         ];
     }
 
@@ -137,6 +177,10 @@ class StdTest extends TestCase
                 "Number of opening '[' and closing ']' does not match"
             ],
             [
+                '/test]opt',
+                "Number of opening '[' and closing ']' does not match"
+            ],
+            [
                 '/test[]',
                 'Empty optional part'
             ],
@@ -147,10 +191,6 @@ class StdTest extends TestCase
             [
                 '[[test]]',
                 'Empty optional part'
-            ],
-            [
-                '/test[/opt]/required',
-                'Optional segments can only occur at the end of a route'
             ],
         ];
     }
