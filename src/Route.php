@@ -39,7 +39,7 @@ class Route
      *
      * @return bool
      */
-    public function matches(string $str):bool
+    public function matches(string $str): bool
     {
         $regex = '~^' . $this->regex . '$~';
         return (bool) preg_match($regex, $str);

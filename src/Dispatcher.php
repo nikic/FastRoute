@@ -22,5 +22,5 @@ interface Dispatcher
      *
      * @return array
      */
-    public function dispatch(string $httpMethod, string $uri):array;
+    public function dispatch(string $httpMethod, string $uri): array;
 }

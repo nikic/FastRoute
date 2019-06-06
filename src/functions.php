@@ -9,7 +9,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
      *
      * @return Dispatcher
      */
-    function simpleDispatcher(callable $routeDefinitionCallback, array $options = []):Dispatcher
+    function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
             'routeParser' => 'FastRoute\\RouteParser\\Std',
@@ -20,7 +20,8 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
 
         /** @var RouteCollector $routeCollector */
         $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'], new $options['dataGenerator']
+            new $options['routeParser'],
+            new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
 
@@ -33,7 +34,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
      *
      * @return Dispatcher
      */
-    function cachedDispatcher(callable $routeDefinitionCallback, array $options = []):Dispatcher
+    function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
             'routeParser' => 'FastRoute\\RouteParser\\Std',
@@ -56,7 +57,8 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         }
 
         $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'], new $options['dataGenerator']
+            new $options['routeParser'],
+            new $options['dataGenerator']
         );
         $routeDefinitionCallback($routeCollector);
 

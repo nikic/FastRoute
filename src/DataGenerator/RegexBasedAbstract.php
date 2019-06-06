@@ -17,14 +17,14 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return int
      */
-    abstract protected function getApproxChunkSize():int;
+    abstract protected function getApproxChunkSize(): int;
 
     /**
      * @return mixed[]
      */
-    abstract protected function processChunk(array $regexToRoutesMap):array;
+    abstract protected function processChunk(array $regexToRoutesMap): array;
 
-    public function addRoute(string $httpMethod, array $routeData, $handler):void
+    public function addRoute(string $httpMethod, array $routeData, $handler): void
     {
         if ($this->isStaticRoute($routeData)) {
             $this->addStaticRoute($httpMethod, $routeData, $handler);
@@ -36,7 +36,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return mixed[]
      */
-    public function getData():array
+    public function getData(): array
     {
         if (empty($this->methodToRegexToRoutesMap)) {
             return [$this->staticRoutes, []];
@@ -48,7 +48,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return mixed[]
      */
-    private function generateVariableRouteData():array
+    private function generateVariableRouteData(): array
     {
         $data = [];
         foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
@@ -63,7 +63,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param int
      * @return int
      */
-    private function computeChunkSize(int $count):int
+    private function computeChunkSize(int $count): int
     {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
         return (int) ceil($count / $numParts);
@@ -73,19 +73,20 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param mixed[]
      * @return bool
      */
-    private function isStaticRoute(array $routeData):bool
+    private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
-    private function addStaticRoute(string $httpMethod, array $routeData, $handler):void
+    private function addStaticRoute(string $httpMethod, array $routeData, $handler): void
     {
         $routeStr = $routeData[0];
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
             throw new BadRouteException(sprintf(
                 'Cannot register two routes matching "%s" for method "%s"',
-                $routeStr, $httpMethod
+                $routeStr,
+                $httpMethod
             ));
         }
 
@@ -94,7 +95,9 @@ abstract class RegexBasedAbstract implements DataGenerator
                 if ($route->matches($routeStr)) {
                     throw new BadRouteException(sprintf(
                         'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
-                        $routeStr, $route->regex, $httpMethod
+                        $routeStr,
+                        $route->regex,
+                        $httpMethod
                     ));
                 }
             }
@@ -103,19 +106,23 @@ abstract class RegexBasedAbstract implements DataGenerator
         $this->staticRoutes[$httpMethod][$routeStr] = $handler;
     }
 
-    private function addVariableRoute(string $httpMethod, array $routeData, $handler):void
+    private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
         [$regex, $variables] = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
             throw new BadRouteException(sprintf(
                 'Cannot register two routes matching "%s" for method "%s"',
-                $regex, $httpMethod
+                $regex,
+                $httpMethod
             ));
         }
 
         $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod, $handler, $regex, $variables
+            $httpMethod,
+            $handler,
+            $regex,
+            $variables
         );
     }
 
@@ -123,7 +130,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param mixed[]
      * @return mixed[]
      */
-    private function buildRegexForRoute(array $routeData):array
+    private function buildRegexForRoute(array $routeData): array
     {
         $regex = '';
         $variables = [];
@@ -137,14 +144,16 @@ abstract class RegexBasedAbstract implements DataGenerator
 
             if (isset($variables[$varName])) {
                 throw new BadRouteException(sprintf(
-                    'Cannot use the same placeholder "%s" twice', $varName
+                    'Cannot use the same placeholder "%s" twice',
+                    $varName
                 ));
             }
 
             if ($this->regexHasCapturingGroups($regexPart)) {
                 throw new BadRouteException(sprintf(
                     'Regex "%s" for parameter "%s" contains a capturing group',
-                    $regexPart, $varName
+                    $regexPart,
+                    $varName
                 ));
             }
 
@@ -159,7 +168,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param string
      * @return bool
      */
-    private function regexHasCapturingGroups(string $regex):bool
+    private function regexHasCapturingGroups(string $regex): bool
     {
         if (false === strpos($regex, '(')) {
             // Needs to have at least a ( to contain a capturing group

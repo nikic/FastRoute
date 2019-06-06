@@ -4,7 +4,7 @@ namespace FastRoute\Dispatcher;
 
 class CharCountBased extends RegexBasedAbstract
 {
-    protected function dispatchVariableRoute(array $routeData, string $uri):array
+    protected function dispatchVariableRoute(array $routeData, string $uri): array
     {
         foreach ($routeData as $data) {
             if (!preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
