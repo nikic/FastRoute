@@ -11,7 +11,7 @@ class RouteCollector
     protected $dataGenerator;
 
     /** @var string */
-    protected $currentGroupPrefix;
+    protected $currentGroupPrefix = '';
 
     /**
      * Constructs a route collector.
@@ -23,7 +23,6 @@ class RouteCollector
     {
         $this->routeParser = $routeParser;
         $this->dataGenerator = $dataGenerator;
-        $this->currentGroupPrefix = '';
     }
 
     /**
