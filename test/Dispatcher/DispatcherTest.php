@@ -47,6 +47,7 @@ abstract class DispatcherTest extends TestCase
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
+
         $this->assertSame($dispatcher::FOUND, $info[0]);
         $this->assertSame($handler, $info[1]);
         $this->assertSame($argDict, $info[2]);

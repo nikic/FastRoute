@@ -100,4 +100,3 @@ class RouteCollectorTest extends TestCase
         $this->assertSame($expected, $r->routes);
     }
 }
-

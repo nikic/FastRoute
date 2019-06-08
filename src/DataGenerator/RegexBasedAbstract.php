@@ -70,12 +70,14 @@ abstract class RegexBasedAbstract implements DataGenerator
             $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
             $data[$method] = array_map([$this, 'processChunk'], $chunks);
         }
+
         return $data;
     }
 
     private function computeChunkSize(int $count): int
     {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
+
         return (int) ceil($count / $numParts);
     }
 

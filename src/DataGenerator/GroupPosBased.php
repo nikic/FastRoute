@@ -32,6 +32,7 @@ class GroupPosBased extends RegexBasedAbstract
         }
 
         $regex = '~^(?:' . implode('|', $regexes) . ')$~';
+
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }

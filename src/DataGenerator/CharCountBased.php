@@ -36,6 +36,7 @@ class CharCountBased extends RegexBasedAbstract
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+
         return ['regex' => $regex, 'suffix' => '/' . $suffix, 'routeMap' => $routeMap];
     }
 }
