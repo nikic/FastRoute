@@ -5,7 +5,7 @@ namespace FastRoute;
 
 if (!function_exists('FastRoute\simpleDispatcher')) {
     /**
-     * @param array $options
+     * @param array<string, string> $options
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
@@ -26,7 +26,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
     }
 
     /**
-     * @param array $options
+     * @param array<string, string> $options
      */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {

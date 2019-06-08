@@ -5,6 +5,9 @@ namespace FastRoute\Dispatcher;
 
 class GroupCountBased extends RegexBasedAbstract
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function dispatchVariableRoute(array $routeData, string $uri): array
     {
         foreach ($routeData as $data) {

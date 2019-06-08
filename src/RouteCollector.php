@@ -14,12 +14,6 @@ class RouteCollector
     /** @var string */
     protected $currentGroupPrefix = '';
 
-    /**
-     * Constructs a route collector.
-     *
-     * @param RouteParser   $routeParser
-     * @param DataGenerator $dataGenerator
-     */
     public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
     {
         $this->routeParser = $routeParser;
@@ -60,7 +54,7 @@ class RouteCollector
 
     /**
      * Adds a GET route to the collection
-     * 
+     *
      * This is simply an alias of $this->addRoute('GET', $route, $handler)
      *
      * @param mixed $handler
@@ -72,7 +66,7 @@ class RouteCollector
 
     /**
      * Adds a POST route to the collection
-     * 
+     *
      * This is simply an alias of $this->addRoute('POST', $route, $handler)
      *
      * @param mixed $handler
@@ -84,7 +78,7 @@ class RouteCollector
 
     /**
      * Adds a PUT route to the collection
-     * 
+     *
      * This is simply an alias of $this->addRoute('PUT', $route, $handler)
      *
      * @param mixed $handler
@@ -96,7 +90,7 @@ class RouteCollector
 
     /**
      * Adds a DELETE route to the collection
-     * 
+     *
      * This is simply an alias of $this->addRoute('DELETE', $route, $handler)
      *
      * @param mixed $handler
@@ -108,7 +102,7 @@ class RouteCollector
 
     /**
      * Adds a PATCH route to the collection
-     * 
+     *
      * This is simply an alias of $this->addRoute('PATCH', $route, $handler)
      *
      * @param mixed $handler
@@ -145,7 +139,7 @@ class RouteCollector
     /**
      * Returns the collected route data, as provided by the data generator.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getData(): array
     {

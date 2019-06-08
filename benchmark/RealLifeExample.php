@@ -13,6 +13,9 @@ use function FastRoute\simpleDispatcher;
 
 final class RealLifeExample extends Dispatching
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function createDispatcher(array $options = []): Dispatcher
     {
         return simpleDispatcher(
@@ -63,6 +66,9 @@ final class RealLifeExample extends Dispatching
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideStaticRoutes(): iterable
     {
         yield 'first' => [
@@ -84,6 +90,9 @@ final class RealLifeExample extends Dispatching
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideDynamicRoutes(): iterable
     {
         yield 'first' => [
@@ -105,6 +114,9 @@ final class RealLifeExample extends Dispatching
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideOtherScenarios(): iterable
     {
         yield 'non-existent' => [

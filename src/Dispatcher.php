@@ -18,7 +18,7 @@ interface Dispatcher
      *     [self::METHOD_NOT_ALLOWED, ['GET', 'OTHER_ALLOWED_METHODS']]
      *     [self::FOUND, $handler, ['varName' => 'value', ...]]
      *
-     * @return array
+     * @return array<int, mixed>
      */
     public function dispatch(string $httpMethod, string $uri): array;
 }

@@ -11,19 +11,15 @@ class Route
     /** @var string */
     public $regex;
 
-    /** @var array */
+    /** @var mixed[] */
     public $variables;
 
     /** @var mixed */
     public $handler;
 
     /**
-     * Constructs a route (value object).
-     *
-     * @param string $httpMethod
-     * @param mixed  $handler
-     * @param string $regex
-     * @param array  $variables
+     * @param mixed   $handler
+     * @param mixed[] $variables
      */
     public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {

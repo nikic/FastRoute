@@ -21,6 +21,8 @@ abstract class DispatcherTest extends TestCase
 
     /**
      * Set appropriate options for the specific Dispatcher class we're testing
+     *
+     * @return array<string, string>
      */
     private function generateDispatcherOptions(): array
     {
@@ -32,6 +34,8 @@ abstract class DispatcherTest extends TestCase
 
     /**
      * @dataProvider provideFoundDispatchCases
+     *
+     * @param array<string, string> $argDict
      */
     public function testFoundDispatches(
         string $method,
@@ -62,6 +66,8 @@ abstract class DispatcherTest extends TestCase
 
     /**
      * @dataProvider provideMethodNotAllowedDispatchCases
+     *
+     * @param string[] $availableMethods
      */
     public function testMethodNotAllowedDispatches(
         string $method,
@@ -133,6 +139,9 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
+    /**
+     * @return mixed[]
+     */
     public function provideFoundDispatchCases(): array
     {
         $cases = [];
@@ -432,6 +441,9 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function provideNotFoundDispatchCases(): array
     {
         $cases = [];
@@ -509,6 +521,9 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function provideMethodNotAllowedDispatchCases(): array
     {
         $cases = [];

@@ -7,12 +7,16 @@ use FastRoute\RouteCollector;
 
 class DummyRouteCollector extends RouteCollector
 {
+    /** @var mixed[] */
     public $routes = [];
 
     public function __construct()
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function addRoute($method, string $route, $handler): void
     {
         $route = $this->currentGroupPrefix . $route;

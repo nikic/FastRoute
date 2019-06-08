@@ -13,20 +13,29 @@ abstract class RegexBasedAbstract implements Dispatcher
     /** @var mixed[] */
     protected $variableRouteData = [];
 
+    /**
+     * @param mixed[] $data
+     */
     public function __construct(array $data)
     {
         [$this->staticRouteMap, $this->variableRouteData] = $data;
     }
 
     /**
+     * @param mixed[] $routeData
+     *
      * @return mixed[]
      */
     abstract protected function dispatchVariableRoute(array $routeData, string $uri): array;
 
+    /**
+     * {@inheritDoc}
+     */
     public function dispatch(string $httpMethod, string $uri): array
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];
+
             return [self::FOUND, $handler, []];
         }
 

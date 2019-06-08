@@ -18,10 +18,15 @@ abstract class RegexBasedAbstract implements DataGenerator
     abstract protected function getApproxChunkSize(): int;
 
     /**
+     * @param array<string, Route> $regexToRoutesMap
+     *
      * @return mixed[]
      */
     abstract protected function processChunk(array $regexToRoutesMap): array;
 
+    /**
+     * {@inheritDoc}
+     */
     public function addRoute(string $httpMethod, array $routeData, $handler): void
     {
         if ($this->isStaticRoute($routeData)) {
@@ -32,7 +37,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @return mixed[]
+     * {@inheritDoc}
      */
     public function getData(): array
     {
@@ -64,14 +69,17 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @param mixed[]
-     * @return bool
+     * @param array<int, mixed> $routeData
      */
     private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
+    /**
+     * @param array<int, mixed> $routeData
+     * @param mixed             $handler
+     */
     private function addStaticRoute(string $httpMethod, array $routeData, $handler): void
     {
         $routeStr = $routeData[0];
@@ -97,6 +105,10 @@ abstract class RegexBasedAbstract implements DataGenerator
         $this->staticRoutes[$httpMethod][$routeStr] = $handler;
     }
 
+    /**
+     * @param array<int, mixed> $routeData
+     * @param mixed             $handler
+     */
     private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
         [$regex, $variables] = $this->buildRegexForRoute($routeData);
@@ -114,7 +126,8 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @param mixed[]
+     * @param mixed[] $routeData
+     *
      * @return mixed[]
      */
     private function buildRegexForRoute(array $routeData): array
