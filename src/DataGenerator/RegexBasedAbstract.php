@@ -184,7 +184,7 @@ abstract class RegexBasedAbstract implements DataGenerator
 
     private function regexHasCapturingGroups(string $regex): bool
     {
-        if (false === strpos($regex, '(')) {
+        if (strpos($regex, '(') === false) {
             // Needs to have at least a ( to contain a capturing group
             return false;
         }
