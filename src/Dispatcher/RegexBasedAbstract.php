@@ -77,9 +77,11 @@ abstract class RegexBasedAbstract implements Dispatcher
         $allowedMethods = [];
 
         foreach ($this->staticRouteMap as $method => $uriMap) {
-            if ($method !== $httpMethod && isset($uriMap[$uri])) {
-                $allowedMethods[] = $method;
+            if ($method === $httpMethod || ! isset($uriMap[$uri])) {
+                continue;
             }
+
+            $allowedMethods[] = $method;
         }
 
         foreach ($varRouteData as $method => $routeData) {
@@ -88,9 +90,11 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
 
             $result = $this->dispatchVariableRoute($routeData, $uri);
-            if ($result[0] === self::FOUND) {
-                $allowedMethods[] = $method;
+            if ($result[0] !== self::FOUND) {
+                continue;
             }
+
+            $allowedMethods[] = $method;
         }
 
         // If there are no allowed methods the route simply does not exist
