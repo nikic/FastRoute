@@ -19,7 +19,8 @@ class GroupPosBased extends RegexBasedAbstract
 
             // find first non-empty match
             /** @noinspection PhpStatementHasEmptyBodyInspection */
-            for ($i = 1; $matches[$i] === ''; ++$i);
+            for ($i = 1; $matches[$i] === ''; ++$i) {
+            }
 
             [$handler, $varNames] = $data['routeMap'][$i];
 
