@@ -5,10 +5,6 @@ namespace FastRoute\Benchmark;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
-use PhpBench\Benchmark\Metadata\Annotations\Iterations;
-use PhpBench\Benchmark\Metadata\Annotations\Revs;
-use function assert;
 use function FastRoute\simpleDispatcher;
 
 final class RealLifeExample extends Dispatching
