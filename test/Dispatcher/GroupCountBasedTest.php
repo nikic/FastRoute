@@ -5,12 +5,12 @@ namespace FastRoute\Test\Dispatcher;
 
 class GroupCountBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass()
+    protected function getDispatcherClass(): string
     {
         return 'FastRoute\\Dispatcher\\GroupCountBased';
     }
 
-    protected function getDataGeneratorClass()
+    protected function getDataGeneratorClass(): string
     {
         return 'FastRoute\\DataGenerator\\GroupCountBased';
     }

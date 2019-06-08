@@ -5,12 +5,9 @@ namespace FastRoute;
 
 if (!function_exists('FastRoute\simpleDispatcher')) {
     /**
-     * @param callable $routeDefinitionCallback
      * @param array $options
-     *
-     * @return Dispatcher
      */
-    function simpleDispatcher(callable $routeDefinitionCallback, array $options = []):Dispatcher
+    function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
             'routeParser' => 'FastRoute\\RouteParser\\Std',
@@ -29,12 +26,9 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
     }
 
     /**
-     * @param callable $routeDefinitionCallback
      * @param array $options
-     *
-     * @return Dispatcher
      */
-    function cachedDispatcher(callable $routeDefinitionCallback, array $options = []):Dispatcher
+    function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
             'routeParser' => 'FastRoute\\RouteParser\\Std',

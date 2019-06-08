@@ -24,7 +24,7 @@ REGEX;
 
     public const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
-    public function parse(string $route):array
+    public function parse(string $route): array
     {
         $routeWithoutClosingOptionals = rtrim($route, ']');
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
@@ -55,10 +55,9 @@ REGEX;
     /**
      * Parses a route string that does not contain optional segments.
      *
-     * @param string
      * @return mixed[]
      */
-    private function parsePlaceholders(string $route):array
+    private function parsePlaceholders(string $route): array
     {
         if (!preg_match_all(
             '~' . self::VARIABLE_REGEX . '~x', $route, $matches,

@@ -35,12 +35,8 @@ class Route
 
     /**
      * Tests whether this route matches the given string.
-     *
-     * @param string $str
-     *
-     * @return bool
      */
-    public function matches(string $str):bool
+    public function matches(string $str): bool
     {
         $regex = '~^' . $this->regex . '$~';
         return (bool) preg_match($regex, $str);

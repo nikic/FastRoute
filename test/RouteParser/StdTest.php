@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class StdTest extends TestCase
 {
     /** @dataProvider provideTestParse */
-    public function testParse($routeString, $expectedRouteDatas)
+    public function testParse(string $routeString, array $expectedRouteDatas): void
     {
         $parser = new Std();
         $routeDatas = $parser->parse($routeString);
@@ -17,7 +17,7 @@ class StdTest extends TestCase
     }
 
     /** @dataProvider provideTestParseError */
-    public function testParseError($routeString, $expectedExceptionMessage)
+    public function testParseError(string $routeString, string $expectedExceptionMessage): void
     {
         $this->expectException('FastRoute\\BadRouteException');
         $this->expectExceptionMessage($expectedExceptionMessage);
@@ -26,7 +26,7 @@ class StdTest extends TestCase
         $parser->parse($routeString);
     }
 
-    public function provideTestParse()
+    public function provideTestParse(): array
     {
         return [
             [
@@ -122,7 +122,7 @@ class StdTest extends TestCase
         ];
     }
 
-    public function provideTestParseError()
+    public function provideTestParseError(): array
     {
         return [
             [
