@@ -44,7 +44,7 @@ class RouteCollectorTest extends TestCase
         $r->put('/put', 'put');
         $r->options('/options', 'options');
 
-        $r->addGroup('/group-one', function (DummyRouteCollector $r): void {
+        $r->addGroup('/group-one', static function (DummyRouteCollector $r): void {
             $r->delete('/delete', 'delete');
             $r->get('/get', 'get');
             $r->head('/head', 'head');
@@ -53,7 +53,7 @@ class RouteCollectorTest extends TestCase
             $r->put('/put', 'put');
             $r->options('/options', 'options');
 
-            $r->addGroup('/group-two', function (DummyRouteCollector $r): void {
+            $r->addGroup('/group-two', static function (DummyRouteCollector $r): void {
                 $r->delete('/delete', 'delete');
                 $r->get('/get', 'get');
                 $r->head('/head', 'head');
@@ -64,10 +64,10 @@ class RouteCollectorTest extends TestCase
             });
         });
 
-        $r->addGroup('/admin', function (DummyRouteCollector $r): void {
+        $r->addGroup('/admin', static function (DummyRouteCollector $r): void {
             $r->get('-some-info', 'admin-some-info');
         });
-        $r->addGroup('/admin-', function (DummyRouteCollector $r): void {
+        $r->addGroup('/admin-', static function (DummyRouteCollector $r): void {
             $r->get('more-info', 'admin-more-info');
         });
 
