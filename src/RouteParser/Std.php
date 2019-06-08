@@ -13,7 +13,7 @@ use FastRoute\RouteParser;
  */
 class Std implements RouteParser
 {
-    const VARIABLE_REGEX = <<<'REGEX'
+    public const VARIABLE_REGEX = <<<'REGEX'
 \{
     \s* ([a-zA-Z_][a-zA-Z0-9_-]*) \s*
     (?:
@@ -21,7 +21,8 @@ class Std implements RouteParser
     )?
 \}
 REGEX;
-    const DEFAULT_DISPATCH_REGEX = '[^/]+';
+
+    public const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
     public function parse(string $route):array
     {
