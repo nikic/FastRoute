@@ -98,7 +98,8 @@ abstract class RegexBasedAbstract implements DataGenerator
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
             throw new BadRouteException(sprintf(
                 'Cannot register two routes matching "%s" for method "%s"',
-                $routeStr, $httpMethod
+                $routeStr,
+                $httpMethod
             ));
         }
 
@@ -107,7 +108,9 @@ abstract class RegexBasedAbstract implements DataGenerator
                 if ($route->matches($routeStr)) {
                     throw new BadRouteException(sprintf(
                         'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
-                        $routeStr, $route->regex, $httpMethod
+                        $routeStr,
+                        $route->regex,
+                        $httpMethod
                     ));
                 }
             }
@@ -127,12 +130,16 @@ abstract class RegexBasedAbstract implements DataGenerator
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
             throw new BadRouteException(sprintf(
                 'Cannot register two routes matching "%s" for method "%s"',
-                $regex, $httpMethod
+                $regex,
+                $httpMethod
             ));
         }
 
         $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod, $handler, $regex, $variables
+            $httpMethod,
+            $handler,
+            $regex,
+            $variables
         );
     }
 
@@ -155,14 +162,16 @@ abstract class RegexBasedAbstract implements DataGenerator
 
             if (isset($variables[$varName])) {
                 throw new BadRouteException(sprintf(
-                    'Cannot use the same placeholder "%s" twice', $varName
+                    'Cannot use the same placeholder "%s" twice',
+                    $varName
                 ));
             }
 
             if ($this->regexHasCapturingGroups($regexPart)) {
                 throw new BadRouteException(sprintf(
                     'Regex "%s" for parameter "%s" contains a capturing group',
-                    $regexPart, $varName
+                    $regexPart,
+                    $varName
                 ));
             }
 
