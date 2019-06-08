@@ -27,7 +27,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
         /** @var RouteCollector $routeCollector */
         $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'], new $options['dataGenerator']
+            new $options['routeParser'](), new $options['dataGenerator']()
         );
         $routeDefinitionCallback($routeCollector);
 
@@ -56,11 +56,12 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             if (! is_array($dispatchData)) {
                 throw new RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
             }
+
             return new $options['dispatcher']($dispatchData);
         }
 
         $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'], new $options['dataGenerator']
+            new $options['routeParser'](), new $options['dataGenerator']()
         );
         $routeDefinitionCallback($routeCollector);
 
