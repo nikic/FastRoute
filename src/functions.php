@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+use LogicException;
+use RuntimeException;
 use function file_exists;
 use function file_put_contents;
 use function function_exists;
@@ -17,10 +19,10 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => RouteParser\Std::class,
+            'dataGenerator' => DataGenerator\GroupCountBased::class,
+            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
         ];
 
         /** @var RouteCollector $routeCollector */
@@ -38,21 +40,21 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => RouteParser\Std::class,
+            'dataGenerator' => DataGenerator\GroupCountBased::class,
+            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
             'cacheDisabled' => false,
         ];
 
         if (! isset($options['cacheFile'])) {
-            throw new \LogicException('Must specify "cacheFile" option');
+            throw new LogicException('Must specify "cacheFile" option');
         }
 
         if (! $options['cacheDisabled'] && file_exists($options['cacheFile'])) {
             $dispatchData = require $options['cacheFile'];
             if (! is_array($dispatchData)) {
-                throw new \RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
+                throw new RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
             }
             return new $options['dispatcher']($dispatchData);
         }

@@ -103,7 +103,7 @@ abstract class DispatcherTest extends TestCase
 
     public function testDuplicateVariableRoute(): void
     {
-	    $this->expectException(BadRouteException::class);
+        $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user/([^/]+)" for method "GET"');
 
         simpleDispatcher(function (RouteCollector $r): void {
@@ -114,7 +114,7 @@ abstract class DispatcherTest extends TestCase
 
     public function testDuplicateStaticRoute(): void
     {
-	    $this->expectException(BadRouteException::class);
+        $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user" for method "GET"');
 
         simpleDispatcher(function (RouteCollector $r): void {
@@ -125,7 +125,7 @@ abstract class DispatcherTest extends TestCase
 
     public function testShadowedStaticRoute(): void
     {
-	    $this->expectException(BadRouteException::class);
+        $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"');
 
         simpleDispatcher(function (RouteCollector $r): void {
@@ -136,7 +136,7 @@ abstract class DispatcherTest extends TestCase
 
     public function testCapturing(): void
     {
-	    $this->expectException(BadRouteException::class);
+        $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Regex "(en|de)" for parameter "lang" contains a capturing group');
 
         simpleDispatcher(function (RouteCollector $r): void {
