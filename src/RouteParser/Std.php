@@ -90,7 +90,7 @@ REGEX;
 
             $routeData[] = [
                 $set[1][0],
-                isset($set[2]) ? trim($set[2][0]) : self::DEFAULT_DISPATCH_REGEX
+                isset($set[2]) ? trim($set[2][0]) : self::DEFAULT_DISPATCH_REGEX,
             ];
 
             $offset = $set[0][1] + strlen($set[0][0]);

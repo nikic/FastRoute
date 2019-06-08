@@ -29,7 +29,7 @@ abstract class DispatcherTest extends TestCase
     {
         return [
             'dataGenerator' => $this->getDataGeneratorClass(),
-            'dispatcher' => $this->getDispatcherClass()
+            'dispatcher' => $this->getDispatcherClass(),
         ];
     }
 

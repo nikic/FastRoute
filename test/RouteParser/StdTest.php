@@ -43,58 +43,58 @@ class StdTest extends TestCase
                 '/test',
                 [
                     ['/test'],
-                ]
+                ],
             ],
             [
                 '/test/{param}',
                 [
                     ['/test/', ['param', '[^/]+']],
-                ]
+                ],
             ],
             [
                 '/te{ param }st',
                 [
-                    ['/te', ['param', '[^/]+'], 'st']
-                ]
+                    ['/te', ['param', '[^/]+'], 'st'],
+                ],
             ],
             [
                 '/test/{param1}/test2/{param2}',
                 [
-                    ['/test/', ['param1', '[^/]+'], '/test2/', ['param2', '[^/]+']]
-                ]
+                    ['/test/', ['param1', '[^/]+'], '/test2/', ['param2', '[^/]+']],
+                ],
             ],
             [
                 '/test/{param:\d+}',
                 [
-                    ['/test/', ['param', '\d+']]
-                ]
+                    ['/test/', ['param', '\d+']],
+                ],
             ],
             [
                 '/test/{ param : \d{1,9} }',
                 [
-                    ['/test/', ['param', '\d{1,9}']]
-                ]
+                    ['/test/', ['param', '\d{1,9}']],
+                ],
             ],
             [
                 '/test[opt]',
                 [
                     ['/test'],
                     ['/testopt'],
-                ]
+                ],
             ],
             [
                 '/test[/{param}]',
                 [
                     ['/test'],
                     ['/test/', ['param', '[^/]+']],
-                ]
+                ],
             ],
             [
                 '/{param}[opt]',
                 [
                     ['/', ['param', '[^/]+']],
-                    ['/', ['param', '[^/]+'], 'opt']
-                ]
+                    ['/', ['param', '[^/]+'], 'opt'],
+                ],
             ],
             [
                 '/test[/{name}[/{id:[0-9]+}]]',
@@ -102,32 +102,32 @@ class StdTest extends TestCase
                     ['/test'],
                     ['/test/', ['name', '[^/]+']],
                     ['/test/', ['name', '[^/]+'], '/', ['id', '[0-9]+']],
-                ]
+                ],
             ],
             [
                 '',
                 [
                     [''],
-                ]
+                ],
             ],
             [
                 '[test]',
                 [
                     [''],
                     ['test'],
-                ]
+                ],
             ],
             [
                 '/{foo-bar}',
                 [
-                    ['/', ['foo-bar', '[^/]+']]
-                ]
+                    ['/', ['foo-bar', '[^/]+']],
+                ],
             ],
             [
                 '/{_foo:.*}',
                 [
-                    ['/', ['_foo', '.*']]
-                ]
+                    ['/', ['_foo', '.*']],
+                ],
             ],
         ];
     }
@@ -140,31 +140,31 @@ class StdTest extends TestCase
         return [
             [
                 '/test[opt',
-                "Number of opening '[' and closing ']' does not match"
+                "Number of opening '[' and closing ']' does not match",
             ],
             [
                 '/test[opt[opt2]',
-                "Number of opening '[' and closing ']' does not match"
+                "Number of opening '[' and closing ']' does not match",
             ],
             [
                 '/testopt]',
-                "Number of opening '[' and closing ']' does not match"
+                "Number of opening '[' and closing ']' does not match",
             ],
             [
                 '/test[]',
-                'Empty optional part'
+                'Empty optional part',
             ],
             [
                 '/test[[opt]]',
-                'Empty optional part'
+                'Empty optional part',
             ],
             [
                 '[[test]]',
-                'Empty optional part'
+                'Empty optional part',
             ],
             [
                 '/test[/opt]/required',
-                'Optional segments can only occur at the end of a route'
+                'Optional segments can only occur at the end of a route',
             ],
         ];
     }
