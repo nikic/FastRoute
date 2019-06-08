@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+use function preg_match;
+
 class Route
 {
     /** @var string */

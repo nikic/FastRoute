@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
+use function count;
+use function implode;
+
 class GroupPosBased extends RegexBasedAbstract
 {
     /**

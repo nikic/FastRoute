@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
+use function count;
+use function implode;
+use function max;
+use function str_repeat;
+
 class GroupCountBased extends RegexBasedAbstract
 {
     /**

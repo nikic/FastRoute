@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use function preg_match;
+
 class GroupPosBased extends RegexBasedAbstract
 {
     /**

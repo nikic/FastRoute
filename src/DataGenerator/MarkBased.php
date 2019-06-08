@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
+use function implode;
+
 class MarkBased extends RegexBasedAbstract
 {
     /**

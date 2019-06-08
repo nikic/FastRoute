@@ -6,6 +6,17 @@ namespace FastRoute\DataGenerator;
 use FastRoute\BadRouteException;
 use FastRoute\DataGenerator;
 use FastRoute\Route;
+use function array_chunk;
+use function array_map;
+use function ceil;
+use function count;
+use function is_string;
+use function max;
+use function preg_match;
+use function preg_quote;
+use function round;
+use function sprintf;
+use function strpos;
 
 abstract class RegexBasedAbstract implements DataGenerator
 {

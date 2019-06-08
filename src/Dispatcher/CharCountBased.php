@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use function end;
+use function preg_match;
+
 class CharCountBased extends RegexBasedAbstract
 {
     /**

@@ -5,6 +5,16 @@ namespace FastRoute\RouteParser;
 
 use FastRoute\BadRouteException;
 use FastRoute\RouteParser;
+use const PREG_OFFSET_CAPTURE;
+use const PREG_SET_ORDER;
+use function count;
+use function preg_match;
+use function preg_match_all;
+use function preg_split;
+use function rtrim;
+use function strlen;
+use function substr;
+use function trim;
 
 /**
  * Parses route strings of the following form:

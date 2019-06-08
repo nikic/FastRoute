@@ -6,6 +6,7 @@ namespace FastRoute\Test\Dispatcher;
 use FastRoute\BadRouteException;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
+use function FastRoute\simpleDispatcher;
 
 abstract class DispatcherTest extends TestCase
 {
@@ -44,7 +45,7 @@ abstract class DispatcherTest extends TestCase
         string $handler,
         array $argDict
     ): void {
-        $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
+        $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
         $this->assertSame($dispatcher::FOUND, $info[0]);
         $this->assertSame($handler, $info[1]);
@@ -56,7 +57,7 @@ abstract class DispatcherTest extends TestCase
      */
     public function testNotFoundDispatches(string $method, string $uri, callable $callback): void
     {
-        $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
+        $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
         $this->assertArrayNotHasKey(1, $routeInfo,
             'NOT_FOUND result must only contain a single element in the returned info array'
@@ -75,7 +76,7 @@ abstract class DispatcherTest extends TestCase
         callable $callback,
         array $availableMethods
     ): void {
-        $dispatcher = \FastRoute\simpleDispatcher($callback, $this->generateDispatcherOptions());
+        $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
         $this->assertArrayHasKey(1, $routeInfo,
             'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1'
@@ -91,7 +92,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot use the same placeholder "test" twice');
 
-        \FastRoute\simpleDispatcher(function (RouteCollector $r): void {
+        simpleDispatcher(function (RouteCollector $r): void {
             $r->addRoute('GET', '/foo/{test}/{test:\d+}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
@@ -101,7 +102,7 @@ abstract class DispatcherTest extends TestCase
 	    $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user/([^/]+)" for method "GET"');
 
-        \FastRoute\simpleDispatcher(function (RouteCollector $r): void {
+        simpleDispatcher(function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{id}', 'handler0'); // oops, forgot \d+ restriction ;)
             $r->addRoute('GET', '/user/{name}', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -112,7 +113,7 @@ abstract class DispatcherTest extends TestCase
 	    $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user" for method "GET"');
 
-        \FastRoute\simpleDispatcher(function (RouteCollector $r): void {
+        simpleDispatcher(function (RouteCollector $r): void {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('GET', '/user', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -123,7 +124,7 @@ abstract class DispatcherTest extends TestCase
 	    $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"');
 
-        \FastRoute\simpleDispatcher(function (RouteCollector $r): void {
+        simpleDispatcher(function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/nikic', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -134,7 +135,7 @@ abstract class DispatcherTest extends TestCase
 	    $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Regex "(en|de)" for parameter "lang" contains a capturing group');
 
-        \FastRoute\simpleDispatcher(function (RouteCollector $r): void {
+        simpleDispatcher(function (RouteCollector $r): void {
             $r->addRoute('GET', '/{lang:(en|de)}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
