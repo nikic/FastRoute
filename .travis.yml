@@ -25,3 +25,9 @@ jobs:
   allow_failures:
     - php: 7.4snapshot
     - php: nightly
+
+  include:
+    - stage: Metrics and quality
+      env: CODE_STANDARD
+      script:
+        - ./vendor/bin/phpcs
