@@ -52,7 +52,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      */
     public function getData(): array
     {
-        if (empty($this->methodToRegexToRoutesMap)) {
+        if ($this->methodToRegexToRoutesMap === []) {
             return [$this->staticRoutes, []];
         }
 
