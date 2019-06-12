@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute;
 
-class BadRouteException extends \LogicException
+use LogicException;
+
+class BadRouteException extends LogicException
 {
 }

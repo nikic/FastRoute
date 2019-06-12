@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute;
+
+use function preg_match;
 
 class Route
 {
@@ -10,19 +13,15 @@ class Route
     /** @var string */
     public $regex;
 
-    /** @var array */
+    /** @var mixed[] */
     public $variables;
 
     /** @var mixed */
     public $handler;
 
     /**
-     * Constructs a route (value object).
-     *
-     * @param string $httpMethod
-     * @param mixed  $handler
-     * @param string $regex
-     * @param array  $variables
+     * @param mixed   $handler
+     * @param mixed[] $variables
      */
     public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
@@ -34,14 +33,11 @@ class Route
 
     /**
      * Tests whether this route matches the given string.
-     *
-     * @param string $str
-     *
-     * @return bool
      */
-    public function matches(string $str):bool
+    public function matches(string $str): bool
     {
         $regex = '~^' . $this->regex . '$~';
+
         return (bool) preg_match($regex, $str);
     }
 }

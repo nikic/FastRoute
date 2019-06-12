@@ -1,19 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use function preg_match;
+
 class GroupPosBased extends RegexBasedAbstract
 {
-    protected function dispatchVariableRoute(array $routeData, string $uri):array
+    /**
+     * {@inheritDoc}
+     */
+    protected function dispatchVariableRoute(array $routeData, string $uri): array
     {
         foreach ($routeData as $data) {
-            if (!preg_match($data['regex'], $uri, $matches)) {
+            if (! preg_match($data['regex'], $uri, $matches)) {
                 continue;
             }
 
             // find first non-empty match
             /** @noinspection PhpStatementHasEmptyBodyInspection */
-            for ($i = 1; $matches[$i] === ''; ++$i);
+            for ($i = 1; $matches[$i] === ''; ++$i) {
+            }
 
             [$handler, $varNames] = $data['routeMap'][$i];
 
@@ -21,6 +28,7 @@ class GroupPosBased extends RegexBasedAbstract
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[$i++];
             }
+
             return [self::FOUND, $handler, $vars];
         }
 

@@ -1,16 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute\Test\Dispatcher;
 
+use FastRoute\DataGenerator;
+use FastRoute\Dispatcher;
+
 class GroupPosBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass()
+    protected function getDispatcherClass(): string
     {
-        return 'FastRoute\\Dispatcher\\GroupPosBased';
+        return Dispatcher\GroupPosBased::class;
     }
 
-    protected function getDataGeneratorClass()
+    protected function getDataGeneratorClass(): string
     {
-        return 'FastRoute\\DataGenerator\\GroupPosBased';
+        return DataGenerator\GroupPosBased::class;
     }
 }

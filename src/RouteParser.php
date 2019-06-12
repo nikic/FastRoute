@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute;
 
@@ -33,5 +34,5 @@ interface RouteParser
      *
      * @return mixed[][] Array of route data arrays
      */
-    public function parse(string $route):array;
+    public function parse(string $route): array;
 }

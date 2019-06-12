@@ -5,14 +5,13 @@ namespace FastRoute\Benchmark;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
-use PhpBench\Benchmark\Metadata\Annotations\Iterations;
-use PhpBench\Benchmark\Metadata\Annotations\Revs;
-use function assert;
 use function FastRoute\simpleDispatcher;
 
 final class RealLifeExample extends Dispatching
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function createDispatcher(array $options = []): Dispatcher
     {
         return simpleDispatcher(
@@ -63,6 +62,9 @@ final class RealLifeExample extends Dispatching
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideStaticRoutes(): iterable
     {
         yield 'first' => [
@@ -84,6 +86,9 @@ final class RealLifeExample extends Dispatching
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideDynamicRoutes(): iterable
     {
         yield 'first' => [
@@ -105,6 +110,9 @@ final class RealLifeExample extends Dispatching
         ];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideOtherScenarios(): iterable
     {
         yield 'non-existent' => [

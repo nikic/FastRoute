@@ -17,6 +17,7 @@ script:
 
 before_install:
   - travis_retry composer self-update
+  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
 
 install:
   - composer install
@@ -25,3 +26,9 @@ jobs:
   allow_failures:
     - php: 7.4snapshot
     - php: nightly
+
+  include:
+    - stage: Metrics and quality
+      env: CODE_STANDARD
+      script:
+        - ./vendor/bin/phpcs

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute\Test;
 
@@ -6,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class RouteCollectorTest extends TestCase
 {
-    public function testShortcuts()
+    public function testShortcuts(): void
     {
         $r = new DummyRouteCollector();
 
@@ -31,7 +32,7 @@ class RouteCollectorTest extends TestCase
         $this->assertSame($expected, $r->routes);
     }
 
-    public function testGroups()
+    public function testGroups(): void
     {
         $r = new DummyRouteCollector();
 
@@ -43,7 +44,7 @@ class RouteCollectorTest extends TestCase
         $r->put('/put', 'put');
         $r->options('/options', 'options');
 
-        $r->addGroup('/group-one', function (DummyRouteCollector $r) {
+        $r->addGroup('/group-one', static function (DummyRouteCollector $r): void {
             $r->delete('/delete', 'delete');
             $r->get('/get', 'get');
             $r->head('/head', 'head');
@@ -52,7 +53,7 @@ class RouteCollectorTest extends TestCase
             $r->put('/put', 'put');
             $r->options('/options', 'options');
 
-            $r->addGroup('/group-two', function (DummyRouteCollector $r) {
+            $r->addGroup('/group-two', static function (DummyRouteCollector $r): void {
                 $r->delete('/delete', 'delete');
                 $r->get('/get', 'get');
                 $r->head('/head', 'head');
@@ -63,10 +64,10 @@ class RouteCollectorTest extends TestCase
             });
         });
 
-        $r->addGroup('/admin', function (DummyRouteCollector $r) {
+        $r->addGroup('/admin', static function (DummyRouteCollector $r): void {
             $r->get('-some-info', 'admin-some-info');
         });
-        $r->addGroup('/admin-', function (DummyRouteCollector $r) {
+        $r->addGroup('/admin-', static function (DummyRouteCollector $r): void {
             $r->get('more-info', 'admin-more-info');
         });
 
@@ -99,4 +100,3 @@ class RouteCollectorTest extends TestCase
         $this->assertSame($expected, $r->routes);
     }
 }
-

@@ -5,6 +5,7 @@ namespace FastRoute\Benchmark;
 
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
+use Generator;
 use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
 use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
@@ -20,9 +21,7 @@ use PHPUnit\Framework\Assert;
  */
 abstract class Dispatching
 {
-    /**
-     * @var Dispatcher[]
-     */
+    /** @var Dispatcher[] */
     private $dispatchers = [];
 
     public function initializeDispatchers(): void
@@ -48,14 +47,29 @@ abstract class Dispatching
         );
     }
 
+    /**
+     * @param array<string, string> $options
+     */
     abstract protected function createDispatcher(array $options = []): Dispatcher;
 
+    /**
+     * @return Generator<string, array<string, string|string[]>>
+     */
     abstract public function provideStaticRoutes(): iterable;
 
+    /**
+     * @return Generator<string, array<string, string|string[]>>
+     */
     abstract public function provideDynamicRoutes(): iterable;
 
+    /**
+     * @return Generator<string, array<string, string|string[]>>
+     */
     abstract public function provideOtherScenarios(): iterable;
 
+    /**
+     * @return Generator<string, array<string, string>>
+     */
     public function provideDispatcher(): iterable
     {
         yield 'default' => ['dispatcher' => 'default'];
@@ -66,6 +80,8 @@ abstract class Dispatching
 
     /**
      * @ParamProviders({"provideDispatcher", "provideStaticRoutes"})
+     *
+     * @param array<string, string|string[]> $params
      */
     public function benchStaticRoutes(array $params): void
     {
@@ -74,6 +90,8 @@ abstract class Dispatching
 
     /**
      * @ParamProviders({"provideDispatcher", "provideDynamicRoutes"})
+     *
+     * @param array<string, string|string[]> $params
      */
     public function benchDynamicRoutes(array $params): void
     {
@@ -82,17 +100,21 @@ abstract class Dispatching
 
     /**
      * @ParamProviders({"provideDispatcher", "provideOtherScenarios"})
+     *
+     * @param array<string, string|string[]> $params
      */
     public function benchOtherRoutes(array $params): void
     {
         $this->runScenario($params);
     }
 
+    /**
+     * @param array<string, string|string[]> $params
+     */
     private function runScenario(array $params): void
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];
-        $result = $dispatcher->dispatch($params['method'], $params['route']);
 
-        Assert::assertSame($params['result'], $result);
+        Assert::assertSame($params['result'], $dispatcher->dispatch($params['method'], $params['route']));
     }
 }

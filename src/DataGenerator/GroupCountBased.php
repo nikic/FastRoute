@@ -1,15 +1,27 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
+use function count;
+use function implode;
+use function max;
+use function str_repeat;
+
 class GroupCountBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize():int
+    /**
+     * {@inheritDoc}
+     */
+    protected function getApproxChunkSize(): int
     {
         return 10;
     }
 
-    protected function processChunk(array $regexToRoutesMap):array
+    /**
+     * {@inheritDoc}
+     */
+    protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
         $regexes = [];
@@ -25,6 +37,7 @@ class GroupCountBased extends RegexBasedAbstract
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }
 }

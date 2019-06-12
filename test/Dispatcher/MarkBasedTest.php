@@ -1,24 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace FastRoute\Test\Dispatcher;
 
+use FastRoute\DataGenerator;
+use FastRoute\Dispatcher;
+
 class MarkBasedTest extends DispatcherTest
 {
-    public function setUp():void
+    protected function getDispatcherClass(): string
     {
-        preg_match('/(*MARK:A)a/', 'a', $matches);
-        if (!isset($matches['MARK'])) {
-            $this->markTestSkipped('PHP 5.6 required for MARK support');
-        }
+        return Dispatcher\MarkBased::class;
     }
 
-    protected function getDispatcherClass()
+    protected function getDataGeneratorClass(): string
     {
-        return 'FastRoute\\Dispatcher\\MarkBased';
-    }
-
-    protected function getDataGeneratorClass()
-    {
-        return 'FastRoute\\DataGenerator\\MarkBased';
+        return DataGenerator\MarkBased::class;
     }
 }

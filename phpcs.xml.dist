@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<ruleset
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="colors" />
+    <arg value="nps" />
+
+    <file>benchmark</file>
+    <file>src</file>
+    <file>test</file>
+
+    <rule ref="Doctrine">
+        <exclude name="Generic.Formatting.MultipleStatementAlignment" />
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming">
+        <exclude-pattern>src/BadRouteException.php</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
+        <exclude-pattern>src/DataGenerator/RegexBasedAbstract.php</exclude-pattern>
+        <exclude-pattern>src/Dispatcher/RegexBasedAbstract.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedFor">
+        <exclude-pattern>src/Dispatcher/GroupPosBased.php</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <properties>
+            <property name="newlinesCountBetweenOpenTagAndDeclare" value="1"/>
+            <property name="spacesCountAroundEqualsSign" value="0"/>
+            <property name="newlinesCountAfterDeclare" value="2"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
+        <properties>
+            <property name="spacesCountBeforeColon" value="0"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
+        <properties>
+            <property name="linesCountBeforeFirstContent" value="0"/>
+            <property name="linesCountAfterLastContent" value="0"/>
+            <property name="linesCountBetweenDescriptionAndAnnotations" value="1"/>
+            <property name="linesCountBetweenAnnotationsGroups" value="1"/>
+            <property name="annotationsGroups" type="array">
+                <element value="@internal, @deprecated"/>
+                <element value="@link, @see"/>
+                <element value="@test, @group, @dataProvider, @depends, @doesNotPerformAssertions, @runInSeparateProcess"/>
+                <element value="@expectedDeprecation, @expectedException, @expectedExceptionCode, @expectedExceptionMessage, @expectedExceptionMessageRegExp"/>
+                <element value="@covers, @coversNothing"/>
+                <element value="@uses"/>
+                <element value="@ORM\,@ODM\"/>
+                <element value="@ParamProviders"/>
+                <element value="@param"/>
+                <element value="@return"/>
+                <element value="@throws"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>
