@@ -1,0 +1,24 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 5
+    paths:
+        - benchmark
+        - src
+        - test
+
+    ignoreErrors:
+        # We don't really want to call the constructor here, so this is fine
+        - '#FastRoute\\Test\\DummyRouteCollector::__construct\(\) does not call parent constructor#'
+
+        # These are false-positives
+        -
+            message: '#Variable \$i might not be defined.#'
+            path: 'src/Dispatcher/GroupPosBased.php'
+        -
+            message: '#Only numeric types are allowed in pre-increment, string given.#'
+            path: 'src/DataGenerator/MarkBased.php'
