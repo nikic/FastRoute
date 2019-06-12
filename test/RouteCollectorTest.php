@@ -29,7 +29,7 @@ class RouteCollectorTest extends TestCase
             ['OPTIONS', '/options', 'options'],
         ];
 
-        $this->assertSame($expected, $r->routes);
+        self::assertSame($expected, $r->routes);
     }
 
     public function testGroups(): void
@@ -97,6 +97,6 @@ class RouteCollectorTest extends TestCase
             ['GET', '/admin-more-info', 'admin-more-info'],
         ];
 
-        $this->assertSame($expected, $r->routes);
+        self::assertSame($expected, $r->routes);
     }
 }
