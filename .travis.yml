@@ -32,3 +32,8 @@ jobs:
       env: CODE_STANDARD
       script:
         - ./vendor/bin/phpcs
+
+    - stage: Metrics and quality
+      env: PHPSTAN
+      script:
+        - ./vendor/bin/phpstan analyse
