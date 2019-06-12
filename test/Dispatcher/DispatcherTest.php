@@ -48,9 +48,9 @@ abstract class DispatcherTest extends TestCase
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
 
-        $this->assertSame($dispatcher::FOUND, $info[0]);
-        $this->assertSame($handler, $info[1]);
-        $this->assertSame($argDict, $info[2]);
+        self::assertSame($dispatcher::FOUND, $info[0]);
+        self::assertSame($handler, $info[1]);
+        self::assertSame($argDict, $info[2]);
     }
 
     /**
@@ -60,12 +60,12 @@ abstract class DispatcherTest extends TestCase
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertArrayNotHasKey(
+        self::assertArrayNotHasKey(
             1,
             $routeInfo,
             'NOT_FOUND result must only contain a single element in the returned info array'
         );
-        $this->assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
+        self::assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
     }
 
     /**
@@ -81,15 +81,15 @@ abstract class DispatcherTest extends TestCase
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
-        $this->assertArrayHasKey(
+        self::assertArrayHasKey(
             1,
             $routeInfo,
             'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1'
         );
 
         [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);
-        $this->assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
-        $this->assertSame($availableMethods, $methodArray);
+        self::assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
+        self::assertSame($availableMethods, $methodArray);
     }
 
     public function testDuplicateVariableNameError(): void

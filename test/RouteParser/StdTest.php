@@ -18,7 +18,7 @@ class StdTest extends TestCase
     {
         $parser = new Std();
         $routeDatas = $parser->parse($routeString);
-        $this->assertSame($expectedRouteDatas, $routeDatas);
+        self::assertSame($expectedRouteDatas, $routeDatas);
     }
 
     /**
