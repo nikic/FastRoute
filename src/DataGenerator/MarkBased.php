@@ -29,10 +29,10 @@ class MarkBased extends RegexBasedAbstract
             $routeMap[$markName] = [$route->handler, $route->variables];
 
             /**
+             * @see https://github.com/vimeo/psalm/issues/1944
+             *
              * @psalm-suppress PossiblyInvalidOperand
              * @psalm-suppress InvalidOperand
-             *
-             * @see https://github.com/vimeo/psalm/issues/1944
              */
             ++$markName;
         }
