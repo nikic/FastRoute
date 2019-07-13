@@ -3,7 +3,7 @@
     name="Example Psalm config with recommended defaults"
     useDocblockTypes="true"
     totallyTyped="false"
-    requireVoidReturnType="false"
+    requireVoidReturnType="true"
     errorBaseline="./psalm.baseline.xml"
 >
     <projectFiles>
