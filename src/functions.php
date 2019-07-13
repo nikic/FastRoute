@@ -15,6 +15,13 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
     /**
      * @param array<string, string> $options
+     *
+     * @psalm-param array{
+     *  routeParser?:class-string<RouteParser>,
+     *  dataGenerator?:class-string<DataGenerator>,
+     *  dispatcher?:class-string<Dispatcher>,
+     *  routeCollector?:class-string<RouteCollector>,
+     * } $options
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
@@ -24,6 +31,16 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             'dispatcher' => Dispatcher\GroupCountBased::class,
             'routeCollector' => RouteCollector::class,
         ];
+
+        /**
+         * @psalm-var array{
+         *  routeParser:class-string<RouteParser>,
+         *  dataGenerator:class-string<DataGenerator>,
+         *  dispatcher:class-string<Dispatcher>,
+         *  routeCollector:class-string<RouteCollector>,
+         * }
+         */
+        $options = $options;
 
         /** @var RouteCollector $routeCollector */
         $routeCollector = new $options['routeCollector'](
@@ -36,6 +53,15 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
     /**
      * @param array<string, string> $options
+     *
+     * @psalm-param array{
+     *  routeParser?:class-string<RouteParser>,
+     *  dataGenerator?:class-string<DataGenerator>,
+     *  dispatcher?:class-string<Dispatcher>,
+     *  routeCollector?:class-string<RouteCollector>,
+     *  cacheDisabled?:bool,
+     *  cacheFile?:string,
+     * } $options
      */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
@@ -47,6 +73,18 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             'cacheDisabled' => false,
         ];
 
+        /**
+         * @psalm-var array{
+         *  routeParser:class-string<RouteParser>,
+         *  dataGenerator:class-string<DataGenerator>,
+         *  dispatcher:class-string<Dispatcher>,
+         *  routeCollector:class-string<RouteCollector>,
+         *  cacheDisabled:bool,
+         *  cacheFile?:string,
+         * }
+         */
+        $options = $options;
+
         if (! isset($options['cacheFile'])) {
             throw new LogicException('Must specify "cacheFile" option');
         }
@@ -57,6 +95,9 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
                 throw new RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
             }
 
+            /**
+             * @psalm-var Dispatcher
+             */
             return new $options['dispatcher']($dispatchData);
         }
 
@@ -74,6 +115,9 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             );
         }
 
+        /**
+         * @psalm-var Dispatcher
+         */
         return new $options['dispatcher']($dispatchData);
     }
 

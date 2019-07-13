@@ -4,6 +4,7 @@
     useDocblockTypes="true"
     totallyTyped="false"
     requireVoidReturnType="false"
+    errorBaseline="./psalm.baseline.xml"
 >
     <projectFiles>
         <directory name="src" />

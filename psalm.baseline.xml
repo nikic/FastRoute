@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="dev-master@7f0dcae0b2a498c9b0037fbed768c1599642c140">
+  <file src="src/functions.php">
+    <UnresolvableInclude occurrences="1">
+      <code>require $options['cacheFile']</code>
+    </UnresolvableInclude>
+  </file>
+</files>

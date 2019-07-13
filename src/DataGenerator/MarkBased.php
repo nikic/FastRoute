@@ -28,6 +28,12 @@ class MarkBased extends RegexBasedAbstract
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
             $routeMap[$markName] = [$route->handler, $route->variables];
 
+            /**
+             * @psalm-suppress PossiblyInvalidOperand
+             * @psalm-suppress InvalidOperand
+             *
+             * @see https://github.com/vimeo/psalm/issues/1944
+             */
             ++$markName;
         }
 
