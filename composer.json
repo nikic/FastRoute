@@ -31,7 +31,8 @@
     "phpstan/phpstan": "^0.11.12",
     "phpstan/phpstan-phpunit": "^0.11.2",
     "phpstan/phpstan-strict-rules": "^0.11.1",
-    "phpstan/phpstan-deprecation-rules": "^0.11.2"
+    "phpstan/phpstan-deprecation-rules": "^0.11.2",
+    "vimeo/psalm": "^3.4"
   },
   "extra": {
     "branch-alias": {

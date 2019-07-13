@@ -37,3 +37,8 @@ jobs:
       env: PHPSTAN
       script:
         - ./vendor/bin/phpstan analyse
+
+    - stage: Metrics and quality
+      env: PSALM
+      script:
+        - ./vendor/bin/psalm
