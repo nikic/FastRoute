@@ -37,6 +37,14 @@ class RouteCollector
      */
     public function addRoute($httpMethod, $route, $handler)
     {
+       //Umakant verma Modefied
+        $route = '/'.trim($route, '/');
+        if(is_array($handler)) {
+            $this->middleware = isset($handler['middleware']) ? $handler['middleware'] : $this->middleware;
+            $handler = $handler['uses'];
+        }
+        $handler =  ['handler' => $handler, 'middleware' => $this->middleware];
+        // End
         $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
@@ -56,6 +64,11 @@ class RouteCollector
      */
     public function addGroup($prefix, callable $callback)
     {
+        //Umakant verma modeified
+        $this->middleware = isset($prefix['middleware']) ? $prefix['middleware'] : false;
+        $prefix['prefix'] = '/'.trim($prefix['prefix'],'/');
+        $prefix = $prefix['prefix'];
+        //End
         $previousGroupPrefix = $this->currentGroupPrefix;
         $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
         $callback($this);
