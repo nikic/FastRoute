@@ -12,7 +12,6 @@ use function is_array;
 use function var_export;
 
 if (! function_exists('FastRoute\simpleDispatcher')) {
-
     /**
      * @param array<string, string> $options
      */
@@ -76,5 +75,4 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
         return new $options['dispatcher']($dispatchData);
     }
-
 }
