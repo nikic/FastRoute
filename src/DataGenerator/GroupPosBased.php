@@ -8,9 +8,6 @@ use function implode;
 
 class GroupPosBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function getApproxChunkSize(): int
     {
         return 10;
