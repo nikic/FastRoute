@@ -8,9 +8,6 @@ use function implode;
 
 class CharCountBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function getApproxChunkSize(): int
     {
         return 30;

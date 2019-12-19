@@ -10,9 +10,6 @@ use function str_repeat;
 
 class GroupCountBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function getApproxChunkSize(): int
     {
         return 10;

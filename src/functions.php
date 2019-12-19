@@ -5,6 +5,7 @@ namespace FastRoute;
 
 use LogicException;
 use RuntimeException;
+use function assert;
 use function file_exists;
 use function file_put_contents;
 use function function_exists;
@@ -24,10 +25,10 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             'routeCollector' => RouteCollector::class,
         ];
 
-        /** @var RouteCollector $routeCollector */
         $routeCollector = new $options['routeCollector'](
             new $options['routeParser'](), new $options['dataGenerator']()
         );
+        assert($routeCollector instanceof RouteCollector);
         $routeDefinitionCallback($routeCollector);
 
         return new $options['dispatcher']($routeCollector->getData());
@@ -62,9 +63,9 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         $routeCollector = new $options['routeCollector'](
             new $options['routeParser'](), new $options['dataGenerator']()
         );
+        assert($routeCollector instanceof RouteCollector);
         $routeDefinitionCallback($routeCollector);
 
-        /** @var RouteCollector $routeCollector */
         $dispatchData = $routeCollector->getData();
         if (! $options['cacheDisabled']) {
             file_put_contents(

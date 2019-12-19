@@ -7,9 +7,6 @@ use function implode;
 
 class MarkBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function getApproxChunkSize(): int
     {
         return 30;

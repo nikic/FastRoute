@@ -29,6 +29,7 @@ jobs:
 
   include:
     - stage: Metrics and quality
+      php: 7.2
       env: CODE_STANDARD
       script:
         - ./vendor/bin/phpcs
