@@ -28,10 +28,10 @@
     "phpunit/phpunit": "^7.5",
     "phpbench/phpbench": "^0.16.9",
     "doctrine/coding-standard": "^6.0",
-    "phpstan/phpstan": "^0.11.8",
-    "phpstan/phpstan-phpunit": "^0.11.2",
-    "phpstan/phpstan-strict-rules": "^0.11.1",
-    "phpstan/phpstan-deprecation-rules": "^0.11.2"
+    "phpstan/phpstan": "^0.12",
+    "phpstan/phpstan-phpunit": "^0.12",
+    "phpstan/phpstan-strict-rules": "^0.12",
+    "phpstan/phpstan-deprecation-rules": "^0.12"
   },
   "extra": {
     "branch-alias": {
