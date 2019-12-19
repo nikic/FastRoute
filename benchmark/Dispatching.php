@@ -53,17 +53,17 @@ abstract class Dispatching
     abstract protected function createDispatcher(array $options = []): Dispatcher;
 
     /**
-     * @return Generator<string, array<string, string|string[]>>
+     * @return Generator<string, array<string, mixed>>
      */
     abstract public function provideStaticRoutes(): iterable;
 
     /**
-     * @return Generator<string, array<string, string|string[]>>
+     * @return Generator<string, array<string, mixed>>
      */
     abstract public function provideDynamicRoutes(): iterable;
 
     /**
-     * @return Generator<string, array<string, string|string[]>>
+     * @return Generator<string, array<string, mixed>>
      */
     abstract public function provideOtherScenarios(): iterable;
 
@@ -81,7 +81,7 @@ abstract class Dispatching
     /**
      * @ParamProviders({"provideDispatcher", "provideStaticRoutes"})
      *
-     * @param array<string, string|string[]> $params
+     * @param array<string, mixed> $params
      */
     public function benchStaticRoutes(array $params): void
     {
