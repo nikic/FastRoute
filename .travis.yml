@@ -18,7 +18,7 @@ matrix:
       dist: bionic
     - php: 7.4
       dist: bionic
-    - php: hhvm-3.18
+    - php: hhvm-3.12
       dist: trusty
 
 install: travis_retry composer install
