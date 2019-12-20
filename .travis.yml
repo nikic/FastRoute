@@ -1,5 +1,6 @@
-sudo: false
 language: php
+
+dist: bionic
 
 php:
   - 7.1
@@ -12,15 +13,13 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-script:
-  - ./vendor/bin/phpunit
-
 before_install:
   - travis_retry composer self-update
   - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
 
-install:
-  - composer install
+install: travis_retry composer install
+
+script: vendor/bin/phpunit
 
 jobs:
   allow_failures:
