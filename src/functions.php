@@ -70,7 +70,8 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         if (! $options['cacheDisabled']) {
             file_put_contents(
                 $options['cacheFile'],
-                '<?php return ' . var_export($dispatchData, true) . ';'
+                '<?php return ' . var_export($dispatchData, true) . ';',
+                LOCK_EX
             );
         }
 
