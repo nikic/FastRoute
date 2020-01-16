@@ -11,6 +11,7 @@ use function file_put_contents;
 use function function_exists;
 use function is_array;
 use function var_export;
+use const LOCK_EX;
 
 if (! function_exists('FastRoute\simpleDispatcher')) {
     /**
