@@ -18,7 +18,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
-        return Functions::simpleDispatcher($routeDefinitionCallback, $options):
+        return Functions::simpleDispatcher($routeDefinitionCallback, $options);
     }
 
     /**
