@@ -18,20 +18,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
-        $options += [
-            'routeParser' => RouteParser\Std::class,
-            'dataGenerator' => DataGenerator\GroupCountBased::class,
-            'dispatcher' => Dispatcher\GroupCountBased::class,
-            'routeCollector' => RouteCollector::class,
-        ];
-
-        $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'](), new $options['dataGenerator']()
-        );
-        assert($routeCollector instanceof RouteCollector);
-        $routeDefinitionCallback($routeCollector);
-
-        return new $options['dispatcher']($routeCollector->getData());
+        return Functions::simpleDispatcher($routeDefinitionCallback, $options):
     }
 
     /**
@@ -39,41 +26,6 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
      */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
-        $options += [
-            'routeParser' => RouteParser\Std::class,
-            'dataGenerator' => DataGenerator\GroupCountBased::class,
-            'dispatcher' => Dispatcher\GroupCountBased::class,
-            'routeCollector' => RouteCollector::class,
-            'cacheDisabled' => false,
-        ];
-
-        if (! isset($options['cacheFile'])) {
-            throw new LogicException('Must specify "cacheFile" option');
-        }
-
-        if (! $options['cacheDisabled'] && file_exists($options['cacheFile'])) {
-            $dispatchData = require $options['cacheFile'];
-            if (! is_array($dispatchData)) {
-                throw new RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
-            }
-
-            return new $options['dispatcher']($dispatchData);
-        }
-
-        $routeCollector = new $options['routeCollector'](
-            new $options['routeParser'](), new $options['dataGenerator']()
-        );
-        assert($routeCollector instanceof RouteCollector);
-        $routeDefinitionCallback($routeCollector);
-
-        $dispatchData = $routeCollector->getData();
-        if (! $options['cacheDisabled']) {
-            file_put_contents(
-                $options['cacheFile'],
-                '<?php return ' . var_export($dispatchData, true) . ';'
-            );
-        }
-
-        return new $options['dispatcher']($dispatchData);
+        return Functions::cachedDispatcher($routeDefinitionCallback, $options);
     }
 }
