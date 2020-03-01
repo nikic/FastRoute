@@ -8,12 +8,15 @@ use RuntimeException;
 use function assert;
 use function file_exists;
 use function file_put_contents;
-use function function_exists;
 use function is_array;
 use function var_export;
 
 class Functions
 {
+
+    /**
+     * @param array<string, string> $options
+     */
     public static function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
