@@ -33,6 +33,7 @@ class Functions
 
         return new $options['dispatcher']($routeCollector->getData());
     }
+    
     /**
      * @param array<string, string> $options
      */
