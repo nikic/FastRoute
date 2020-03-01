@@ -13,7 +13,6 @@ use function var_export;
 
 class Functions
 {
-
     /**
      * @param array<string, string> $options
      */
@@ -34,7 +33,6 @@ class Functions
 
         return new $options['dispatcher']($routeCollector->getData());
     }
-
     /**
      * @param array<string, string> $options
      */
