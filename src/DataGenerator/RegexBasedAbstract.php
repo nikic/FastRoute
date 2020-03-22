@@ -60,31 +60,9 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @return mixed[]
-     */
-    private function generateVariableRouteData(): array
-    {
-        $data = [];
-        foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
-            $chunkSize = $this->computeChunkSize(count($regexToRoutesMap));
-            $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
-            $data[$method] = array_map([$this, 'processChunk'], $chunks);
-        }
-
-        return $data;
-    }
-
-    private function computeChunkSize(int $count): int
-    {
-        $numParts = max(1, round($count / $this->getApproxChunkSize()));
-
-        return (int) ceil($count / $numParts);
-    }
-
-    /**
      * @param array<int, mixed> $routeData
      */
-    private function isStaticRoute(array $routeData): bool
+    protected function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
@@ -93,7 +71,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param array<int, mixed> $routeData
      * @param mixed             $handler
      */
-    private function addStaticRoute(string $httpMethod, array $routeData, $handler): void
+    protected function addStaticRoute(string $httpMethod, array $routeData, $handler): void
     {
         $routeStr = $routeData[0];
 
@@ -125,7 +103,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param array<int, mixed> $routeData
      * @param mixed             $handler
      */
-    private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
+    protected function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
         [$regex, $variables] = $this->buildRegexForRoute($routeData);
 
@@ -150,7 +128,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      *
      * @return mixed[]
      */
-    private function buildRegexForRoute(array $routeData): array
+    protected function buildRegexForRoute(array $routeData): array
     {
         $regex = '';
         $variables = [];
@@ -182,6 +160,28 @@ abstract class RegexBasedAbstract implements DataGenerator
         }
 
         return [$regex, $variables];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function generateVariableRouteData(): array
+    {
+        $data = [];
+        foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
+            $chunkSize = $this->computeChunkSize(count($regexToRoutesMap));
+            $chunks = array_chunk($regexToRoutesMap, $chunkSize, true);
+            $data[$method] = array_map([$this, 'processChunk'], $chunks);
+        }
+
+        return $data;
+    }
+
+    private function computeChunkSize(int $count): int
+    {
+        $numParts = max(1, round($count / $this->getApproxChunkSize()));
+
+        return (int) ceil($count / $numParts);
     }
 
     private function regexHasCapturingGroups(string $regex): bool
