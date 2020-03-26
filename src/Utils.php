@@ -11,7 +11,7 @@ use function file_put_contents;
 use function is_array;
 use function var_export;
 
-class Functions
+class Utils
 {
     /**
      * @param array<string, string> $options
