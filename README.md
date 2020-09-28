@@ -277,13 +277,13 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     /* ... */
 }, [
     'routeParser' => 'FastRoute\\RouteParser\\Std',
-    'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-    'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
+    'dataGenerator' => 'FastRoute\\DataGenerator\\MarkBased',
+    'dispatcher' => 'FastRoute\\Dispatcher\\MarkBased',
 ]);
 ```
 
-The above options array corresponds to the defaults. By replacing `GroupCountBased` by
-`GroupPosBased` you could switch to a different dispatching strategy.
+The above options array corresponds to the defaults. By replacing `MarkBased` with
+`GroupCountBased` you could switch to a different dispatching strategy.
 
 ### A Note on HEAD Requests
 
