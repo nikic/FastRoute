@@ -20,8 +20,8 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     {
         $options += [
             'routeParser' => RouteParser\Std::class,
-            'dataGenerator' => DataGenerator\GroupCountBased::class,
-            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'dataGenerator' => DataGenerator\MarkBased::class,
+            'dispatcher' => Dispatcher\MarkBased::class,
             'routeCollector' => RouteCollector::class,
         ];
 
@@ -42,8 +42,8 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     {
         $options += [
             'routeParser' => RouteParser\Std::class,
-            'dataGenerator' => DataGenerator\GroupCountBased::class,
-            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'dataGenerator' => DataGenerator\MarkBased::class,
+            'dispatcher' => Dispatcher\MarkBased::class,
             'routeCollector' => RouteCollector::class,
             'cacheDisabled' => false,
         ];
