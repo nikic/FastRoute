@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace FastRoute\Test\Dispatcher;
 
 use FastRoute\BadRouteException;
-use FastRoute\Result;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
 use function FastRoute\simpleDispatcher;
@@ -52,7 +51,6 @@ abstract class DispatcherTest extends TestCase
         /**
          * @var $info \FastRoute\Result
          */
-        self::assertInstanceOf(Result::class, $info);
         self::assertTrue($info->routeMatched());
         self::assertSame($handler, $info->handler());
         self::assertSame($argDict, $info->args());
@@ -64,13 +62,14 @@ abstract class DispatcherTest extends TestCase
     public function testNotFoundDispatches(string $method, string $uri, callable $callback): void
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $routeInfo = $dispatcher->dispatch($method, $uri);
+        $result = $dispatcher->dispatch($method, $uri);
         self::assertArrayNotHasKey(
             1,
-            $routeInfo,
+             $result,
             'NOT_FOUND result must only contain a single element in the returned info array'
         );
-        self::assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
+        self::assertTrue($result->routeNotFound());
+        self::assertSame($dispatcher::NOT_FOUND, $result[0]);
     }
 
     /**
