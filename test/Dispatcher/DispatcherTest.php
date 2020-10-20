@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\Test\Dispatcher;
 
 use FastRoute\BadRouteException;
+use FastRoute\Result;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
 use function FastRoute\simpleDispatcher;
@@ -48,9 +49,13 @@ abstract class DispatcherTest extends TestCase
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
 
-        self::assertSame($dispatcher::FOUND, $info[0]);
-        self::assertSame($handler, $info[1]);
-        self::assertSame($argDict, $info[2]);
+        /**
+         * @var $info \FastRoute\Result
+         */
+        self::assertInstanceOf(Result::class, $info);
+        self::assertTrue($info->routeMatched());
+        self::assertSame($handler, $info->handler());
+        self::assertSame($argDict, $info->args());
     }
 
     /**

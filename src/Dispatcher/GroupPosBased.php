@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Result;
 use function preg_match;
 
 class GroupPosBased extends RegexBasedAbstract
@@ -10,7 +11,7 @@ class GroupPosBased extends RegexBasedAbstract
     /**
      * {@inheritDoc}
      */
-    protected function dispatchVariableRoute(array $routeData, string $uri): array
+    protected function dispatchVariableRoute(array $routeData, string $uri): Result
     {
         foreach ($routeData as $data) {
             if (! preg_match($data['regex'], $uri, $matches)) {
@@ -29,9 +30,9 @@ class GroupPosBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[$i++];
             }
 
-            return [self::FOUND, $handler, $vars];
+            return Result::fromArray([self::FOUND, $handler, $vars]);
         }
 
-        return [self::NOT_FOUND];
+        return Result::fromArray([self::NOT_FOUND]);
     }
 }

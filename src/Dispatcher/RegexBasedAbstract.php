@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\Dispatcher;
 
 use FastRoute\Dispatcher;
+use FastRoute\Result;
 
 abstract class RegexBasedAbstract implements Dispatcher
 {
@@ -24,19 +25,19 @@ abstract class RegexBasedAbstract implements Dispatcher
     /**
      * @param mixed[] $routeData
      *
-     * @return mixed[]
+     * @return \FastRoute\Result
      */
-    abstract protected function dispatchVariableRoute(array $routeData, string $uri): array;
+    abstract protected function dispatchVariableRoute(array $routeData, string $uri): Result;
 
     /**
      * {@inheritDoc}
      */
-    public function dispatch(string $httpMethod, string $uri): array
+    public function dispatch(string $httpMethod, string $uri): Result
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];
 
-            return [self::FOUND, $handler, []];
+            return Result::fromArray([self::FOUND, $handler, []]);
         }
 
         $varRouteData = $this->variableRouteData;
@@ -52,7 +53,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             if (isset($this->staticRouteMap['GET'][$uri])) {
                 $handler = $this->staticRouteMap['GET'][$uri];
 
-                return [self::FOUND, $handler, []];
+                return Result::fromArray([self::FOUND, $handler, []]);
             }
 
             if (isset($varRouteData['GET'])) {
@@ -67,7 +68,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         if (isset($this->staticRouteMap['*'][$uri])) {
             $handler = $this->staticRouteMap['*'][$uri];
 
-            return [self::FOUND, $handler, []];
+            return Result::fromArray([self::FOUND, $handler, []]);
         }
 
         if (isset($varRouteData['*'])) {
@@ -103,9 +104,9 @@ abstract class RegexBasedAbstract implements Dispatcher
 
         // If there are no allowed methods the route simply does not exist
         if ($allowedMethods !== []) {
-            return [self::METHOD_NOT_ALLOWED, $allowedMethods];
+            return Result::fromArray([self::METHOD_NOT_ALLOWED, $allowedMethods]);
         }
 
-        return [self::NOT_FOUND];
+        return Result::fromArray([self::NOT_FOUND]);
     }
 }
