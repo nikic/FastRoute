@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+    tags:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    name: PHP v${{ matrix.php }} with phpstan ${{ matrix.phpstan }} and code_standard ${{ matrix.code_standard}}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        include:
+        - { os: ubuntu-latest, php: 7.1, experimental: false}
+        - { os: ubuntu-latest, php: 7.1, phpstan: true, experimental: false}
+        - { os: ubuntu-latest, php: 7.2, experimental: false}
+        - { os: ubuntu-latest, php: 7.2, code_standard: true, experimental: false}
+        - { os: ubuntu-latest, php: 7.3, experimental: false}
+        - { os: ubuntu-latest, php: 7.4, experimental: false}
+        - { os: ubuntu-latest, php: 8.0, experimental: true}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Installing php"
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: curl,mbstring,xdebug
+        coverage: xdebug
+        tools: composer
+    - name: Show PHP version
+      run: php -v && composer -V
+    - name: Debug if needed
+      run: if [[ "$DEBUG" == "true" ]]; then env; fi
+      env:
+        DEBUG: ${{secrets.DEBUG}}
+    - name: Install dependencies
+      run: composer install --no-interaction
+    - name: Run tests
+      if: (!matrix.code_standard && !matrix.phpstan)
+      run: ./vendor/bin/phpunit
+    - name: Run phpcs
+      if: startsWith(matrix.php, '7.2') && matrix.code_standard
+      run: ./vendor/bin/phpcs
+    - name: Run phpstan
+      if: startsWith(matrix.php, '7.1') && matrix.phpstan
+      run: ./vendor/bin/phpstan analyze
