@@ -1,7 +1,7 @@
 FastRoute - Fast request router for PHP
 =======================================
 
-[![Build Status](https://travis-ci.org/nikic/FastRoute.svg?branch=master)](https://travis-ci.org/nikic/FastRoute)
+[![Build Status](https://img.shields.io/github/workflow/status/nikic/FastRoute/PHPUnit%20tests/master?style=flat-square)](https://github.com/nikic/FastRoute/actions?query=workflow%3A%22PHPUnit%20Tests%22+branch%3Amaster)
 
 This library provides a fast implementation of a regular expression based router. [Blog post explaining how the
 implementation works and why it is fast.][blog_post]
