@@ -6,6 +6,7 @@ namespace FastRoute\Test\Dispatcher;
 use FastRoute\BadRouteException;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
+
 use function FastRoute\simpleDispatcher;
 
 abstract class DispatcherTest extends TestCase

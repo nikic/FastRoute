@@ -5,6 +5,7 @@ namespace FastRoute\Benchmark;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+
 use function FastRoute\simpleDispatcher;
 
 final class RealLifeExample extends Dispatching

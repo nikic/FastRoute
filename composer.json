@@ -16,7 +16,7 @@
         "php": ">=7.1.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^6.0 || ^7.0",
+        "doctrine/coding-standard": "^9.0",
         "phpbench/phpbench": "^0.16.9",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12",

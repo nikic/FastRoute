@@ -5,6 +5,7 @@ namespace FastRoute;
 
 use LogicException;
 use RuntimeException;
+
 use function assert;
 use function file_exists;
 use function file_put_contents;
