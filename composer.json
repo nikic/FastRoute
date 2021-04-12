@@ -17,7 +17,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0",
-        "phpbench/phpbench": "^0.16.9",
+        "phpbench/phpbench": "^0.16 || ^0.17 || ^1.0@alpha",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
