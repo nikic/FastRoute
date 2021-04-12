@@ -6,3 +6,4 @@
 /*.dist         export-ignore
 /psalm.xml      export-ignore
 /phpbench.json  export-ignore
+/composer.lock  export-ignore
