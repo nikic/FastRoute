@@ -6,6 +6,7 @@ namespace FastRoute\DataGenerator;
 use FastRoute\BadRouteException;
 use FastRoute\DataGenerator;
 use FastRoute\Route;
+
 use function array_chunk;
 use function array_map;
 use function ceil;
