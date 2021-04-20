@@ -13,17 +13,17 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.4.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0",
-        "phpbench/phpbench": "^0.16 || ^0.17 || ^1.0@alpha",
+        "phpbench/phpbench": "^1.0@beta",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5"
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "preferred-install": "dist",
