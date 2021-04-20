@@ -9,7 +9,7 @@ use function preg_match;
 class CharCountBased extends RegexBasedAbstract
 {
     /** @inheritDoc */
-    protected function dispatchVariableRoute(array $routeData, string $uri): ?array
+    protected function dispatchVariableRoute(array $routeData, string $uri): ?Result
     {
         foreach ($routeData as $data) {
             if (! preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
@@ -24,7 +24,7 @@ class CharCountBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $route->handler, $vars];
+            return Result::fromArray([self::FOUND, $route->handler, $vars, $route]);
         }
 
         return null;

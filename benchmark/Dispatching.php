@@ -108,7 +108,8 @@ abstract class Dispatching
     private function runScenario(array $params): void
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];
+        $result = $dispatcher->dispatch($params['method'], $params['route']);
 
-        assert($params['result'] === $dispatcher->dispatch($params['method'], $params['route']));
+        assert($params['result'][0] === $result->status());
     }
 }

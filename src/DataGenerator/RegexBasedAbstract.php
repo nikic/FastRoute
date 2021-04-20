@@ -112,7 +112,7 @@ abstract class RegexBasedAbstract implements DataGenerator
             }
         }
 
-        $this->staticRoutes[$httpMethod][$routeStr] = $handler;
+        $this->staticRoutes[$httpMethod][$routeStr] = new Route($httpMethod, $handler, $routeStr, [], true);
     }
 
     /**
