@@ -8,7 +8,7 @@ use FastRoute\RouteCollector;
 class DummyRouteCollector extends RouteCollector
 {
     /** @var mixed[] */
-    public $routes = [];
+    public array $routes = [];
 
     public function __construct()
     {
