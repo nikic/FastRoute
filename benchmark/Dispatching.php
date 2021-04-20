@@ -115,6 +115,6 @@ abstract class Dispatching
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];
 
-        Assert::assertSame($params['result'], $dispatcher->dispatch($params['method'], $params['route']));
+        Assert::assertSame($params['result'], $dispatcher->dispatch($params['method'], $params['route'])->toArray());
     }
 }

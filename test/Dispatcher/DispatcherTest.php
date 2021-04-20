@@ -49,9 +49,12 @@ abstract class DispatcherTest extends TestCase
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
 
-        self::assertSame($dispatcher::FOUND, $info[0]);
-        self::assertSame($handler, $info[1]);
-        self::assertSame($argDict, $info[2]);
+        /**
+         * @var $info \FastRoute\Result
+         */
+        self::assertTrue($info->routeMatched());
+        self::assertSame($handler, $info->handler());
+        self::assertSame($argDict, $info->args());
     }
 
     /**
@@ -60,13 +63,14 @@ abstract class DispatcherTest extends TestCase
     public function testNotFoundDispatches(string $method, string $uri, callable $callback): void
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $routeInfo = $dispatcher->dispatch($method, $uri);
+        $result = $dispatcher->dispatch($method, $uri);
         self::assertArrayNotHasKey(
             1,
-            $routeInfo,
+            $result,
             'NOT_FOUND result must only contain a single element in the returned info array'
         );
-        self::assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
+        self::assertTrue($result->routeNotFound());
+        self::assertSame($dispatcher::NOT_FOUND, $result[0]);
     }
 
     /**
