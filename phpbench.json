@@ -1,8 +1,8 @@
 {
-    "bootstrap": "vendor/autoload.php",
-    "path": "benchmark",
+    "runner.bootstrap": "vendor/autoload.php",
+    "runner.path": "benchmark",
 
-    "extensions": [
+    "core.extensions": [
         "PhpBench\\Extensions\\XDebug\\XDebugExtension"
     ]
 }
