@@ -22,7 +22,7 @@ use PHPUnit\Framework\Assert;
 abstract class Dispatching
 {
     /** @var Dispatcher[] */
-    private $dispatchers = [];
+    private array $dispatchers = [];
 
     public function initializeDispatchers(): void
     {

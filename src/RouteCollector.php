@@ -5,14 +5,11 @@ namespace FastRoute;
 
 class RouteCollector
 {
-    /** @var RouteParser */
-    protected $routeParser;
+    protected RouteParser $routeParser;
 
-    /** @var DataGenerator */
-    protected $dataGenerator;
+    protected DataGenerator $dataGenerator;
 
-    /** @var string */
-    protected $currentGroupPrefix = '';
+    protected string $currentGroupPrefix = '';
 
     public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
     {

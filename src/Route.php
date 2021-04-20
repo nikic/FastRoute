@@ -7,14 +7,12 @@ use function preg_match;
 
 class Route
 {
-    /** @var string */
-    public $httpMethod;
+    public string $httpMethod;
 
-    /** @var string */
-    public $regex;
+    public string $regex;
 
     /** @var mixed[] */
-    public $variables;
+    public array $variables;
 
     /** @var mixed */
     public $handler;

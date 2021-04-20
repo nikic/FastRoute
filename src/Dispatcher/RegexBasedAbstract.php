@@ -8,10 +8,10 @@ use FastRoute\Dispatcher;
 abstract class RegexBasedAbstract implements Dispatcher
 {
     /** @var mixed[][] */
-    protected $staticRouteMap = [];
+    protected array $staticRouteMap = [];
 
     /** @var mixed[] */
-    protected $variableRouteData = [];
+    protected array $variableRouteData = [];
 
     /**
      * @param mixed[] $data

@@ -22,10 +22,10 @@ use function strpos;
 abstract class RegexBasedAbstract implements DataGenerator
 {
     /** @var mixed[][] */
-    protected $staticRoutes = [];
+    protected array $staticRoutes = [];
 
     /** @var Route[][] */
-    protected $methodToRegexToRoutesMap = [];
+    protected array $methodToRegexToRoutesMap = [];
 
     abstract protected function getApproxChunkSize(): int;
 
