@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace FastRoute\Test;
 
-use FastRoute\RouteCollector;
+use FastRoute\RouteCollection;
 
-class DummyRouteCollector extends RouteCollector
+class DummyRouteCollection extends RouteCollection
 {
     /** @var mixed[] */
     public array $routes = [];

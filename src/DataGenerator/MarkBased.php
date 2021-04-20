@@ -3,33 +3,17 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
-use function implode;
-
+/**
+ * @deprecated Pass the chunk processor to the constructor of your data generator instead
+ */
 class MarkBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize(): int
+    protected function getChunkProcessor(): ChunkProcessorInterface
     {
-        return 30;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function processChunk(array $regexToRoutesMap): array
-    {
-        $routeMap = [];
-        $regexes = [];
-        $markName = 'a';
-
-        foreach ($regexToRoutesMap as $regex => $route) {
-            $regexes[] = $regex . '(*MARK:' . $markName . ')';
-            $routeMap[$markName] = [$route->handler, $route->variables, $route];
-
-            ++$markName;
+        if ($this->chunkProcessor === null) {
+            $this->chunkProcessor = new MarkBasedProcessor();
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return $this->chunkProcessor;
     }
 }

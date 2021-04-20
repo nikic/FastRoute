@@ -1,4 +1,5 @@
 parameters:
+    checkGenericClassInNonGenericObjectType: false
     level: 6
     paths:
         - benchmark
@@ -7,7 +8,7 @@ parameters:
 
     ignoreErrors:
         # We don't really want to call the constructor here, so this is fine
-        - '#FastRoute\\Test\\DummyRouteCollector::__construct\(\) does not call parent constructor#'
+        - '#FastRoute\\Test\\DummyRouteCollection::__construct\(\) does not call parent constructor#'
 
         # These are false-positives
         -
@@ -15,4 +16,4 @@ parameters:
             path: 'src/Dispatcher/GroupPosBased.php'
         -
             message: '#Only numeric types are allowed in pre-increment, string given.#'
-            path: 'src/DataGenerator/MarkBased.php'
+            path: 'src/DataGenerator/MarkBasedProcessor.php'

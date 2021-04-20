@@ -27,7 +27,7 @@ Here's a basic usage example:
 
 require '/path/to/vendor/autoload.php';
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollection $r) {
     $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)
     $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
@@ -173,7 +173,7 @@ routing data and construct the dispatcher from the cached information:
 ```php
 <?php
 
-$dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollection $r) {
     $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
     $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
     $r->addRoute('GET', '/user/{name}', 'handler2');
@@ -273,7 +273,7 @@ through the options array:
 ```php
 <?php
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollection $r) {
     /* ... */
 }, [
     'routeParser' => 'FastRoute\\RouteParser\\Std',

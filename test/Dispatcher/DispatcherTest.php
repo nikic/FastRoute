@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\Test\Dispatcher;
 
 use FastRoute\BadRouteException;
-use FastRoute\RouteCollector;
+use FastRoute\RouteCollection;
 use PHPUnit\Framework\TestCase;
 
 use function FastRoute\simpleDispatcher;
@@ -13,13 +13,17 @@ abstract class DispatcherTest extends TestCase
 {
     /**
      * Delegate dispatcher selection to child test classes
+     *
+     * @return mixed
      */
-    abstract protected function getDispatcherClass(): string;
+    abstract protected function getDispatcherClass();
 
     /**
      * Delegate dataGenerator selection to child test classes
+     *
+     * @return mixed
      */
-    abstract protected function getDataGeneratorClass(): string;
+    abstract protected function getDataGeneratorClass();
 
     /**
      * Set appropriate options for the specific Dispatcher class we're testing
@@ -49,9 +53,6 @@ abstract class DispatcherTest extends TestCase
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
 
-        /**
-         * @var $info \FastRoute\Result
-         */
         self::assertTrue($info->routeMatched());
         self::assertSame($handler, $info->handler());
         self::assertSame($argDict, $info->args());
@@ -102,7 +103,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot use the same placeholder "test" twice');
 
-        simpleDispatcher(static function (RouteCollector $r): void {
+        simpleDispatcher(static function (RouteCollection $r): void {
             $r->addRoute('GET', '/foo/{test}/{test:\d+}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
@@ -112,7 +113,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user/([^/]+)" for method "GET"');
 
-        simpleDispatcher(static function (RouteCollector $r): void {
+        simpleDispatcher(static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{id}', 'handler0'); // oops, forgot \d+ restriction ;)
             $r->addRoute('GET', '/user/{name}', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -123,7 +124,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user" for method "GET"');
 
-        simpleDispatcher(static function (RouteCollector $r): void {
+        simpleDispatcher(static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('GET', '/user', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -134,7 +135,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"');
 
-        simpleDispatcher(static function (RouteCollector $r): void {
+        simpleDispatcher(static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/nikic', 'handler1');
         }, $this->generateDispatcherOptions());
@@ -145,7 +146,7 @@ abstract class DispatcherTest extends TestCase
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Regex "(en|de)" for parameter "lang" contains a capturing group');
 
-        simpleDispatcher(static function (RouteCollector $r): void {
+        simpleDispatcher(static function (RouteCollection $r): void {
             $r->addRoute('GET', '/{lang:(en|de)}', 'handler0');
         }, $this->generateDispatcherOptions());
     }
@@ -159,7 +160,7 @@ abstract class DispatcherTest extends TestCase
 
         // 0 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
@@ -172,7 +173,7 @@ abstract class DispatcherTest extends TestCase
 
         // 1 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/handler0', 'handler0');
             $r->addRoute('GET', '/handler1', 'handler1');
             $r->addRoute('GET', '/handler2', 'handler2');
@@ -187,7 +188,7 @@ abstract class DispatcherTest extends TestCase
 
         // 2 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
             $r->addRoute('GET', '/user/{name}', 'handler2');
@@ -235,7 +236,7 @@ abstract class DispatcherTest extends TestCase
 
         // 6 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler0');
             $r->addRoute('GET', '/user/12345/extension', 'handler1');
             $r->addRoute('GET', '/user/{id:[0-9]+}.{extension}', 'handler2');
@@ -250,7 +251,7 @@ abstract class DispatcherTest extends TestCase
 
         // 7 ----- Test GET method fallback on HEAD route miss ------------------------------------>
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler1');
             $r->addRoute('GET', '/static0', 'handler2');
@@ -300,7 +301,7 @@ abstract class DispatcherTest extends TestCase
 
         // 11 ---- More specified routes are not shadowed by less specific of another method ------>
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('POST', '/user/{name:[a-z]+}', 'handler1');
         };
@@ -314,7 +315,7 @@ abstract class DispatcherTest extends TestCase
 
         // 12 ---- Handler of more specific routes is used, if it occurs first -------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('POST', '/user/{name:[a-z]+}', 'handler1');
             $r->addRoute('POST', '/user/{name}', 'handler2');
@@ -329,7 +330,7 @@ abstract class DispatcherTest extends TestCase
 
         // 13 ---- Route with constant suffix ----------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/{name}/edit', 'handler1');
         };
@@ -343,7 +344,7 @@ abstract class DispatcherTest extends TestCase
 
         // 14 ---- Handle multiple methods with the same handler ---------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute(['GET', 'POST'], '/user', 'handlerGetPost');
             $r->addRoute(['DELETE'], '/user', 'handlerDelete');
             $r->addRoute([], '/user', 'handlerNone');
@@ -356,7 +357,7 @@ abstract class DispatcherTest extends TestCase
 
         // 17 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('POST', '/user.json', 'handler0');
             $r->addRoute('GET', '/{entity}.json', 'handler1');
         };
@@ -365,7 +366,7 @@ abstract class DispatcherTest extends TestCase
 
         // 18 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '', 'handler0');
         };
 
@@ -373,7 +374,7 @@ abstract class DispatcherTest extends TestCase
 
         // 19 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('HEAD', '/a/{foo}', 'handler0');
             $r->addRoute('GET', '/b/{foo}', 'handler1');
         };
@@ -382,7 +383,7 @@ abstract class DispatcherTest extends TestCase
 
         // 20 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('HEAD', '/a', 'handler0');
             $r->addRoute('GET', '/b', 'handler1');
         };
@@ -391,7 +392,7 @@ abstract class DispatcherTest extends TestCase
 
         // 21 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/foo', 'handler0');
             $r->addRoute('HEAD', '/{bar}', 'handler1');
         };
@@ -400,7 +401,7 @@ abstract class DispatcherTest extends TestCase
 
         // 22 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('*', '/user', 'handler0');
             $r->addRoute('*', '/{user}', 'handler1');
             $r->addRoute('GET', '/user', 'handler2');
@@ -410,7 +411,7 @@ abstract class DispatcherTest extends TestCase
 
         // 23 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('*', '/user', 'handler0');
             $r->addRoute('GET', '/user', 'handler1');
         };
@@ -423,7 +424,7 @@ abstract class DispatcherTest extends TestCase
 
         // 25 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/{bar}', 'handler0');
             $r->addRoute('*', '/foo', 'handler1');
         };
@@ -432,7 +433,7 @@ abstract class DispatcherTest extends TestCase
 
         // 26 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('*', '/{foo:.*}', 'handler1');
         };
@@ -441,7 +442,7 @@ abstract class DispatcherTest extends TestCase
 
         // 27 ----
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('OPTIONS', '/about', 'handler0');
         };
 
@@ -461,7 +462,7 @@ abstract class DispatcherTest extends TestCase
 
         // 0 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
@@ -488,7 +489,7 @@ abstract class DispatcherTest extends TestCase
 
         // 3 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/handler0', 'handler0');
             $r->addRoute('GET', '/handler1', 'handler1');
             $r->addRoute('GET', '/handler2', 'handler2');
@@ -501,7 +502,7 @@ abstract class DispatcherTest extends TestCase
 
         // 4 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
             $r->addRoute('GET', '/user/{name}', 'handler2');
@@ -541,7 +542,7 @@ abstract class DispatcherTest extends TestCase
 
         // 0 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
@@ -553,7 +554,7 @@ abstract class DispatcherTest extends TestCase
 
         // 1 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
             $r->addRoute('POST', '/resource/123/456', 'handler1');
             $r->addRoute('PUT', '/resource/123/456', 'handler2');
@@ -568,7 +569,7 @@ abstract class DispatcherTest extends TestCase
 
         // 2 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
             $r->addRoute('POST', '/user/{name}/{id:[0-9]+}', 'handler1');
             $r->addRoute('PUT', '/user/{name}/{id:[0-9]+}', 'handler2');
@@ -583,7 +584,7 @@ abstract class DispatcherTest extends TestCase
 
         // 3 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('POST', '/user/{name}', 'handler1');
             $r->addRoute('PUT', '/user/{name:[a-z]+}', 'handler2');
             $r->addRoute('PATCH', '/user/{name:[a-z]+}', 'handler3');
@@ -597,7 +598,7 @@ abstract class DispatcherTest extends TestCase
 
         // 4 -------------------------------------------------------------------------------------->
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute(['GET', 'POST'], '/user', 'handlerGetPost');
             $r->addRoute(['DELETE'], '/user', 'handlerDelete');
             $r->addRoute([], '/user', 'handlerNone');
@@ -607,7 +608,7 @@ abstract class DispatcherTest extends TestCase
 
         // 5
 
-        $callback = static function (RouteCollector $r): void {
+        $callback = static function (RouteCollection $r): void {
             $r->addRoute('POST', '/user.json', 'handler0');
             $r->addRoute('GET', '/{entity}.json', 'handler1');
         };

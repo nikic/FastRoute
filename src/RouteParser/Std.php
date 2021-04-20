@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\RouteParser;
 
 use FastRoute\BadRouteException;
-use FastRoute\RouteParser;
+use FastRoute\RouteParserInterface;
 
 use function count;
 use function preg_match;
@@ -23,7 +23,7 @@ use const PREG_SET_ORDER;
  *
  * "/user/{name}[/{id:[0-9]+}]"
  */
-class Std implements RouteParser
+class Std implements RouteParserInterface
 {
     public const VARIABLE_REGEX = <<<'REGEX'
 \{

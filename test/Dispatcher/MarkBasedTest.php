@@ -8,13 +8,19 @@ use FastRoute\Dispatcher;
 
 class MarkBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDispatcherClass()
     {
         return Dispatcher\MarkBased::class;
     }
 
-    protected function getDataGeneratorClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDataGeneratorClass()
     {
-        return DataGenerator\MarkBased::class;
+        return new DataGenerator\RegexBased(new DataGenerator\MarkBasedProcessor());
     }
 }

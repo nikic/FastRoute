@@ -3,18 +3,25 @@ declare(strict_types=1);
 
 namespace FastRoute\Test\Dispatcher;
 
-use FastRoute\DataGenerator\GroupCountBased;
+use FastRoute\DataGenerator\GroupCountProcessor;
+use FastRoute\DataGenerator\RegexBased;
 use FastRoute\Dispatcher;
 
 class GroupCountBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDispatcherClass()
     {
         return Dispatcher\GroupCountBased::class;
     }
 
-    protected function getDataGeneratorClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDataGeneratorClass()
     {
-        return GroupCountBased::class;
+        return new RegexBased(new GroupCountProcessor());
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
-interface RouteParser
+interface RouteParserInterface
 {
     /**
      * Parses a route string into multiple route data arrays.

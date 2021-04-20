@@ -8,13 +8,19 @@ use FastRoute\Dispatcher;
 
 class GroupPosBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDispatcherClass()
     {
         return Dispatcher\GroupPosBased::class;
     }
 
-    protected function getDataGeneratorClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDataGeneratorClass()
     {
-        return DataGenerator\GroupPosBased::class;
+        return new DataGenerator\RegexBased(new DataGenerator\GroupPosProcessor());
     }
 }

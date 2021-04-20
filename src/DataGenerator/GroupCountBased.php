@@ -3,38 +3,17 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
-use function count;
-use function implode;
-use function max;
-use function str_repeat;
-
+/**
+ * @deprecated Pass the chunk processor to the constructor of your data generator instead
+ */
 class GroupCountBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize(): int
+    protected function getChunkProcessor(): ChunkProcessorInterface
     {
-        return 10;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function processChunk(array $regexToRoutesMap): array
-    {
-        $routeMap = [];
-        $regexes = [];
-        $numGroups = 0;
-        foreach ($regexToRoutesMap as $regex => $route) {
-            $numVariables = count($route->variables);
-            $numGroups = max($numGroups, $numVariables);
-
-            $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
-            $routeMap[$numGroups + 1] = [$route->handler, $route->variables, $route];
-
-            ++$numGroups;
+        if ($this->chunkProcessor === null) {
+            $this->chunkProcessor = new GroupCountProcessor();
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
-
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return $this->chunkProcessor;
     }
 }

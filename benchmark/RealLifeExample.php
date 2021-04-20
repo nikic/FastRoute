@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\Benchmark;
 
 use FastRoute\Dispatcher;
-use FastRoute\RouteCollector;
+use FastRoute\RouteCollection;
 
 use function FastRoute\simpleDispatcher;
 
@@ -16,7 +16,7 @@ final class RealLifeExample extends Dispatching
     protected function createDispatcher(array $options = []): Dispatcher
     {
         return simpleDispatcher(
-            static function (RouteCollector $routes): void {
+            static function (RouteCollection $routes): void {
                 $routes->addRoute('GET', '/', ['name' => 'home']);
                 $routes->addRoute('GET', '/page/{page_slug:[a-zA-Z0-9\-]+}', ['name' => 'page.show']);
                 $routes->addRoute('GET', '/about-us', ['name' => 'about-us']);

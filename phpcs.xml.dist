@@ -16,6 +16,10 @@
         <exclude name="Generic.Formatting.MultipleStatementAlignment" />
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix">
+        <exclude-pattern>src/*</exclude-pattern>
+    </rule>
+
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming">
         <exclude-pattern>src/BadRouteException.php</exclude-pattern>
     </rule>

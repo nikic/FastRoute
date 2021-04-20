@@ -3,33 +3,17 @@ declare(strict_types=1);
 
 namespace FastRoute\DataGenerator;
 
-use function count;
-use function implode;
-
+/**
+ * @deprecated Pass the chunk processor to the constructor of your data generator instead
+ */
 class GroupPosBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize(): int
+    protected function getChunkProcessor(): ChunkProcessorInterface
     {
-        return 10;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function processChunk(array $regexToRoutesMap): array
-    {
-        $routeMap = [];
-        $regexes = [];
-        $offset = 1;
-        foreach ($regexToRoutesMap as $regex => $route) {
-            $regexes[] = $regex;
-            $routeMap[$offset] = [$route->handler, $route->variables, $route];
-
-            $offset += count($route->variables);
+        if ($this->chunkProcessor === null) {
+            $this->chunkProcessor = new GroupPosProcessor();
         }
 
-        $regex = '~^(?:' . implode('|', $regexes) . ')$~';
-
-        return ['regex' => $regex, 'routeMap' => $routeMap];
+        return $this->chunkProcessor;
     }
 }

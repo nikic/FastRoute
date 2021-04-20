@@ -8,13 +8,19 @@ use FastRoute\Dispatcher;
 
 class CharCountBasedTest extends DispatcherTest
 {
-    protected function getDispatcherClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDispatcherClass()
     {
         return Dispatcher\CharCountBased::class;
     }
 
-    protected function getDataGeneratorClass(): string
+    /**
+     * @inheritDoc
+     */
+    protected function getDataGeneratorClass()
     {
-        return DataGenerator\CharCountBased::class;
+        return new DataGenerator\RegexBased(new DataGenerator\CharCountProcessor());
     }
 }

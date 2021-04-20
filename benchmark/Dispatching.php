@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace FastRoute\Benchmark;
 
 use FastRoute\DataGenerator;
+use FastRoute\DataGenerator\RegexBased;
 use FastRoute\Dispatcher;
 use Generator;
 use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
@@ -29,26 +30,26 @@ abstract class Dispatching
         $this->dispatchers['default'] = $this->createDispatcher();
         $this->dispatchers['char_count'] = $this->createDispatcher(
             [
-                'dataGenerator' => DataGenerator\CharCountBased::class,
+                'dataGenerator' => new RegexBased(new DataGenerator\CharCountProcessor()),
                 'dispatcher' => Dispatcher\CharCountBased::class,
             ]
         );
         $this->dispatchers['group_pos'] = $this->createDispatcher(
             [
-                'dataGenerator' => DataGenerator\GroupPosBased::class,
+                'dataGenerator' => new RegexBased(new DataGenerator\GroupPosProcessor()),
                 'dispatcher' => Dispatcher\GroupPosBased::class,
             ]
         );
         $this->dispatchers['mark'] = $this->createDispatcher(
             [
-                'dataGenerator' => DataGenerator\MarkBased::class,
+                'dataGenerator' => new RegexBased(new DataGenerator\MarkBasedProcessor()),
                 'dispatcher' => Dispatcher\MarkBased::class,
             ]
         );
     }
 
     /**
-     * @param array<string, string> $options
+     * @param array<string, (string|DataGenerator)> $options
      */
     abstract protected function createDispatcher(array $options = []): Dispatcher;
 
