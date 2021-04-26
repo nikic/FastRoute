@@ -54,9 +54,7 @@ abstract class DispatcherTest extends TestCase
         self::assertSame($argDict, $info[2]);
     }
 
-    /**
-     * @dataProvider provideNotFoundDispatchCases
-     */
+    /** @dataProvider provideNotFoundDispatchCases */
     public function testNotFoundDispatches(string $method, string $uri, callable $callback): void
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
@@ -146,9 +144,7 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function provideFoundDispatchCases(): array
     {
         $cases = [];
@@ -448,9 +444,7 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function provideNotFoundDispatchCases(): array
     {
         $cases = [];
@@ -528,9 +522,7 @@ abstract class DispatcherTest extends TestCase
         return $cases;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function provideMethodNotAllowedDispatchCases(): array
     {
         $cases = [];

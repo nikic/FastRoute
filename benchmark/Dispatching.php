@@ -47,29 +47,19 @@ abstract class Dispatching
         );
     }
 
-    /**
-     * @param array<string, string> $options
-     */
+    /** @param array<string, string> $options */
     abstract protected function createDispatcher(array $options = []): Dispatcher;
 
-    /**
-     * @return Generator<string, array<string, mixed>>
-     */
+    /** @return Generator<string, array<string, mixed>> */
     abstract public function provideStaticRoutes(): iterable;
 
-    /**
-     * @return Generator<string, array<string, mixed>>
-     */
+    /** @return Generator<string, array<string, mixed>> */
     abstract public function provideDynamicRoutes(): iterable;
 
-    /**
-     * @return Generator<string, array<string, mixed>>
-     */
+    /** @return Generator<string, array<string, mixed>> */
     abstract public function provideOtherScenarios(): iterable;
 
-    /**
-     * @return Generator<string, array<string, string>>
-     */
+    /** @return Generator<string, array<string, string>> */
     public function provideDispatcher(): iterable
     {
         yield 'default' => ['dispatcher' => 'default'];
@@ -108,9 +98,7 @@ abstract class Dispatching
         $this->runScenario($params);
     }
 
-    /**
-     * @param array<string, string|string[]> $params
-     */
+    /** @param array<string, string|string[]> $params */
     private function runScenario(array $params): void
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];

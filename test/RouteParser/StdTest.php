@@ -21,9 +21,7 @@ class StdTest extends TestCase
         self::assertSame($expectedRouteDatas, $routeDatas);
     }
 
-    /**
-     * @dataProvider provideTestParseError
-     */
+    /** @dataProvider provideTestParseError */
     public function testParseError(string $routeString, string $expectedExceptionMessage): void
     {
         $this->expectException(BadRouteException::class);
@@ -33,9 +31,7 @@ class StdTest extends TestCase
         $parser->parse($routeString);
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function provideTestParse(): array
     {
         return [
@@ -132,9 +128,7 @@ class StdTest extends TestCase
         ];
     }
 
-    /**
-     * @return string[][]
-     */
+    /** @return string[][] */
     public function provideTestParseError(): array
     {
         return [

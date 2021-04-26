@@ -61,9 +61,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         return [$this->staticRoutes, $this->generateVariableRouteData()];
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     private function generateVariableRouteData(): array
     {
         $data = [];
@@ -83,9 +81,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         return (int) ceil($count / $numParts);
     }
 
-    /**
-     * @param array<int, mixed> $routeData
-     */
+    /** @param array<int, mixed> $routeData */
     private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
