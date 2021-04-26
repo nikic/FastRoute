@@ -18,7 +18,7 @@ class GroupPosBased extends RegexBasedAbstract
             }
 
             // find first non-empty match
-            /** @noinspection PhpStatementHasEmptyBodyInspection */
+            // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFor
             for ($i = 1; $matches[$i] === ''; ++$i) {
             }
 

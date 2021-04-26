@@ -16,18 +16,6 @@
         <exclude name="Generic.Formatting.MultipleStatementAlignment" />
     </rule>
 
-    <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming">
-        <exclude-pattern>src/BadRouteException.php</exclude-pattern>
-    </rule>
-
-    <rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
-        <exclude-pattern>src/DataGenerator/RegexBasedAbstract.php</exclude-pattern>
-        <exclude-pattern>src/Dispatcher/RegexBasedAbstract.php</exclude-pattern>
-    </rule>
-
-    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedFor">
-        <exclude-pattern>src/Dispatcher/GroupPosBased.php</exclude-pattern>
-    </rule>
 
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>

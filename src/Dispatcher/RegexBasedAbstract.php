@@ -5,6 +5,7 @@ namespace FastRoute\Dispatcher;
 
 use FastRoute\Dispatcher;
 
+// phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements Dispatcher
 {
     /** @var mixed[][] */

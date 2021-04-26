@@ -19,6 +19,7 @@ use function round;
 use function sprintf;
 use function strpos;
 
+// phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements DataGenerator
 {
     /** @var mixed[][] */
