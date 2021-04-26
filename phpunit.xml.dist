@@ -5,6 +5,7 @@
     verbose="true"
     beStrictAboutChangesToGlobalState="true"
     beStrictAboutOutputDuringTests="true"
+    executionOrder="random"
 >
     <testsuites>
         <testsuite name="FastRoute Tests">
