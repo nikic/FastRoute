@@ -11,7 +11,8 @@ use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
-use PHPUnit\Framework\Assert;
+
+use function assert;
 
 /**
  * @Warmup(2)
@@ -103,6 +104,6 @@ abstract class Dispatching
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];
 
-        Assert::assertSame($params['result'], $dispatcher->dispatch($params['method'], $params['route']));
+        assert($params['result'] === $dispatcher->dispatch($params['method'], $params['route']));
     }
 }
