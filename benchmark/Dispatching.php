@@ -27,7 +27,12 @@ abstract class Dispatching
 
     public function initializeDispatchers(): void
     {
-        $this->dispatchers['default'] = $this->createDispatcher();
+        $this->dispatchers['group_count'] = $this->createDispatcher(
+            [
+                'dataGenerator' => DataGenerator\GroupCountBased::class,
+                'dispatcher' => Dispatcher\GroupCountBased::class,
+            ]
+        );
         $this->dispatchers['char_count'] = $this->createDispatcher(
             [
                 'dataGenerator' => DataGenerator\CharCountBased::class,
@@ -63,7 +68,7 @@ abstract class Dispatching
     /** @return Generator<string, array<string, string>> */
     public function provideDispatcher(): iterable
     {
-        yield 'default' => ['dispatcher' => 'default'];
+        yield 'group_count' => ['dispatcher' => 'group_count'];
         yield 'char-count' => ['dispatcher' => 'char_count'];
         yield 'group-pos' => ['dispatcher' => 'group_pos'];
         yield 'mark' => ['dispatcher' => 'mark'];
