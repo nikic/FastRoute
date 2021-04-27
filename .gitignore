@@ -3,3 +3,4 @@
 
 phpunit.xml
 /.phpunit.result.cache
+/.phpbench
