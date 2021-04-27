@@ -77,7 +77,7 @@ abstract class Dispatching
     /**
      * @ParamProviders({"provideDispatcher", "provideStaticRoutes"})
      *
-     * @param array<string, mixed> $params
+     * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
      */
     public function benchStaticRoutes(array $params): void
     {
@@ -87,7 +87,7 @@ abstract class Dispatching
     /**
      * @ParamProviders({"provideDispatcher", "provideDynamicRoutes"})
      *
-     * @param array<string, string|string[]> $params
+     * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
      */
     public function benchDynamicRoutes(array $params): void
     {
@@ -97,14 +97,14 @@ abstract class Dispatching
     /**
      * @ParamProviders({"provideDispatcher", "provideOtherScenarios"})
      *
-     * @param array<string, string|string[]> $params
+     * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
      */
     public function benchOtherRoutes(array $params): void
     {
         $this->runScenario($params);
     }
 
-    /** @param array<string, string|string[]> $params */
+    /** @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params */
     private function runScenario(array $params): void
     {
         $dispatcher = $this->dispatchers[$params['dispatcher']];
