@@ -15,9 +15,7 @@ class GroupCountBased extends RegexBasedAbstract
         return 10;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
@@ -28,7 +26,7 @@ class GroupCountBased extends RegexBasedAbstract
             $numGroups = max($numGroups, $numVariables);
 
             $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
-            $routeMap[$numGroups + 1] = [$route->handler, $route->variables];
+            $routeMap[$numGroups + 1] = $route;
 
             ++$numGroups;
         }

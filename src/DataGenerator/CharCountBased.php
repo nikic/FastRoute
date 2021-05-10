@@ -13,9 +13,7 @@ class CharCountBased extends RegexBasedAbstract
         return 30;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
@@ -29,7 +27,7 @@ class CharCountBased extends RegexBasedAbstract
             $suffix .= "\t";
 
             $regexes[] = '(?:' . $regex . '/(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
-            $routeMap[$suffix] = [$route->handler, $route->variables];
+            $routeMap[$suffix] = $route;
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';

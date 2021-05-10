@@ -12,9 +12,7 @@ class MarkBased extends RegexBasedAbstract
         return 30;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
@@ -23,7 +21,7 @@ class MarkBased extends RegexBasedAbstract
 
         foreach ($regexToRoutesMap as $regex => $route) {
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
-            $routeMap[$markName] = [$route->handler, $route->variables];
+            $routeMap[$markName] = $route;
 
             ++$markName;
         }

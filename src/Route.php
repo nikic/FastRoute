@@ -11,15 +11,21 @@ class Route
 
     public string $regex;
 
-    /** @var mixed[] */
+    /** @var array<string, string> */
     public array $variables;
 
     /** @var mixed */
     public $handler;
 
+    /** @param array{httpMethod: string, handler: mixed, regex: string, variables: array<string, string>} $state */
+    public static function __set_state(array $state): self
+    {
+        return new self($state['httpMethod'], $state['handler'], $state['regex'], $state['variables']);
+    }
+
     /**
-     * @param mixed   $handler
-     * @param mixed[] $variables
+     * @param mixed                 $handler
+     * @param array<string, string> $variables
      */
     public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
@@ -29,13 +35,11 @@ class Route
         $this->variables = $variables;
     }
 
-    /**
-     * Tests whether this route matches the given string.
-     */
-    public function matches(string $str): bool
+    /** Tests whether this route matches the given string */
+    public function matches(string $routePath): bool
     {
         $regex = '~^' . $this->regex . '$~';
 
-        return (bool) preg_match($regex, $str);
+        return (bool) preg_match($regex, $routePath);
     }
 }
