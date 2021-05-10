@@ -23,9 +23,9 @@ abstract class RegexBasedAbstract implements Dispatcher
     /**
      * @param mixed[] $routeData
      *
-     * @return mixed[]
+     * @return mixed[]|null
      */
-    abstract protected function dispatchVariableRoute(array $routeData, string $uri): array;
+    abstract protected function dispatchVariableRoute(array $routeData, string $uri): ?array;
 
     /**
      * {@inheritDoc}
@@ -41,7 +41,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         $varRouteData = $this->variableRouteData;
         if (isset($varRouteData[$httpMethod])) {
             $result = $this->dispatchVariableRoute($varRouteData[$httpMethod], $uri);
-            if ($result[0] === self::FOUND) {
+            if ($result !== null) {
                 return $result;
             }
         }
@@ -56,7 +56,7 @@ abstract class RegexBasedAbstract implements Dispatcher
 
             if (isset($varRouteData['GET'])) {
                 $result = $this->dispatchVariableRoute($varRouteData['GET'], $uri);
-                if ($result[0] === self::FOUND) {
+                if ($result !== null) {
                     return $result;
                 }
             }
@@ -71,7 +71,7 @@ abstract class RegexBasedAbstract implements Dispatcher
 
         if (isset($varRouteData['*'])) {
             $result = $this->dispatchVariableRoute($varRouteData['*'], $uri);
-            if ($result[0] === self::FOUND) {
+            if ($result !== null) {
                 return $result;
             }
         }
@@ -93,7 +93,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
 
             $result = $this->dispatchVariableRoute($routeData, $uri);
-            if ($result[0] !== self::FOUND) {
+            if ($result === null) {
                 continue;
             }
 

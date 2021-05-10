@@ -11,7 +11,7 @@ class CharCountBased extends RegexBasedAbstract
     /**
      * {@inheritDoc}
      */
-    protected function dispatchVariableRoute(array $routeData, string $uri): array
+    protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {
             if (! preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
@@ -29,6 +29,6 @@ class CharCountBased extends RegexBasedAbstract
             return [self::FOUND, $handler, $vars];
         }
 
-        return [self::NOT_FOUND];
+        return null;
     }
 }
