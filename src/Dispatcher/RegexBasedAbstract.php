@@ -15,18 +15,10 @@ abstract class RegexBasedAbstract implements Dispatcher
     /** @var array<string, array<array{regex: string, suffix?: string, routeMap: Route[]}>> */
     protected array $variableRouteData = [];
 
-    protected ResultFactoryInterface $resultFactory;
-
     /** @param array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: Route[]}>>} $data */
     public function __construct(array $data)
     {
         [$this->staticRouteMap, $this->variableRouteData] = $data;
-
-        if (isset($data['resultFactory'])) {
-            $this->resultFactory = $data['resultFactory'];
-        } else {
-            $this->resultFactory = new ResultFactory();
-        }
     }
 
     /** @param mixed[] $routeData */
