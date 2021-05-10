@@ -5,7 +5,7 @@ namespace FastRoute;
 
 use function preg_match;
 
-class Route implements RouteInterface
+class Route
 {
     public string $httpMethod;
 
@@ -52,31 +52,5 @@ class Route implements RouteInterface
         $regex = '~^' . $this->regex . '$~';
 
         return (bool) preg_match($regex, $string);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function handler()
-    {
-        return $this->handler;
-    }
-
-    public function regex(): string
-    {
-        return $this->regex;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function variables(): array
-    {
-        return $this->variables;
-    }
-
-    public function isStatic(): bool
-    {
-        return $this->isStatic;
     }
 }
