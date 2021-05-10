@@ -35,15 +35,11 @@ class Route
         $this->variables = $variables;
     }
 
-    /**
-     * Tests whether this route matches the given string.
-     *
-     * @param string $string URI string to match
-     */
-    public function matches(string $string): bool
+    /** Tests whether this route matches the given string */
+    public function matches(string $routePath): bool
     {
         $regex = '~^' . $this->regex . '$~';
 
-        return (bool) preg_match($regex, $string);
+        return (bool) preg_match($regex, $routePath);
     }
 }
