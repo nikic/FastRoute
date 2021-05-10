@@ -29,7 +29,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $route = $this->staticRouteMap[$httpMethod][$uri];
 
-            return Result::fromArray([self::FOUND, $route->handler(), [], $route]);
+            return Result::found($route->handler);
         }
 
         $varRouteData = $this->variableRouteData;
@@ -45,7 +45,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             if (isset($this->staticRouteMap['GET'][$uri])) {
                 $route = $this->staticRouteMap['GET'][$uri];
 
-                return Result::fromArray([self::FOUND, $route->handler(), [], $route]);
+                return Result::found($route->handler);
             }
 
             if (isset($varRouteData['GET'])) {
@@ -60,7 +60,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         if (isset($this->staticRouteMap['*'][$uri])) {
             $route = $this->staticRouteMap['*'][$uri];
 
-            return Result::fromArray([self::FOUND, $route->handler(), [], $route]);
+            return Result::found($route->handler);
         }
 
         if (isset($varRouteData['*'])) {
@@ -96,9 +96,9 @@ abstract class RegexBasedAbstract implements Dispatcher
 
         // If there are no allowed methods the route simply does not exist
         if ($allowedMethods !== []) {
-            return Result::createMethodNotAllowed($allowedMethods);
+            return Result::methodNotAllowed($allowedMethods);
         }
 
-        return Result::createNotFound();
+        return Result::notFound();
     }
 }

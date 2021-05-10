@@ -23,7 +23,7 @@ class MarkBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            return Result::fromArray([self::FOUND, $route->handler, $vars, $route]);
+            return Result::found($route->handler, $vars);
         }
 
         return null;
