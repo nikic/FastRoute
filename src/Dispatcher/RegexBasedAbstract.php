@@ -4,17 +4,18 @@ declare(strict_types=1);
 namespace FastRoute\Dispatcher;
 
 use FastRoute\Dispatcher;
+use FastRoute\Route;
 
 // phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements Dispatcher
 {
-    /** @var mixed[][] */
+    /** @var array<string, array<string, mixed>> */
     protected array $staticRouteMap = [];
 
-    /** @var mixed[] */
+    /** @var array<string, array<array{regex: string, suffix?: string, routeMap: Route[]}>> */
     protected array $variableRouteData = [];
 
-    /** @param mixed[] $data */
+    /** @param array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: Route[]}>>} $data */
     public function __construct(array $data)
     {
         [$this->staticRouteMap, $this->variableRouteData] = $data;
@@ -27,9 +28,7 @@ abstract class RegexBasedAbstract implements Dispatcher
      */
     abstract protected function dispatchVariableRoute(array $routeData, string $uri): ?array;
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     public function dispatch(string $httpMethod, string $uri): array
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {

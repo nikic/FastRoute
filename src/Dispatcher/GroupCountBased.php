@@ -8,9 +8,7 @@ use function preg_match;
 
 class GroupCountBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {

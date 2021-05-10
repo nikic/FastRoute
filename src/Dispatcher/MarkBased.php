@@ -7,9 +7,7 @@ use function preg_match;
 
 class MarkBased extends RegexBasedAbstract
 {
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {

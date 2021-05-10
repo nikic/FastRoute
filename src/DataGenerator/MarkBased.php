@@ -12,9 +12,7 @@ class MarkBased extends RegexBasedAbstract
         return 30;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
