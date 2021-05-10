@@ -17,8 +17,6 @@ class Route
     /** @var mixed */
     public $handler;
 
-    public bool $isStatic = false;
-
     /** @param array{httpMethod: string, handler: mixed, regex: string, variables: array<string, string>} $state */
     public static function __set_state(array $state): self
     {
@@ -29,13 +27,12 @@ class Route
      * @param mixed                 $handler
      * @param array<string, string> $variables
      */
-    public function __construct(string $httpMethod, $handler, string $regex, array $variables, bool $isStatic = false)
+    public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
         $this->httpMethod = $httpMethod;
         $this->handler = $handler;
         $this->regex = $regex;
         $this->variables = $variables;
-        $this->isStatic = $isStatic;
     }
 
     /**
@@ -45,10 +42,6 @@ class Route
      */
     public function matches(string $string): bool
     {
-        if ($this->isStatic) {
-            return $string === $this->regex;
-        }
-
         $regex = '~^' . $this->regex . '$~';
 
         return (bool) preg_match($regex, $string);
