@@ -17,15 +17,15 @@ class MarkBased extends RegexBasedAbstract
                 continue;
             }
 
-            [$handler, $varNames] = $data['routeMap'][$matches['MARK']];
+            $route = $data['routeMap'][$matches['MARK']];
 
             $vars = [];
             $i = 0;
-            foreach ($varNames as $varName) {
+            foreach ($route->variables as $varName) {
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $handler, $vars];
+            return [self::FOUND, $route->handler, $vars];
         }
 
         return null;

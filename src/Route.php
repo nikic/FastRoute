@@ -17,6 +17,12 @@ class Route
     /** @var mixed */
     public $handler;
 
+    /** @param array{httpMethod: string, handler: mixed, regex: string, variables: array<string, string>} $state */
+    public static function __set_state(array $state): self
+    {
+        return new self($state['httpMethod'], $state['handler'], $state['regex'], $state['variables']);
+    }
+
     /**
      * @param mixed   $handler
      * @param mixed[] $variables
