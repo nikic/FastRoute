@@ -36,9 +36,7 @@ REGEX;
 
     public const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     public function parse(string $route): array
     {
         $routeWithoutClosingOptionals = rtrim($route, ']');

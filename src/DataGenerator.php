@@ -22,7 +22,7 @@ interface DataGenerator
      * Returns dispatcher data in some unspecified format, which
      * depends on the used method of dispatch.
      *
-     * @return mixed[]
+     * @return array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>}
      */
     public function getData(): array;
 }

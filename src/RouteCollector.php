@@ -136,7 +136,7 @@ class RouteCollector
     /**
      * Returns the collected route data, as provided by the data generator.
      *
-     * @return mixed[]
+     * @return array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>}
      */
     public function getData(): array
     {

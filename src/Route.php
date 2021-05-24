@@ -11,15 +11,15 @@ class Route
 
     public string $regex;
 
-    /** @var mixed[] */
+    /** @var array<string, string> */
     public array $variables;
 
     /** @var mixed */
     public $handler;
 
     /**
-     * @param mixed   $handler
-     * @param mixed[] $variables
+     * @param mixed                 $handler
+     * @param array<string, string> $variables
      */
     public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
