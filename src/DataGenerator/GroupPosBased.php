@@ -13,9 +13,7 @@ class GroupPosBased extends RegexBasedAbstract
         return 10;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritDoc */
     protected function processChunk(array $regexToRoutesMap): array
     {
         $routeMap = [];
