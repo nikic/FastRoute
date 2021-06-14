@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Benchmark;
 
+use FastRoute\Cache;
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
 use Generator;
@@ -53,7 +54,7 @@ abstract class Dispatching
         );
     }
 
-    /** @param array<string, string> $options */
+    /** @param array{routeParser?: string, dataGenerator?: string, dispatcher?: string, routeCollector?: string, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: string|Cache} $options */
     abstract protected function createDispatcher(array $options = []): Dispatcher;
 
     /** @return Generator<string, array<string, mixed>> */

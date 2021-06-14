@@ -24,7 +24,7 @@ abstract class DispatcherTest extends TestCase
     /**
      * Set appropriate options for the specific Dispatcher class we're testing
      *
-     * @return array<string, string>
+     * @return array{dataGenerator: string, dispatcher: string}
      */
     private function generateDispatcherOptions(): array
     {
