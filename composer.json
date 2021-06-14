@@ -25,6 +25,9 @@
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpunit/phpunit": "^9.5"
     },
+    "suggest": {
+        "ext-apcu": "To be able to use APCu cache driver"
+    },
     "config": {
         "preferred-install": "dist",
         "sort-packages": true
