@@ -22,8 +22,8 @@ class BadRouteException extends LogicException
                 'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
                 $route,
                 $shadowedRegex,
-                $method
-            )
+                $method,
+            ),
         );
     }
 
