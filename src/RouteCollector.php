@@ -39,7 +39,7 @@ class RouteCollector
     /**
      * Create a route group with a common prefix.
      *
-     * All routes created in the passed callback will have the given group prefix prepended.
+     * All routes created by the passed callback will have the given group prefix prepended.
      */
     public function addGroup(string $prefix, callable $callback): void
     {
