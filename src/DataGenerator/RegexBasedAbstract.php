@@ -13,7 +13,6 @@ use function ceil;
 use function count;
 use function is_string;
 use function max;
-use function preg_quote;
 use function round;
 
 // phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
@@ -109,41 +108,13 @@ abstract class RegexBasedAbstract implements DataGenerator
      */
     private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
-        [$regex, $variables] = $this->buildRegexForRoute($routeData);
+        $route = Route::fromParsedRoute($httpMethod, $routeData, $handler);
+        $regex = $route->regex;
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
             throw BadRouteException::alreadyRegistered($regex, $httpMethod);
         }
 
-        $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod,
-            $handler,
-            $regex,
-            $variables
-        );
-    }
-
-    /**
-     * @param array<string|array{0: string, 1:string}> $routeData
-     *
-     * @return array{0: string, 1: array<string, string>}
-     */
-    private function buildRegexForRoute(array $routeData): array
-    {
-        $regex = '';
-        $variables = [];
-        foreach ($routeData as $part) {
-            if (is_string($part)) {
-                $regex .= preg_quote($part, '~');
-                continue;
-            }
-
-            [$varName, $regexPart] = $part;
-
-            $variables[$varName] = $varName;
-            $regex .= '(' . $regexPart . ')';
-        }
-
-        return [$regex, $variables];
+        $this->methodToRegexToRoutesMap[$httpMethod][$regex] = $route;
     }
 }
