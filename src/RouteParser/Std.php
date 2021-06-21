@@ -55,7 +55,7 @@ REGEX;
         }
 
         $currentRoute = '';
-        $routeDatas = [];
+        $parsedRoutes = [];
 
         foreach ($segments as $n => $segment) {
             if ($segment === '' && $n !== 0) {
@@ -63,10 +63,10 @@ REGEX;
             }
 
             $currentRoute .= $segment;
-            $routeDatas[] = $this->parsePlaceholders($currentRoute);
+            $parsedRoutes[] = $this->parsePlaceholders($currentRoute);
         }
 
-        return $routeDatas;
+        return $parsedRoutes;
     }
 
     /**
