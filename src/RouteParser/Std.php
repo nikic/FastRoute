@@ -72,7 +72,7 @@ REGEX;
     /**
      * Parses a route string that does not contain optional segments.
      *
-     * @return mixed[]
+     * @return array<string|array{0: string, 1:string}>
      */
     private function parsePlaceholders(string $route): array
     {

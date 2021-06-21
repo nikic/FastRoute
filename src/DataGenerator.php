@@ -13,8 +13,8 @@ interface DataGenerator
      * can be arbitrary data that will be returned when the route
      * matches.
      *
-     * @param mixed[] $routeData
-     * @param mixed   $handler
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param mixed                                    $handler
      */
     public function addRoute(string $httpMethod, array $routeData, $handler): void;
 
