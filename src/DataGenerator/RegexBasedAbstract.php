@@ -16,7 +16,6 @@ use function max;
 use function preg_match;
 use function preg_quote;
 use function round;
-use function sprintf;
 use function strpos;
 
 // phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
@@ -92,22 +91,13 @@ abstract class RegexBasedAbstract implements DataGenerator
         $routeStr = $routeData[0];
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
-            throw new BadRouteException(sprintf(
-                'Cannot register two routes matching "%s" for method "%s"',
-                $routeStr,
-                $httpMethod
-            ));
+            throw BadRouteException::alreadyRegistered($routeStr, $httpMethod);
         }
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod])) {
             foreach ($this->methodToRegexToRoutesMap[$httpMethod] as $route) {
                 if ($route->matches($routeStr)) {
-                    throw new BadRouteException(sprintf(
-                        'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
-                        $routeStr,
-                        $route->regex,
-                        $httpMethod
-                    ));
+                    throw BadRouteException::shadowedByVariableRoute($routeStr, $route->regex, $httpMethod);
                 }
             }
         }
@@ -124,11 +114,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         [$regex, $variables] = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
-            throw new BadRouteException(sprintf(
-                'Cannot register two routes matching "%s" for method "%s"',
-                $regex,
-                $httpMethod
-            ));
+            throw BadRouteException::alreadyRegistered($regex, $httpMethod);
         }
 
         $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
@@ -157,18 +143,11 @@ abstract class RegexBasedAbstract implements DataGenerator
             [$varName, $regexPart] = $part;
 
             if (isset($variables[$varName])) {
-                throw new BadRouteException(sprintf(
-                    'Cannot use the same placeholder "%s" twice',
-                    $varName
-                ));
+                throw BadRouteException::placeholderAlreadyDefined($varName);
             }
 
             if ($this->regexHasCapturingGroups($regexPart)) {
-                throw new BadRouteException(sprintf(
-                    'Regex "%s" for parameter "%s" contains a capturing group',
-                    $regexPart,
-                    $varName
-                ));
+                throw BadRouteException::variableWithCaptureGroup($regexPart, $varName);
             }
 
             $variables[$varName] = $varName;
