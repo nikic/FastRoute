@@ -13,10 +13,8 @@ use function ceil;
 use function count;
 use function is_string;
 use function max;
-use function preg_match;
 use function preg_quote;
 use function round;
-use function strpos;
 
 // phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements DataGenerator
@@ -142,43 +140,10 @@ abstract class RegexBasedAbstract implements DataGenerator
 
             [$varName, $regexPart] = $part;
 
-            if (isset($variables[$varName])) {
-                throw BadRouteException::placeholderAlreadyDefined($varName);
-            }
-
-            if ($this->regexHasCapturingGroups($regexPart)) {
-                throw BadRouteException::variableWithCaptureGroup($regexPart, $varName);
-            }
-
             $variables[$varName] = $varName;
             $regex .= '(' . $regexPart . ')';
         }
 
         return [$regex, $variables];
-    }
-
-    private function regexHasCapturingGroups(string $regex): bool
-    {
-        if (strpos($regex, '(') === false) {
-            // Needs to have at least a ( to contain a capturing group
-            return false;
-        }
-
-        // Semi-accurate detection for capturing groups
-        return (bool) preg_match(
-            '~
-                (?:
-                    \(\?\(
-                  | \[ [^\]\\\\]* (?: \\\\ . [^\]\\\\]* )* \]
-                  | \\\\ .
-                ) (*SKIP)(*FAIL) |
-                \(
-                (?!
-                    \? (?! <(?![!=]) | P< | \' )
-                  | \*
-                )
-            ~x',
-            $regex
-        );
     }
 }
