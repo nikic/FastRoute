@@ -32,7 +32,7 @@ interface RouteParser
      *
      * @param string $route Route string to parse
      *
-     * @return mixed[][] Array of route data arrays
+     * @return list<array<string|array{0: string, 1:string}>> Array of route data arrays
      */
     public function parse(string $route): array;
 }
