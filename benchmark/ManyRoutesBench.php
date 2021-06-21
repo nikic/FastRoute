@@ -8,7 +8,7 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-final class ManyRoutes extends Dispatching
+final class ManyRoutesBench extends Dispatching
 {
     /**
      * {@inheritDoc}

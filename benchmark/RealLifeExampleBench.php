@@ -8,7 +8,7 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-final class RealLifeExample extends Dispatching
+final class RealLifeExampleBench extends Dispatching
 {
     /**
      * {@inheritDoc}
