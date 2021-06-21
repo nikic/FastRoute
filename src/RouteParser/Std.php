@@ -7,11 +7,13 @@ use FastRoute\BadRouteException;
 use FastRoute\RouteParser;
 
 use function count;
+use function in_array;
 use function preg_match;
 use function preg_match_all;
 use function preg_split;
 use function rtrim;
 use function strlen;
+use function strpos;
 use function substr;
 use function trim;
 
@@ -35,6 +37,18 @@ class Std implements RouteParser
 REGEX;
 
     public const DEFAULT_DISPATCH_REGEX = '[^/]+';
+    private const CAPTURING_GROUPS_REGEX = '~
+                (?:
+                    \(\?\(
+                  | \[ [^\]\\\\]* (?: \\\\ . [^\]\\\\]* )* \]
+                  | \\\\ .
+                ) (*SKIP)(*FAIL) |
+                \(
+                (?!
+                    \? (?! <(?![!=]) | P< | \' )
+                  | \*
+                )
+            ~x';
 
     /** @inheritDoc */
     public function parse(string $route): array
@@ -83,10 +97,22 @@ REGEX;
         $offset = 0;
         $routeData = [];
 
+        $parsedVariableNames = [];
+
         foreach ($matches as $set) {
             if ($set[0][1] > $offset) {
                 $routeData[] = substr($route, $offset, $set[0][1] - $offset);
             }
+
+            if (in_array($set[1][0], $parsedVariableNames, true)) {
+                throw BadRouteException::placeholderAlreadyDefined($set[1][0]);
+            }
+
+            if (isset($set[2])) {
+                $this->guardAgainstCapturingGroupUsage(trim($set[2][0]), $set[1][0]);
+            }
+
+            $parsedVariableNames[] = $set[1][0];
 
             $routeData[] = [
                 $set[1][0],
@@ -101,5 +127,20 @@ REGEX;
         }
 
         return $routeData;
+    }
+
+    private function guardAgainstCapturingGroupUsage(string $regex, string $variableName): void
+    {
+        // Needs to have at least a ( to contain a capturing group
+        if (strpos($regex, '(') === false) {
+            return;
+        }
+
+        // Semi-accurate detection for capturing groups
+        if (preg_match(self::CAPTURING_GROUPS_REGEX, $regex) !== 1) {
+            return;
+        }
+
+        throw BadRouteException::variableWithCaptureGroup($regex, $variableName);
     }
 }
