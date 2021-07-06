@@ -52,6 +52,12 @@ abstract class Dispatching
                 'dispatcher' => Dispatcher\MarkBased::class,
             ]
         );
+        $this->dispatchers['compact_mark'] = $this->createDispatcher(
+            [
+                'dataGenerator' => DataGenerator\CompactMarkBased::class,
+                'dispatcher' => Dispatcher\CompactMarkBased::class,
+            ]
+        );
     }
 
     /** @param array{routeParser?: string, dataGenerator?: string, dispatcher?: string, routeCollector?: string, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: string|Cache} $options */
@@ -73,6 +79,7 @@ abstract class Dispatching
         yield 'char-count' => ['dispatcher' => 'char_count'];
         yield 'group-pos' => ['dispatcher' => 'group_pos'];
         yield 'mark' => ['dispatcher' => 'mark'];
+        yield 'compact_mark' => ['dispatcher' => 'compact_mark'];
     }
 
     /**

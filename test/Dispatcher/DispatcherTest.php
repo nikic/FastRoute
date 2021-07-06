@@ -8,6 +8,7 @@ use FastRoute\RouteCollector;
 use PHPUnit\Framework\TestCase;
 
 use function FastRoute\simpleDispatcher;
+use function sort;
 
 abstract class DispatcherTest extends TestCase
 {
@@ -88,6 +89,9 @@ abstract class DispatcherTest extends TestCase
 
         [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);
         self::assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
+
+        sort($availableMethods);
+        sort($methodArray);
         self::assertSame($availableMethods, $methodArray);
     }
 

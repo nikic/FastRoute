@@ -13,11 +13,7 @@ use function ceil;
 use function count;
 use function is_string;
 use function max;
-use function preg_match;
-use function preg_quote;
 use function round;
-use function sprintf;
-use function strpos;
 
 // phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements DataGenerator
@@ -77,37 +73,28 @@ abstract class RegexBasedAbstract implements DataGenerator
         return (int) ceil($count / $numParts);
     }
 
-    /** @param array<int, mixed> $routeData */
+    /** @param array<string|array{0: string, 1:string}> $routeData */
     private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
     /**
-     * @param array<int, mixed> $routeData
-     * @param mixed             $handler
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param mixed                                    $handler
      */
     private function addStaticRoute(string $httpMethod, array $routeData, $handler): void
     {
         $routeStr = $routeData[0];
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
-            throw new BadRouteException(sprintf(
-                'Cannot register two routes matching "%s" for method "%s"',
-                $routeStr,
-                $httpMethod
-            ));
+            throw BadRouteException::alreadyRegistered($routeStr, $httpMethod);
         }
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod])) {
             foreach ($this->methodToRegexToRoutesMap[$httpMethod] as $route) {
                 if ($route->matches($routeStr)) {
-                    throw new BadRouteException(sprintf(
-                        'Static route "%s" is shadowed by previously defined variable route "%s" for method "%s"',
-                        $routeStr,
-                        $route->regex,
-                        $httpMethod
-                    ));
+                    throw BadRouteException::shadowedByVariableRoute($routeStr, $route->regex, $httpMethod);
                 }
             }
         }
@@ -116,90 +103,18 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @param array<int, mixed> $routeData
-     * @param mixed             $handler
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param mixed                                    $handler
      */
     private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
-        [$regex, $variables] = $this->buildRegexForRoute($routeData);
+        $route = Route::fromParsedRoute($httpMethod, $routeData, $handler);
+        $regex = $route->regex;
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
-            throw new BadRouteException(sprintf(
-                'Cannot register two routes matching "%s" for method "%s"',
-                $regex,
-                $httpMethod
-            ));
+            throw BadRouteException::alreadyRegistered($regex, $httpMethod);
         }
 
-        $this->methodToRegexToRoutesMap[$httpMethod][$regex] = new Route(
-            $httpMethod,
-            $handler,
-            $regex,
-            $variables
-        );
-    }
-
-    /**
-     * @param mixed[] $routeData
-     *
-     * @return array{0: string, 1: array<string, string>}
-     */
-    private function buildRegexForRoute(array $routeData): array
-    {
-        $regex = '';
-        $variables = [];
-        foreach ($routeData as $part) {
-            if (is_string($part)) {
-                $regex .= preg_quote($part, '~');
-                continue;
-            }
-
-            [$varName, $regexPart] = $part;
-
-            if (isset($variables[$varName])) {
-                throw new BadRouteException(sprintf(
-                    'Cannot use the same placeholder "%s" twice',
-                    $varName
-                ));
-            }
-
-            if ($this->regexHasCapturingGroups($regexPart)) {
-                throw new BadRouteException(sprintf(
-                    'Regex "%s" for parameter "%s" contains a capturing group',
-                    $regexPart,
-                    $varName
-                ));
-            }
-
-            $variables[$varName] = $varName;
-            $regex .= '(' . $regexPart . ')';
-        }
-
-        return [$regex, $variables];
-    }
-
-    private function regexHasCapturingGroups(string $regex): bool
-    {
-        if (strpos($regex, '(') === false) {
-            // Needs to have at least a ( to contain a capturing group
-            return false;
-        }
-
-        // Semi-accurate detection for capturing groups
-        return (bool) preg_match(
-            '~
-                (?:
-                    \(\?\(
-                  | \[ [^\]\\\\]* (?: \\\\ . [^\]\\\\]* )* \]
-                  | \\\\ .
-                ) (*SKIP)(*FAIL) |
-                \(
-                (?!
-                    \? (?! <(?![!=]) | P< | \' )
-                  | \*
-                )
-            ~x',
-            $regex
-        );
+        $this->methodToRegexToRoutesMap[$httpMethod][$regex] = $route;
     }
 }

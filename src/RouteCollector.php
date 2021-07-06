@@ -28,10 +28,10 @@ class RouteCollector
     public function addRoute($httpMethod, string $route, $handler): void
     {
         $route = $this->currentGroupPrefix . $route;
-        $routeDatas = $this->routeParser->parse($route);
+        $parsedRoutes = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
-            foreach ($routeDatas as $routeData) {
-                $this->dataGenerator->addRoute($method, $routeData, $handler);
+            foreach ($parsedRoutes as $parsedRoute) {
+                $this->dataGenerator->addRoute($method, $parsedRoute, $handler);
             }
         }
     }
@@ -39,7 +39,7 @@ class RouteCollector
     /**
      * Create a route group with a common prefix.
      *
-     * All routes created in the passed callback will have the given group prefix prepended.
+     * All routes created by the passed callback will have the given group prefix prepended.
      */
     public function addGroup(string $prefix, callable $callback): void
     {

@@ -160,6 +160,14 @@ class StdTest extends TestCase
                 '/test[/opt]/required',
                 'Optional segments can only occur at the end of a route',
             ],
+            [
+                '/{lang:(en|de)}',
+                'Regex "(en|de)" for parameter "lang" contains a capturing group',
+            ],
+            [
+                '/foo/{test}/{test:\d+}',
+                'Cannot use the same placeholder "test" twice',
+            ],
         ];
     }
 }
