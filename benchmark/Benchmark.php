@@ -42,6 +42,10 @@ abstract class Benchmark
             'dataGenerator' => DataGenerator\MarkBased::class,
             'dispatcher' => Dispatcher\MarkBased::class,
         ],
+        'compact_mark' => [
+            'dataGenerator' => DataGenerator\CompactMarkBased::class,
+            'dispatcher' => Dispatcher\CompactMarkBased::class,
+        ],
     ];
 
     /** @var Dispatcher[] */
