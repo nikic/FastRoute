@@ -8,12 +8,10 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-final class RealLifeExampleBench extends Dispatching
+final class RealLifeExampleBench extends Benchmark
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createDispatcher(array $options = []): Dispatcher
+    /** @inheritdoc */
+    protected function createDispatcher(array $options): Dispatcher
     {
         return simpleDispatcher(
             static function (RouteCollector $routes): void {
@@ -63,9 +61,7 @@ final class RealLifeExampleBench extends Dispatching
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideStaticRoutes(): iterable
     {
         yield 'first' => [
@@ -87,9 +83,7 @@ final class RealLifeExampleBench extends Dispatching
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideDynamicRoutes(): iterable
     {
         yield 'first' => [
@@ -111,9 +105,7 @@ final class RealLifeExampleBench extends Dispatching
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideOtherScenarios(): iterable
     {
         yield 'non-existent' => [

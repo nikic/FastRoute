@@ -8,16 +8,16 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-final class ManyRoutesBench extends Dispatching
+final class ManyRoutesBench extends Benchmark
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createDispatcher(array $options = []): Dispatcher
+    private const ROUTES_COUNT = 400;
+
+    /** @inheritdoc */
+    protected function createDispatcher(array $options): Dispatcher
     {
         return simpleDispatcher(
             static function (RouteCollector $routes): void {
-                for ($i = 0; $i < 400; ++$i) {
+                for ($i = 0; $i < self::ROUTES_COUNT; ++$i) {
                     $routes->addRoute('GET', '/abc' . $i, ['name' => 'static-' . $i]);
                     $routes->addRoute('GET', '/abc{foo}/' . $i, ['name' => 'not-static-' . $i]);
                 }
@@ -26,9 +26,7 @@ final class ManyRoutesBench extends Dispatching
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideStaticRoutes(): iterable
     {
         yield 'first' => [
@@ -39,20 +37,18 @@ final class ManyRoutesBench extends Dispatching
 
         yield 'last' => [
             'method' => 'GET',
-            'route' => '/abc399',
-            'result' => [Dispatcher::FOUND, ['name' => 'static-399'], []],
+            'route' => '/abc' . (self::ROUTES_COUNT - 1),
+            'result' => [Dispatcher::FOUND, ['name' => 'static-' . (self::ROUTES_COUNT - 1)], []],
         ];
 
         yield 'invalid-method' => [
             'method' => 'PUT',
-            'route' => '/abc399',
+            'route' => '/abc' . (self::ROUTES_COUNT - 1),
             'result' => [Dispatcher::METHOD_NOT_ALLOWED, ['GET']],
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideDynamicRoutes(): iterable
     {
         yield 'first' => [
@@ -63,20 +59,18 @@ final class ManyRoutesBench extends Dispatching
 
         yield 'last' => [
             'method' => 'GET',
-            'route' => '/abcbar/399',
-            'result' => [Dispatcher::FOUND, ['name' => 'not-static-399'], ['foo' => 'bar']],
+            'route' => '/abcbar/' . (self::ROUTES_COUNT - 1),
+            'result' => [Dispatcher::FOUND, ['name' => 'not-static-' . (self::ROUTES_COUNT - 1)], ['foo' => 'bar']],
         ];
 
         yield 'invalid-method' => [
             'method' => 'PUT',
-            'route' => '/abcbar/399',
+            'route' => '/abcbar/' . (self::ROUTES_COUNT - 1),
             'result' => [Dispatcher::METHOD_NOT_ALLOWED, ['GET']],
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** @inheritdoc */
     public function provideOtherScenarios(): iterable
     {
         yield 'non-existent' => [

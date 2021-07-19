@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace FastRoute\Benchmark;
 
-use FastRoute\Cache;
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
 use Generator;
@@ -11,18 +10,20 @@ use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
 use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
+use PhpBench\Benchmark\Metadata\Annotations\Subject;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
 
 use function array_keys;
 use function assert;
 
 /**
- * @Warmup(2)
- * @Revs(1000)
+ * @ParamProviders({"provideDispatcher"})
+ *
+ * @Warmup(50)
+ * @Revs(500)
  * @Iterations(5)
- * @BeforeMethods({"initializeDispatchers"})
  */
-abstract class Dispatching
+abstract class Benchmark
 {
     private const DISPATCHERS_CONFIG = [
         'group_count' => [
@@ -46,15 +47,15 @@ abstract class Dispatching
     /** @var Dispatcher[] */
     private array $dispatchers = [];
 
-    public function initializeDispatchers(): void
+    final public function initializeDispatchers(): void
     {
         foreach (self::DISPATCHERS_CONFIG as $name => $config) {
             $this->dispatchers[$name] = $this->createDispatcher($config);
         }
     }
 
-    /** @param array{routeParser?: string, dataGenerator?: string, dispatcher?: string, routeCollector?: string, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: string|Cache} $options */
-    abstract protected function createDispatcher(array $options = []): Dispatcher;
+    /** @param array{dataGenerator: string, dispatcher: string} $options */
+    abstract protected function createDispatcher(array $options): Dispatcher;
 
     /** @return Generator<string, array<string, mixed>> */
     abstract public function provideStaticRoutes(): iterable;
@@ -66,7 +67,7 @@ abstract class Dispatching
     abstract public function provideOtherScenarios(): iterable;
 
     /** @return Generator<string, array<string, string>> */
-    public function provideDispatcher(): iterable
+    final public function provideDispatcher(): iterable
     {
         foreach (array_keys(self::DISPATCHERS_CONFIG) as $dispatcher) {
             yield $dispatcher => ['dispatcher' => $dispatcher];
@@ -74,31 +75,40 @@ abstract class Dispatching
     }
 
     /**
-     * @ParamProviders({"provideDispatcher", "provideStaticRoutes"})
+     * @ParamProviders({"provideStaticRoutes"}, extend=true)
      *
      * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
+     *
+     * @Subject
+     * @BeforeMethods({"initializeDispatchers"})
      */
-    public function benchStaticRoutes(array $params): void
+    final public function staticRoutes(array $params): void
     {
         $this->runScenario($params);
     }
 
     /**
-     * @ParamProviders({"provideDispatcher", "provideDynamicRoutes"})
+     * @ParamProviders({"provideDynamicRoutes"}, extend=true)
      *
      * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
+     *
+     * @Subject
+     * @BeforeMethods({"initializeDispatchers"})
      */
-    public function benchDynamicRoutes(array $params): void
+    final public function dynamicRoutes(array $params): void
     {
         $this->runScenario($params);
     }
 
     /**
-     * @ParamProviders({"provideDispatcher", "provideOtherScenarios"})
+     * @ParamProviders({"provideOtherScenarios"}, extend=true)
      *
      * @param array<string, string|array{0: int, 1: string[]|mixed, 2?: array<string, string>}> $params
+     *
+     * @Subject
+     * @BeforeMethods({"initializeDispatchers"})
      */
-    public function benchOtherRoutes(array $params): void
+    final public function otherRoutes(array $params): void
     {
         $this->runScenario($params);
     }
@@ -109,5 +119,15 @@ abstract class Dispatching
         $dispatcher = $this->dispatchers[$params['dispatcher']];
 
         assert($params['result'] === $dispatcher->dispatch($params['method'], $params['route']));
+    }
+
+    /**
+     * @param array{dispatcher: string} $params
+     *
+     * @Subject
+     */
+    final public function routeRegistration(array $params): void
+    {
+        $this->createDispatcher(self::DISPATCHERS_CONFIG[$params['dispatcher']]);
     }
 }
