@@ -17,7 +17,7 @@ class DummyRouteCollector extends RouteCollector
     /**
      * {@inheritDoc}
      */
-    public function addRoute($httpMethod, string $route, $handler): void
+    public function addRoute($httpMethod, string $route, mixed $handler): void
     {
         $route = $this->currentGroupPrefix . $route;
         $this->routes[] = [$httpMethod, $route, $handler];

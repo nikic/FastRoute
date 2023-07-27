@@ -13,6 +13,3 @@ parameters:
         -
             message: '#Variable \$i might not be defined.#'
             path: 'src/Dispatcher/GroupPosBased.php'
-        -
-            message: '#Only numeric types are allowed in pre-increment, string given.#'
-            path: 'src/DataGenerator/MarkBased.php'

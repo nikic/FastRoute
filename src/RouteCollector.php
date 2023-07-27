@@ -5,16 +5,10 @@ namespace FastRoute;
 
 class RouteCollector
 {
-    protected RouteParser $routeParser;
-
-    protected DataGenerator $dataGenerator;
-
     protected string $currentGroupPrefix = '';
 
-    public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
+    public function __construct(protected RouteParser $routeParser, protected DataGenerator $dataGenerator)
     {
-        $this->routeParser = $routeParser;
-        $this->dataGenerator = $dataGenerator;
     }
 
     /**
@@ -23,9 +17,8 @@ class RouteCollector
      * The syntax used in the $route string depends on the used route parser.
      *
      * @param string|string[] $httpMethod
-     * @param mixed           $handler
      */
-    public function addRoute($httpMethod, string $route, $handler): void
+    public function addRoute(string|array $httpMethod, string $route, mixed $handler): void
     {
         $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
@@ -53,10 +46,8 @@ class RouteCollector
      * Adds a fallback route to the collection
      *
      * This is simply an alias of $this->addRoute('*', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function any(string $route, $handler): void
+    public function any(string $route, mixed $handler): void
     {
         $this->addRoute('*', $route, $handler);
     }
@@ -65,10 +56,8 @@ class RouteCollector
      * Adds a GET route to the collection
      *
      * This is simply an alias of $this->addRoute('GET', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function get(string $route, $handler): void
+    public function get(string $route, mixed $handler): void
     {
         $this->addRoute('GET', $route, $handler);
     }
@@ -77,10 +66,8 @@ class RouteCollector
      * Adds a POST route to the collection
      *
      * This is simply an alias of $this->addRoute('POST', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function post(string $route, $handler): void
+    public function post(string $route, mixed $handler): void
     {
         $this->addRoute('POST', $route, $handler);
     }
@@ -89,10 +76,8 @@ class RouteCollector
      * Adds a PUT route to the collection
      *
      * This is simply an alias of $this->addRoute('PUT', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function put(string $route, $handler): void
+    public function put(string $route, mixed $handler): void
     {
         $this->addRoute('PUT', $route, $handler);
     }
@@ -101,10 +86,8 @@ class RouteCollector
      * Adds a DELETE route to the collection
      *
      * This is simply an alias of $this->addRoute('DELETE', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function delete(string $route, $handler): void
+    public function delete(string $route, mixed $handler): void
     {
         $this->addRoute('DELETE', $route, $handler);
     }
@@ -113,10 +96,8 @@ class RouteCollector
      * Adds a PATCH route to the collection
      *
      * This is simply an alias of $this->addRoute('PATCH', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function patch(string $route, $handler): void
+    public function patch(string $route, mixed $handler): void
     {
         $this->addRoute('PATCH', $route, $handler);
     }
@@ -125,10 +106,8 @@ class RouteCollector
      * Adds a HEAD route to the collection
      *
      * This is simply an alias of $this->addRoute('HEAD', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function head(string $route, $handler): void
+    public function head(string $route, mixed $handler): void
     {
         $this->addRoute('HEAD', $route, $handler);
     }
@@ -137,10 +116,8 @@ class RouteCollector
      * Adds an OPTIONS route to the collection
      *
      * This is simply an alias of $this->addRoute('OPTIONS', $route, $handler)
-     *
-     * @param mixed $handler
      */
-    public function options(string $route, $handler): void
+    public function options(string $route, mixed $handler): void
     {
         $this->addRoute('OPTIONS', $route, $handler);
     }
