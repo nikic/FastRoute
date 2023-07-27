@@ -28,4 +28,4 @@ phpstan:
 
 .PHONY: phpbench
 phpbench:
-	@vendor/bin/phpbench run -l dots --report aggregate
+	@vendor/bin/phpbench run -l dots --report aggregate $(PHPBENCH_OPTIONS)
