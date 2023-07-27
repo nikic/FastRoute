@@ -22,7 +22,7 @@ final class ManyRoutes extends Dispatching
                     $routes->addRoute('GET', '/abc{foo}/' . $i, ['name' => 'not-static-' . $i]);
                 }
             },
-            $options
+            $options,
         );
     }
 

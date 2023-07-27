@@ -25,7 +25,7 @@ abstract class RegexBasedAbstract implements Dispatcher
      *
      * @return array{0: int, 1?: list<string>|mixed, 2?: array<string, string>}|null
      */
-    abstract protected function dispatchVariableRoute(array $routeData, string $uri): ?array;
+    abstract protected function dispatchVariableRoute(array $routeData, string $uri): array|null;
 
     /** @inheritDoc */
     public function dispatch(string $httpMethod, string $uri): array

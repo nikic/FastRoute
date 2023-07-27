@@ -59,7 +59,7 @@ final class RealLifeExample extends Dispatching
                 $routes->addRoute(['PUT', 'PATCH'], '/admin/category/{category_id:\d+}', ['name' => 'admin.category.update']);
                 $routes->addRoute('DELETE', '/admin/category/{category_id:\d+}', ['name' => 'admin.category.destroy']);
             },
-            $options
+            $options,
         );
     }
 

@@ -44,7 +44,7 @@ abstract class DispatcherTest extends TestCase
         string $uri,
         callable $callback,
         string $handler,
-        array $argDict
+        array $argDict,
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
@@ -62,7 +62,7 @@ abstract class DispatcherTest extends TestCase
         self::assertArrayNotHasKey(
             1,
             $routeInfo,
-            'NOT_FOUND result must only contain a single element in the returned info array'
+            'NOT_FOUND result must only contain a single element in the returned info array',
         );
         self::assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
     }
@@ -76,14 +76,14 @@ abstract class DispatcherTest extends TestCase
         string $method,
         string $uri,
         callable $callback,
-        array $availableMethods
+        array $availableMethods,
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
         self::assertArrayHasKey(
             1,
             $routeInfo,
-            'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1'
+            'METHOD_NOT_ALLOWED result must return an array of allowed methods at index 1',
         );
 
         [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);

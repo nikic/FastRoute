@@ -1,11 +1,11 @@
 {
     "name": "nikic/fast-route",
     "description": "Fast request router for PHP",
+    "license": "BSD-3-Clause",
     "keywords": [
         "routing",
         "router"
     ],
-    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Nikita Popov",
@@ -13,33 +13,20 @@
         }
     ],
     "require": {
-        "php": ">=7.4.0"
+        "php": ">=8.1.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^9.0",
-        "phpbench/phpbench": "^1.0",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-deprecation-rules": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^9.5"
+        "doctrine/coding-standard": "^12.0",
+        "phpbench/phpbench": "^1.2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "phpstan/phpstan-strict-rules": "^1.5",
+        "phpunit/phpunit": "^9.6"
     },
     "suggest": {
         "ext-apcu": "To be able to use APCu cache driver"
-    },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev"
-        }
     },
     "autoload": {
         "psr-4": {
@@ -53,6 +40,19 @@
         "psr-4": {
             "FastRoute\\Benchmark\\": "benchmark/",
             "FastRoute\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
         }
     }
 }

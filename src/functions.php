@@ -17,7 +17,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     {
         return \FastRoute\cachedDispatcher(
             $routeDefinitionCallback,
-            ['cacheDisabled' => true] + $options
+            ['cacheDisabled' => true] + $options,
         );
     }
 

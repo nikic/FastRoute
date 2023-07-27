@@ -18,7 +18,7 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "7.4"
+          php-version: "8.1"
           ini-values: memory_limit=-1
           tools: composer:v2, cs2pr
         env:
@@ -32,8 +32,8 @@ jobs:
         uses: "actions/cache@v3"
         with:
           path: ${{ steps.composer-cache.outputs.composer_cache_dir }}
-          key: "php-7.4-bc-break-check-${{ hashFiles('.github/workflows/backwards-compatibility.yml') }}"
-          restore-keys: "php-7.4-bc-break-check-"
+          key: "php-8.1-bc-break-check-${{ hashFiles('.github/workflows/backwards-compatibility.yml') }}"
+          restore-keys: "php-8.1-bc-break-check-"
 
       - name: "Install dependencies"
         run: composer global require roave/backward-compatibility-check

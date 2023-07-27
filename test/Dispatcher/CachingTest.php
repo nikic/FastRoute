@@ -33,7 +33,7 @@ final class CachingTest extends TestCase
                 $collector->get('/testing', ['test']);
                 $collector->get('/admin/{page}', ['admin-page']);
             },
-            ['cacheKey' => self::CACHE_FILE]
+            ['cacheKey' => self::CACHE_FILE],
         );
     }
 

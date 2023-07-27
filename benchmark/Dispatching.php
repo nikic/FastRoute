@@ -32,25 +32,25 @@ abstract class Dispatching
             [
                 'dataGenerator' => DataGenerator\GroupCountBased::class,
                 'dispatcher' => Dispatcher\GroupCountBased::class,
-            ]
+            ],
         );
         $this->dispatchers['char_count'] = $this->createDispatcher(
             [
                 'dataGenerator' => DataGenerator\CharCountBased::class,
                 'dispatcher' => Dispatcher\CharCountBased::class,
-            ]
+            ],
         );
         $this->dispatchers['group_pos'] = $this->createDispatcher(
             [
                 'dataGenerator' => DataGenerator\GroupPosBased::class,
                 'dispatcher' => Dispatcher\GroupPosBased::class,
-            ]
+            ],
         );
         $this->dispatchers['mark'] = $this->createDispatcher(
             [
                 'dataGenerator' => DataGenerator\MarkBased::class,
                 'dispatcher' => Dispatcher\MarkBased::class,
-            ]
+            ],
         );
     }
 

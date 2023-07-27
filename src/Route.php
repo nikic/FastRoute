@@ -7,26 +7,9 @@ use function preg_match;
 
 class Route
 {
-    public string $httpMethod;
-
-    public string $regex;
-
-    /** @var array<string, string> */
-    public array $variables;
-
-    /** @var mixed */
-    public $handler;
-
-    /**
-     * @param mixed                 $handler
-     * @param array<string, string> $variables
-     */
-    public function __construct(string $httpMethod, $handler, string $regex, array $variables)
+    /** @param array<string, string> $variables */
+    public function __construct(public string $httpMethod, public mixed $handler, public string $regex, public array $variables)
     {
-        $this->httpMethod = $httpMethod;
-        $this->handler = $handler;
-        $this->regex = $regex;
-        $this->variables = $variables;
     }
 
     /**
