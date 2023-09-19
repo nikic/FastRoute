@@ -4,7 +4,8 @@
 /.gitattributes export-ignore
 /.gitignore     export-ignore
 /*.dist         export-ignore
-/psalm.xml      export-ignore
 /phpbench.json  export-ignore
 /composer.lock  export-ignore
 /Makefile       export-ignore
+/.editorconfig  export-ignore
+/composer-req*.json export-ignore
