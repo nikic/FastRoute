@@ -8,7 +8,7 @@ use function preg_match;
 class GroupPosBased extends RegexBasedAbstract
 {
     /** @inheritDoc */
-    protected function dispatchVariableRoute(array $routeData, string $uri): array|null
+    protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {
             if (! preg_match($data['regex'], $uri, $matches)) {

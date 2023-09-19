@@ -9,6 +9,15 @@ use function preg_quote;
 
 class Route
 {
+    /** @param array<string, string> $variables */
+    public function __construct(
+        public string $httpMethod,
+        public mixed $handler,
+        public string $regex,
+        public array $variables,
+    ) {
+    }
+
     /** @param array<string|array{0: string, 1:string}> $routeData */
     public static function fromParsedRoute(string $httpMethod, array $routeData, mixed $handler): self
     {
@@ -45,11 +54,6 @@ class Route
         }
 
         return [$regex, $variables];
-    }
-
-    /** @param array<string, string> $variables */
-    public function __construct(public string $httpMethod, public mixed $handler, public string $regex, public array $variables)
-    {
     }
 
     /**
