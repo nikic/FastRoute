@@ -15,4 +15,13 @@
     <rule ref="Lcobucci">
         <exclude name="Generic.Formatting.MultipleStatementAlignment" />
     </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix">
+        <exclude-pattern>src/Dispatcher/RegexBasedAbstract*</exclude-pattern>
+        <exclude-pattern>src/DataGenerator/RegexBasedAbstract*</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix">
+        <exclude-pattern>src/BadRouteException*</exclude-pattern>
+    </rule>
 </ruleset>
