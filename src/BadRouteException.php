@@ -7,7 +7,6 @@ use LogicException;
 
 use function sprintf;
 
-// phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix
 class BadRouteException extends LogicException
 {
     public static function alreadyRegistered(string $route, string $method): self

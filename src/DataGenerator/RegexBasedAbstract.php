@@ -15,7 +15,6 @@ use function is_string;
 use function max;
 use function round;
 
-// phpcs:ignore SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousSuffix
 abstract class RegexBasedAbstract implements DataGenerator
 {
     /** @var array<string, array<string, mixed>> */
