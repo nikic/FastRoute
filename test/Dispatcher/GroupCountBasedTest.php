@@ -6,7 +6,7 @@ namespace FastRoute\Test\Dispatcher;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\Dispatcher;
 
-class GroupCountBasedTest extends DispatcherTest
+class GroupCountBasedTest extends DispatcherTestCase
 {
     protected function getDispatcherClass(): string
     {

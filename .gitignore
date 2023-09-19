@@ -2,5 +2,5 @@
 .idea/
 
 phpunit.xml
-/.phpunit.result.cache
+/*.cache
 /.phpbench

@@ -6,7 +6,7 @@ namespace FastRoute\Test\Dispatcher;
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
 
-class MarkBasedTest extends DispatcherTest
+class MarkBasedTest extends DispatcherTestCase
 {
     protected function getDispatcherClass(): string
     {

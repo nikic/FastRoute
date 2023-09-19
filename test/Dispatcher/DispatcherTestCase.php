@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace FastRoute\Test\Dispatcher;
 
+use Closure;
 use FastRoute\BadRouteException;
 use FastRoute\RouteCollector;
+use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
 use function FastRoute\simpleDispatcher;
 
-abstract class DispatcherTest extends TestCase
+abstract class DispatcherTestCase extends TestCase
 {
     /**
      * Delegate dispatcher selection to child test classes
@@ -34,17 +36,15 @@ abstract class DispatcherTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideFoundDispatchCases
-     *
-     * @param array<string, string> $argDict
-     */
-    public function testFoundDispatches(
+    /** @param array<string, string> $argDict */
+    #[PHPUnit\Test]
+    #[PHPUnit\DataProvider('provideFoundDispatchCases')]
+    public function foundDispatches(
         string $method,
         string $uri,
         callable $callback,
         string $handler,
-        array $argDict,
+        array $argDict = [],
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
@@ -54,8 +54,9 @@ abstract class DispatcherTest extends TestCase
         self::assertSame($argDict, $info[2]);
     }
 
-    /** @dataProvider provideNotFoundDispatchCases */
-    public function testNotFoundDispatches(string $method, string $uri, callable $callback): void
+    #[PHPUnit\Test]
+    #[PHPUnit\DataProvider('provideNotFoundDispatchCases')]
+    public function notFoundDispatches(string $method, string $uri, callable $callback): void
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
@@ -67,12 +68,10 @@ abstract class DispatcherTest extends TestCase
         self::assertSame($dispatcher::NOT_FOUND, $routeInfo[0]);
     }
 
-    /**
-     * @dataProvider provideMethodNotAllowedDispatchCases
-     *
-     * @param string[] $availableMethods
-     */
-    public function testMethodNotAllowedDispatches(
+    /** @param string[] $availableMethods */
+    #[PHPUnit\Test]
+    #[PHPUnit\DataProvider('provideMethodNotAllowedDispatchCases')]
+    public function methodNotAllowedDispatches(
         string $method,
         string $uri,
         callable $callback,
@@ -91,7 +90,8 @@ abstract class DispatcherTest extends TestCase
         self::assertSame($availableMethods, $methodArray);
     }
 
-    public function testDuplicateVariableNameError(): void
+    #[PHPUnit\Test]
+    public function duplicateVariableNameError(): void
     {
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot use the same placeholder "test" twice');
@@ -101,7 +101,8 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    public function testDuplicateVariableRoute(): void
+    #[PHPUnit\Test]
+    public function duplicateVariableRoute(): void
     {
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user/([^/]+)" for method "GET"');
@@ -112,7 +113,8 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    public function testDuplicateStaticRoute(): void
+    #[PHPUnit\Test]
+    public function duplicateStaticRoute(): void
     {
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Cannot register two routes matching "/user" for method "GET"');
@@ -123,7 +125,8 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    public function testShadowedStaticRoute(): void
+    #[PHPUnit\Test]
+    public function shadowedStaticRoute(): void
     {
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Static route "/user/nikic" is shadowed by previously defined variable route "/user/([^/]+)" for method "GET"');
@@ -134,7 +137,8 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    public function testCapturing(): void
+    #[PHPUnit\Test]
+    public function capturing(): void
     {
         $this->expectException(BadRouteException::class);
         $this->expectExceptionMessage('Regex "(en|de)" for parameter "lang" contains a capturing group');
@@ -144,25 +148,14 @@ abstract class DispatcherTest extends TestCase
         }, $this->generateDispatcherOptions());
     }
 
-    /** @return mixed[] */
-    public function provideFoundDispatchCases(): array
+    /** @return iterable<string, array{0: string, 1: string, 2: Closure(RouteCollector):void, 3: string, 4?: array<string, string>}> */
+    public static function provideFoundDispatchCases(): iterable
     {
-        $cases = [];
-
-        // 0 -------------------------------------------------------------------------------------->
-
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
-        $method = 'GET';
-        $uri = '/resource/123/456';
-        $handler = 'handler0';
-        $argDict = [];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 1 -------------------------------------------------------------------------------------->
+        yield 'single static route' => ['GET', '/resource/123/456', $callback, 'handler0'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/handler0', 'handler0');
@@ -170,14 +163,7 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/handler2', 'handler2');
         };
 
-        $method = 'GET';
-        $uri = '/handler2';
-        $handler = 'handler2';
-        $argDict = [];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 2 -------------------------------------------------------------------------------------->
+        yield 'multiple static routes' => ['GET', '/handler2', $callback, 'handler2'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
@@ -185,47 +171,10 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/user/{name}', 'handler2');
         };
 
-        $method = 'GET';
-        $uri = '/user/rdlowrey';
-        $handler = 'handler2';
-        $argDict = ['name' => 'rdlowrey'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 3 -------------------------------------------------------------------------------------->
-
-        // reuse $callback from #2
-
-        $method = 'GET';
-        $uri = '/user/12345';
-        $handler = 'handler1';
-        $argDict = ['id' => '12345'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 4 -------------------------------------------------------------------------------------->
-
-        // reuse $callback from #3
-
-        $method = 'GET';
-        $uri = '/user/NaN';
-        $handler = 'handler2';
-        $argDict = ['name' => 'NaN'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 5 -------------------------------------------------------------------------------------->
-
-        // reuse $callback from #4
-
-        $method = 'GET';
-        $uri = '/user/rdlowrey/12345';
-        $handler = 'handler0';
-        $argDict = ['name' => 'rdlowrey', 'id' => '12345'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 6 -------------------------------------------------------------------------------------->
+        yield 'parameter matching precedence {/user/rdlowrey/12345}' => ['GET', '/user/rdlowrey/12345', $callback, 'handler0', ['name' => 'rdlowrey', 'id' => '12345']];
+        yield 'parameter matching precedence {/user/12345}' => ['GET', '/user/12345', $callback, 'handler1', ['id' => '12345']];
+        yield 'parameter matching precedence {/user/rdlowrey}' => ['GET', '/user/rdlowrey', $callback, 'handler2', ['name' => 'rdlowrey']];
+        yield 'parameter matching precedence {/user/NaN}' => ['GET', '/user/NaN', $callback, 'handler2', ['name' => 'NaN']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler0');
@@ -233,14 +182,7 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/user/{id:[0-9]+}.{extension}', 'handler2');
         };
 
-        $method = 'GET';
-        $uri = '/user/12345.svg';
-        $handler = 'handler2';
-        $argDict = ['id' => '12345', 'extension' => 'svg'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 7 ----- Test GET method fallback on HEAD route miss ------------------------------------>
+        yield 'dynamic file extensions' => ['GET', '/user/12345.svg', $callback, 'handler2', ['id' => '12345', 'extension' => 'svg']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
@@ -250,61 +192,17 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('HEAD', '/static1', 'handler4');
         };
 
-        $method = 'HEAD';
-        $uri = '/user/rdlowrey';
-        $handler = 'handler0';
-        $argDict = ['name' => 'rdlowrey'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 8 ----- Test GET method fallback on HEAD route miss ------------------------------------>
-
-        // reuse $callback from #7
-
-        $method = 'HEAD';
-        $uri = '/user/rdlowrey/1234';
-        $handler = 'handler1';
-        $argDict = ['name' => 'rdlowrey', 'id' => '1234'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 9 ----- Test GET method fallback on HEAD route miss ------------------------------------>
-
-        // reuse $callback from #8
-
-        $method = 'HEAD';
-        $uri = '/static0';
-        $handler = 'handler2';
-        $argDict = [];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 10 ---- Test existing HEAD route used if available (no fallback) ----------------------->
-
-        // reuse $callback from #9
-
-        $method = 'HEAD';
-        $uri = '/static1';
-        $handler = 'handler4';
-        $argDict = [];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 11 ---- More specified routes are not shadowed by less specific of another method ------>
+        yield 'fallback to GET on HEAD route miss {/user/rdlowrey}' => ['HEAD', '/user/rdlowrey', $callback, 'handler0', ['name' => 'rdlowrey']];
+        yield 'fallback to GET on HEAD route miss {/user/rdlowrey/1234}' => ['HEAD', '/user/rdlowrey/1234', $callback, 'handler1', ['name' => 'rdlowrey', 'id' => '1234']];
+        yield 'fallback to GET on HEAD route miss {/static0}' => ['HEAD', '/static0', $callback, 'handler2'];
+        yield 'registered HEAD route is used' => ['HEAD', '/static1', $callback, 'handler4'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('POST', '/user/{name:[a-z]+}', 'handler1');
         };
 
-        $method = 'POST';
-        $uri = '/user/rdlowrey';
-        $handler = 'handler1';
-        $argDict = ['name' => 'rdlowrey'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 12 ---- Handler of more specific routes is used, if it occurs first -------------------->
+        yield 'more specific routes are not shadowed by less specific of another method' => ['POST', '/user/rdlowrey', $callback, 'handler1', ['name' => 'rdlowrey']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
@@ -312,28 +210,15 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('POST', '/user/{name}', 'handler2');
         };
 
-        $method = 'POST';
-        $uri = '/user/rdlowrey';
-        $handler = 'handler1';
-        $argDict = ['name' => 'rdlowrey'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 13 ---- Route with constant suffix ----------------------------------------------------->
+        yield 'more specific routes are used, according to the registration order {/user/rdlowrey}' => ['POST', '/user/rdlowrey', $callback, 'handler1', ['name' => 'rdlowrey']];
+        yield 'more specific routes are used, according to the registration order {/user/rdlowrey1}' => ['POST', '/user/rdlowrey1', $callback, 'handler2', ['name' => 'rdlowrey1']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}', 'handler0');
             $r->addRoute('GET', '/user/{name}/edit', 'handler1');
         };
 
-        $method = 'GET';
-        $uri = '/user/rdlowrey/edit';
-        $handler = 'handler1';
-        $argDict = ['name' => 'rdlowrey'];
-
-        $cases[] = [$method, $uri, $callback, $handler, $argDict];
-
-        // 14 ---- Handle multiple methods with the same handler ---------------------------------->
+        yield 'route with constant suffix' => ['GET', '/user/rdlowrey/edit', $callback, 'handler1', ['name' => 'rdlowrey']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute(['GET', 'POST'], '/user', 'handlerGetPost');
@@ -341,56 +226,43 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute([], '/user', 'handlerNone');
         };
 
-        $argDict = [];
-        $cases[] = ['GET', '/user', $callback, 'handlerGetPost', $argDict];
-        $cases[] = ['POST', '/user', $callback, 'handlerGetPost', $argDict];
-        $cases[] = ['DELETE', '/user', $callback, 'handlerDelete', $argDict];
-
-        // 17 ----
+        foreach (['GET' => 'handlerGetPost', 'POST' => 'handlerGetPost', 'DELETE' => 'handlerDelete'] as $method => $handler) {
+            yield 'multiple methods with the same handler {' . $method . '}' => [$method, '/user', $callback, $handler];
+        }
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('POST', '/user.json', 'handler0');
             $r->addRoute('GET', '/{entity}.json', 'handler1');
         };
 
-        $cases[] = ['GET', '/user.json', $callback, 'handler1', ['entity' => 'user']];
-
-        // 18 ----
+        yield 'fallback to dynamic routes when method does not match' => ['GET', '/user.json', $callback, 'handler1', ['entity' => 'user']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '', 'handler0');
         };
 
-        $cases[] = ['GET', '', $callback, 'handler0', []];
-
-        // 19 ----
+        yield 'match empty route' => ['GET', '', $callback, 'handler0'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('HEAD', '/a/{foo}', 'handler0');
             $r->addRoute('GET', '/b/{foo}', 'handler1');
         };
 
-        $cases[] = ['HEAD', '/b/bar', $callback, 'handler1', ['foo' => 'bar']];
-
-        // 20 ----
+        yield 'fallback to GET route on HEAD miss {dynamic routes}' => ['HEAD', '/b/bar', $callback, 'handler1', ['foo' => 'bar']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('HEAD', '/a', 'handler0');
             $r->addRoute('GET', '/b', 'handler1');
         };
 
-        $cases[] = ['HEAD', '/b', $callback, 'handler1', []];
-
-        // 21 ----
+        yield 'fallback to GET route on HEAD miss {static routes}' =>  ['HEAD', '/b', $callback, 'handler1'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/foo', 'handler0');
             $r->addRoute('HEAD', '/{bar}', 'handler1');
         };
 
-        $cases[] = ['HEAD', '/foo', $callback, 'handler1', ['bar' => 'foo']];
-
-        // 22 ----
+        yield 'fallback to GET route on HEAD miss {dynamic/static routes}' => ['HEAD', '/foo', $callback, 'handler1', ['bar' => 'foo']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('*', '/user', 'handler0');
@@ -398,85 +270,50 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/user', 'handler2');
         };
 
-        $cases[] = ['GET', '/user', $callback, 'handler2', []];
+        yield 'fallback method is used when needed {GET,static}' => ['GET', '/user', $callback, 'handler2'];
+        yield 'fallback method is used when needed {HEAD,static}' => ['HEAD', '/user', $callback, 'handler2'];
 
-        // 23 ----
+        yield 'fallback method is used when needed {GET,dynamic}' => ['GET', '/foo', $callback, 'handler1', ['user' => 'foo']];
+        yield 'fallback method is used when needed {HEAD,dynamic}' => ['HEAD', '/foo', $callback, 'handler1', ['user' => 'foo']];
 
-        $callback = static function (RouteCollector $r): void {
-            $r->addRoute('*', '/user', 'handler0');
-            $r->addRoute('GET', '/user', 'handler1');
-        };
-
-        $cases[] = ['POST', '/user', $callback, 'handler0', []];
-
-        // 24 ----
-
-        $cases[] = ['HEAD', '/user', $callback, 'handler1', []];
-
-        // 25 ----
+        foreach (['POST', 'DELETE', 'OPTIONS', 'PUT', 'PATCH'] as $method) {
+            yield 'fallback method is used when needed {' . $method . ',static}' => [$method, '/user', $callback, 'handler0'];
+            yield 'fallback method is used when needed {' . $method . ',dynamic}' => [$method, '/foo', $callback, 'handler1', ['user' => 'foo']];
+        }
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/{bar}', 'handler0');
             $r->addRoute('*', '/foo', 'handler1');
         };
 
-        $cases[] = ['GET', '/foo', $callback, 'handler0', ['bar' => 'foo']];
-
-        // 26 ----
+        yield 'fallback method is used as last resource' => ['GET', '/foo', $callback, 'handler0', ['bar' => 'foo']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user', 'handler0');
             $r->addRoute('*', '/{foo:.*}', 'handler1');
         };
 
-        $cases[] = ['POST', '/bar', $callback, 'handler1', ['foo' => 'bar']];
-
-        // 27 ----
+        yield 'fallback method can capture arguments' => ['POST', '/bar', $callback, 'handler1', ['foo' => 'bar']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('OPTIONS', '/about', 'handler0');
         };
 
-        $cases[] = ['OPTIONS', '/about', $callback, 'handler0', []];
-
-        // x -------------------------------------------------------------------------------------->
-
-        return $cases;
+        yield 'options method is supported' => ['OPTIONS', '/about', $callback, 'handler0'];
     }
 
-    /** @return mixed[] */
-    public function provideNotFoundDispatchCases(): array
+    /** @return iterable<string, array{string, string, Closure(RouteCollector):void}> */
+    public static function provideNotFoundDispatchCases(): iterable
     {
-        $cases = [];
-
-        // 0 -------------------------------------------------------------------------------------->
+        $methods = ['GET', 'POST', 'DELETE', 'PUT', 'HEAD', 'OPTIONS'];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
-        $method = 'GET';
-        $uri = '/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 1 -------------------------------------------------------------------------------------->
-
-        // reuse callback from #0
-        $method = 'POST';
-        $uri = '/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 2 -------------------------------------------------------------------------------------->
-
-        // reuse callback from #1
-        $method = 'PUT';
-        $uri = '/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 3 -------------------------------------------------------------------------------------->
+        foreach ($methods as $method) {
+            yield 'single static route {' . $method . '}' => [$method, '/not-found', $callback];
+        }
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/handler0', 'handler0');
@@ -484,12 +321,9 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/handler2', 'handler2');
         };
 
-        $method = 'GET';
-        $uri = '/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 4 -------------------------------------------------------------------------------------->
+        foreach ($methods as $method) {
+            yield 'multiple static routes {' . $method . '}' => [$method, '/not-found', $callback];
+        }
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
@@ -497,49 +331,21 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('GET', '/user/{name}', 'handler2');
         };
 
-        $method = 'GET';
-        $uri = '/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 5 -------------------------------------------------------------------------------------->
-
-        // reuse callback from #4
-        $method = 'GET';
-        $uri = '/user/rdlowrey/12345/not-found';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // 6 -------------------------------------------------------------------------------------->
-
-        // reuse callback from #5
-        $method = 'HEAD';
-
-        $cases[] = [$method, $uri, $callback];
-
-        // x -------------------------------------------------------------------------------------->
-
-        return $cases;
+        foreach ($methods as $method) {
+            foreach (['/not-found', '/user/rdlowrey/12345/not-found'] as $uri) {
+                yield 'multiple dynamic routes {' . $method . ', ' . $uri . '}' => [$method, $uri, $callback];
+            }
+        }
     }
 
-    /** @return mixed[] */
-    public function provideMethodNotAllowedDispatchCases(): array
+    /** @return iterable<string, array{string, string, Closure(RouteCollector):void, list<string>}> */
+    public static function provideMethodNotAllowedDispatchCases(): iterable
     {
-        $cases = [];
-
-        // 0 -------------------------------------------------------------------------------------->
-
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
         };
 
-        $method = 'POST';
-        $uri = '/resource/123/456';
-        $allowedMethods = ['GET'];
-
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
-
-        // 1 -------------------------------------------------------------------------------------->
+        yield 'match static routes' => ['POST', '/resource/123/456', $callback, ['GET']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/resource/123/456', 'handler0');
@@ -548,13 +354,7 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('*', '/', 'handler3');
         };
 
-        $method = 'DELETE';
-        $uri = '/resource/123/456';
-        $allowedMethods = ['GET', 'POST', 'PUT'];
-
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
-
-        // 2 -------------------------------------------------------------------------------------->
+        yield 'ignore fallbacks for unmatched routes ' => ['DELETE', '/resource/123/456', $callback, ['GET', 'POST', 'PUT']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
@@ -563,13 +363,7 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('PATCH', '/user/{name}/{id:[0-9]+}', 'handler3');
         };
 
-        $method = 'DELETE';
-        $uri = '/user/rdlowrey/42';
-        $allowedMethods = ['GET', 'POST', 'PUT', 'PATCH'];
-
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
-
-        // 3 -------------------------------------------------------------------------------------->
+        yield 'match dynamic routes' => ['DELETE', '/user/rdlowrey/42', $callback, ['GET', 'POST', 'PUT', 'PATCH']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('POST', '/user/{name}', 'handler1');
@@ -577,13 +371,16 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute('PATCH', '/user/{name:[a-z]+}', 'handler3');
         };
 
-        $method = 'GET';
-        $uri = '/user/rdlowrey';
-        $allowedMethods = ['POST', 'PUT', 'PATCH'];
+        yield 'match with and without validations' => ['GET', '/user/rdlowrey', $callback, ['POST', 'PUT', 'PATCH']];
 
-        $cases[] = [$method, $uri, $callback, $allowedMethods];
+        $callback = static function (RouteCollector $r): void {
+            $r->addRoute('POST', '/user/{name}', 'handler1');
+            $r->addRoute('PUT', '/user/{name:[a-z]+}', 'handler2');
+            $r->addRoute('PATCH', '/user/{name:[a-z]+}', 'handler3');
+            $r->addRoute('DELETE', '/user/{name:[a-z0-9]+}', 'handler3');
+        };
 
-        // 4 -------------------------------------------------------------------------------------->
+        yield 'match respects validations' => ['GET', '/user/rdlowrey42', $callback, ['POST', 'DELETE']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute(['GET', 'POST'], '/user', 'handlerGetPost');
@@ -591,19 +388,13 @@ abstract class DispatcherTest extends TestCase
             $r->addRoute([], '/user', 'handlerNone');
         };
 
-        $cases[] = ['PUT', '/user', $callback, ['GET', 'POST', 'DELETE']];
-
-        // 5
+        yield 'match all valid methods' => ['PUT', '/user', $callback, ['GET', 'POST', 'DELETE']];
 
         $callback = static function (RouteCollector $r): void {
             $r->addRoute('POST', '/user.json', 'handler0');
             $r->addRoute('GET', '/{entity}.json', 'handler1');
         };
 
-        $cases[] = ['PUT', '/user.json', $callback, ['POST', 'GET']];
-
-        // x -------------------------------------------------------------------------------------->
-
-        return $cases;
+        yield 'match static and dynamic routes' => ['PUT', '/user.json', $callback, ['POST', 'GET']];
     }
 }

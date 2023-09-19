@@ -2,10 +2,18 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
-    verbose="true"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutTodoAnnotatedTests="true"
     beStrictAboutChangesToGlobalState="true"
     beStrictAboutOutputDuringTests="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnIncompleteTests="true"
+    displayDetailsOnSkippedTests="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
     executionOrder="random"
+    cacheDirectory=".phpunit.cache"
 >
     <testsuites>
         <testsuite name="FastRoute Tests">
@@ -13,9 +21,9 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory>./src/</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

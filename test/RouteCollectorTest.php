@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace FastRoute\Test;
 
+use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
 class RouteCollectorTest extends TestCase
 {
-    public function testShortcuts(): void
+    #[PHPUnit\Test]
+    public function shortcutsCanBeUsedToRegisterRoutes(): void
     {
         $r = new DummyRouteCollector();
 
@@ -34,7 +36,8 @@ class RouteCollectorTest extends TestCase
         self::assertSame($expected, $r->routes);
     }
 
-    public function testGroups(): void
+    #[PHPUnit\Test]
+    public function routesCanBeGrouped(): void
     {
         $r = new DummyRouteCollector();
 
