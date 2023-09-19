@@ -54,7 +54,7 @@ final class FileCache implements Cache
     }
 
     /** @return array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>}|null */
-    private static function readFileContents(string $path): array|null
+    private static function readFileContents(string $path): ?array
     {
         // error suppression is faster than calling `file_exists()` + `is_file()` + `is_readable()`, especially because there's no need to error here
         set_error_handler(self::$emptyErrorHandler);
