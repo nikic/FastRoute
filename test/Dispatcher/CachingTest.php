@@ -5,6 +5,7 @@ namespace FastRoute\Test\Dispatcher;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
 use function FastRoute\cachedDispatcher;
@@ -14,13 +15,13 @@ final class CachingTest extends TestCase
 {
     private const CACHE_FILE = __DIR__ . '/routing_cache.php';
 
-    /** @after */
+    #[PHPUnit\After]
     public function cleanUpCache(): void
     {
         unlink(self::CACHE_FILE);
     }
 
-    /** @before */
+    #[PHPUnit\Before]
     public function warmUpCache(): void
     {
         $this->createDispatcher();
@@ -37,7 +38,7 @@ final class CachingTest extends TestCase
         );
     }
 
-    /** @test */
+    #[PHPUnit\Test]
     public function dynamicRouteShouldMatch(): void
     {
         $dispatcher = $this->createDispatcher();
@@ -48,7 +49,7 @@ final class CachingTest extends TestCase
         self::assertSame(['page' => '1234'], $result[2]);
     }
 
-    /** @test */
+    #[PHPUnit\Test]
     public function staticRouteShouldMatch(): void
     {
         $dispatcher = $this->createDispatcher();
@@ -58,7 +59,7 @@ final class CachingTest extends TestCase
         self::assertSame(['test'], $result[1]);
     }
 
-    /** @test */
+    #[PHPUnit\Test]
     public function missingRoutShouldNotBeFound(): void
     {
         $dispatcher = $this->createDispatcher();
