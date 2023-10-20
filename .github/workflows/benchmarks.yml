@@ -44,7 +44,7 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
 
       - name: "Install Dependencies"
-        uses: "./.github/workflows/reusable-install-dependencies.yml"
+        uses: "./.github/actions/install-dependencies@master"
         with:
             dependencies: ${{ matrix.dependencies }}
 

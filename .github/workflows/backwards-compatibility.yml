@@ -40,4 +40,4 @@ jobs:
 
       - name: "BC Check"
         run: |
-          ~/.composer/vendor/bin/roave-backward-compatibility-check --from=${{ github.event.pull_request.base.sha }} --format=github-actions
+          composer exec roave-backward-compatibility-check -- --from=${{ github.event.pull_request.base.sha }} --format=github-actions

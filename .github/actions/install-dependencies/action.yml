@@ -1,0 +1,35 @@
+name: "Install Dependencies"
+
+on:
+  workflow_call:
+    inputs:
+      dependencies:
+        type: "string"
+        default: "highest"
+        required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Install lowest dependencies"
+      if: ${{ inputs.dependencies == 'lowest' }}
+      shell: "bash"
+      run: "composer update --prefer-lowest --no-interaction --no-progress"
+
+    - name: "Install highest dependencies"
+      if: ${{ inputs.dependencies == 'highest' }}
+      shell: "bash"
+      run: "composer update --no-interaction --no-progress"
+
+    - name: "Install locked dependencies"
+      if: ${{ inputs.dependencies == 'locked' }}
+      shell: "bash"
+      run: "composer install --no-interaction --no-progress"
+
+    - name: "Install development dependencies"
+      if: ${{ inputs.dependencies == 'development' }}
+      shell: "bash"
+      run: |
+          composer config --no-interaction -- minimum-stability dev
+          composer update --no-interaction --no-progress
