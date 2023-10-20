@@ -1,12 +1,10 @@
 name: "Install Dependencies"
 
-on:
-  workflow_call:
-    inputs:
-      dependencies:
-        type: "string"
-        default: "highest"
-        required: true
+inputs:
+  dependencies:
+    type: "string"
+    default: "highest"
+    required: true
 
 runs:
   using: "composite"
