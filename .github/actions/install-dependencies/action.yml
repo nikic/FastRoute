@@ -23,7 +23,9 @@ runs:
     - name: "Install locked dependencies"
       if: ${{ inputs.dependencies == 'locked' }}
       shell: "bash"
-      run: "composer install --no-interaction --no-progress"
+      run: |
+        test -f composer.lock
+        composer install --no-interaction --no-progress
 
     - name: "Install development dependencies"
       if: ${{ inputs.dependencies == 'development' }}
