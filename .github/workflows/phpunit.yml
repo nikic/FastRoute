@@ -27,6 +27,12 @@ jobs:
         include:
           - dependencies: "highest"
             minimum-stability: "dev"
+            php-version: "8.1"
+            operating-system: "ubuntu-latest"
+          - dependencies: "highest"
+            minimum-stability: "dev"
+            php-version: "8.2"
+            operating-system: "ubuntu-latest"
 
     steps:
       - name: "Checkout"
