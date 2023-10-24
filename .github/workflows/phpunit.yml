@@ -45,7 +45,7 @@ jobs:
         run: "composer config --no-interaction -- minimum-stability dev"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@2"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
