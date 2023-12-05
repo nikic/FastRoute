@@ -47,11 +47,19 @@ abstract class DispatcherTestCase extends TestCase
         array $argDict = [],
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
-        $info = $dispatcher->dispatch($method, $uri);
+        $result = $dispatcher->dispatch($method, $uri);
 
-        self::assertSame($dispatcher::FOUND, $info[0]);
-        self::assertSame($handler, $info[1]);
-        self::assertSame($argDict, $info[2]);
+        self::assertCount(4, $result);
+        self::assertSame($dispatcher::FOUND, $result[0]);
+        self::assertSame($handler, $result[1]);
+        self::assertSame($argDict, $result[2]);
+        /**
+         * Unable to test the result of generated regexp because captured groups are replaced with a generic pattern
+         * For example, the regexp for '/user/{name}/{id:[0-9]+}' is '/^\/user\/([^\/]+)\/([^\/]+)$/'
+         * But we can test that the result is a string. It also could be empty string if the route is static
+         */
+        /** @phpstan-ignore-next-line */
+        self::assertIsString($result[3]);
     }
 
     #[PHPUnit\Test]
@@ -86,6 +94,7 @@ abstract class DispatcherTestCase extends TestCase
         );
 
         [$routedStatus, $methodArray] = $dispatcher->dispatch($method, $uri);
+        self::assertCount(2, $routeInfo);
         self::assertSame($dispatcher::METHOD_NOT_ALLOWED, $routedStatus);
         self::assertSame($availableMethods, $methodArray);
     }

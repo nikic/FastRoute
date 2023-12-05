@@ -16,9 +16,9 @@ interface Dispatcher
      *
      *     [self::NOT_FOUND]
      *     [self::METHOD_NOT_ALLOWED, ['GET', 'OTHER_ALLOWED_METHODS']]
-     *     [self::FOUND, $handler, ['varName' => 'value', ...]]
+     *     [self::FOUND, $handler, ['varName' => 'value', ...], 'route converted to a regexp']
      *
-     * @return array{0: int, 1?: list<string>|mixed, 2?: array<string, string>}
+     * @return array{0: int, 1?: list<string>|mixed, 2?: array<string, string>, 3?: string}
      */
     public function dispatch(string $httpMethod, string $uri): array;
 }

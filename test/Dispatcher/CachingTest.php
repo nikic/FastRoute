@@ -44,9 +44,11 @@ final class CachingTest extends TestCase
         $dispatcher = $this->createDispatcher();
         $result = $dispatcher->dispatch('GET', '/admin/1234');
 
+        self::assertCount(4, $result);
         self::assertSame(Dispatcher::FOUND, $result[0]);
         self::assertSame(['admin-page'], $result[1]);
         self::assertSame(['page' => '1234'], $result[2]);
+        self::assertSame('/admin/([^/]+)', $result[3]);
     }
 
     #[PHPUnit\Test]
@@ -55,8 +57,11 @@ final class CachingTest extends TestCase
         $dispatcher = $this->createDispatcher();
         $result = $dispatcher->dispatch('GET', '/testing');
 
+        self::assertCount(4, $result);
         self::assertSame(Dispatcher::FOUND, $result[0]);
         self::assertSame(['test'], $result[1]);
+        self::assertSame([], $result[2]);
+        self::assertSame('/testing', $result[3]);
     }
 
     #[PHPUnit\Test]
@@ -65,6 +70,7 @@ final class CachingTest extends TestCase
         $dispatcher = $this->createDispatcher();
         $result = $dispatcher->dispatch('GET', '/testing2');
 
+        self::assertCount(1, $result);
         self::assertSame(Dispatcher::NOT_FOUND, $result[0]);
     }
 }

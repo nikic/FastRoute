@@ -21,7 +21,7 @@ class MarkBased extends RegexBasedAbstract
 
         foreach ($regexToRoutesMap as $regex => $route) {
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
-            $routeMap[$markName] = [$route->handler, $route->variables];
+            $routeMap[$markName] = [$route->handler, $route->variables, $regex];
 
             ++$markName;
         }

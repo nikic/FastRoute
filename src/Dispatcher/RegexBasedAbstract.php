@@ -33,7 +33,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];
 
-            return [self::FOUND, $handler, []];
+            return [self::FOUND, $handler, [], $uri];
         }
 
         $varRouteData = $this->variableRouteData;
@@ -49,7 +49,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             if (isset($this->staticRouteMap['GET'][$uri])) {
                 $handler = $this->staticRouteMap['GET'][$uri];
 
-                return [self::FOUND, $handler, []];
+                return [self::FOUND, $handler, [], $uri];
             }
 
             if (isset($varRouteData['GET'])) {
@@ -64,7 +64,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         if (isset($this->staticRouteMap['*'][$uri])) {
             $handler = $this->staticRouteMap['*'][$uri];
 
-            return [self::FOUND, $handler, []];
+            return [self::FOUND, $handler, [], $uri];
         }
 
         if (isset($varRouteData['*'])) {

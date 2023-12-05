@@ -16,7 +16,7 @@ class GroupCountBased extends RegexBasedAbstract
                 continue;
             }
 
-            [$handler, $varNames] = $data['routeMap'][count($matches)];
+            [$handler, $varNames, $regexp] = $data['routeMap'][count($matches)];
 
             $vars = [];
             $i = 0;
@@ -24,7 +24,7 @@ class GroupCountBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $handler, $vars];
+            return [self::FOUND, $handler, $vars, $regexp];
         }
 
         return null;

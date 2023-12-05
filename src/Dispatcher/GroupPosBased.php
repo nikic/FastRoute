@@ -20,14 +20,14 @@ class GroupPosBased extends RegexBasedAbstract
             for ($i = 1; $matches[$i] === ''; ++$i) {
             }
 
-            [$handler, $varNames] = $data['routeMap'][$i];
+            [$handler, $varNames, $regexp] = $data['routeMap'][$i];
 
             $vars = [];
             foreach ($varNames as $varName) {
                 $vars[$varName] = $matches[$i++];
             }
 
-            return [self::FOUND, $handler, $vars];
+            return [self::FOUND, $handler, $vars, $regexp];
         }
 
         return null;
