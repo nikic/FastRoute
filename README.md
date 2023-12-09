@@ -147,7 +147,7 @@ Additionally, you can specify routes inside of a group. All routes defined insid
 For example, defining your routes as:
 
 ```php
-$r->addGroup('/admin', function (RouteCollector $r) {
+$r->addGroup('/admin', function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/do-something', 'handler');
     $r->addRoute('GET', '/do-another-thing', 'handler');
     $r->addRoute('GET', '/do-something-else', 'handler');
