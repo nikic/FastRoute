@@ -65,6 +65,7 @@ final class FileCache implements Cache
             return null;
         }
 
+        // @phpstan-ignore-next-line because we won´t be able to validate the array shape in a performant way
         return $value;
     }
 
