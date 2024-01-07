@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use function assert;
 use function preg_match;
 
 class GroupPosBased extends RegexBasedAbstract
@@ -19,6 +20,8 @@ class GroupPosBased extends RegexBasedAbstract
             // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFor
             for ($i = 1; $matches[$i] === ''; ++$i) {
             }
+
+            assert(isset($i));
 
             [$handler, $varNames] = $data['routeMap'][$i];
 

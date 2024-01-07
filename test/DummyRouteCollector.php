@@ -10,6 +10,7 @@ class DummyRouteCollector extends RouteCollector
     /** @var mixed[] */
     public array $routes = [];
 
+    /** @phpstan-ignore-next-line We don't want to call the parent constructor here */
     public function __construct()
     {
     }
