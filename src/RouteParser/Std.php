@@ -6,8 +6,10 @@ namespace FastRoute\RouteParser;
 use FastRoute\BadRouteException;
 use FastRoute\RouteParser;
 
+use function assert;
 use function count;
 use function in_array;
+use function is_array;
 use function preg_match;
 use function preg_match_all;
 use function preg_split;
@@ -58,10 +60,11 @@ REGEX;
 
         // Split on [ while skipping placeholders
         $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
+        assert(is_array($segments));
 
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
-            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
+            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals) === 1) {
                 throw new BadRouteException('Optional segments can only occur at the end of a route');
             }
 
@@ -90,7 +93,7 @@ REGEX;
      */
     private function parsePlaceholders(string $route): array
     {
-        if (! preg_match_all('~' . self::VARIABLE_REGEX . '~x', $route, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+        if ((int) preg_match_all('~' . self::VARIABLE_REGEX . '~x', $route, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === 0) {
             return [$route];
         }
 

@@ -9,6 +9,7 @@ use FastRoute\Route;
 
 use function array_chunk;
 use function array_map;
+use function assert;
 use function ceil;
 use function count;
 use function is_string;
@@ -65,11 +66,14 @@ abstract class RegexBasedAbstract implements DataGenerator
         return $data;
     }
 
+    /** @return positive-int */
     private function computeChunkSize(int $count): int
     {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
+        $size = (int) ceil($count / $numParts);
+        assert($size > 0);
 
-        return (int) ceil($count / $numParts);
+        return $size;
     }
 
     /** @param array<string|array{0: string, 1:string}> $routeData */
@@ -82,6 +86,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     private function addStaticRoute(string $httpMethod, array $routeData, mixed $handler): void
     {
         $routeStr = $routeData[0];
+        assert(is_string($routeStr));
 
         if (isset($this->staticRoutes[$httpMethod][$routeStr])) {
             throw BadRouteException::alreadyRegistered($routeStr, $httpMethod);
