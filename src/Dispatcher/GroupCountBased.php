@@ -12,7 +12,7 @@ class GroupCountBased extends RegexBasedAbstract
     protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {
-            if (! preg_match($data['regex'], $uri, $matches)) {
+            if (preg_match($data['regex'], $uri, $matches) !== 1) {
                 continue;
             }
 

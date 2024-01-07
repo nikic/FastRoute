@@ -20,7 +20,7 @@ abstract class RegexBasedAbstract implements Dispatcher
     }
 
     /**
-     * @param mixed[] $routeData
+     * @param array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}> $routeData
      *
      * @return array{0: int, 1?: list<string>|mixed, 2?: array<string, string>}|null
      */

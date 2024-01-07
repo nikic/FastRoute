@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use function assert;
 use function end;
 use function preg_match;
 
@@ -12,7 +13,9 @@ class CharCountBased extends RegexBasedAbstract
     protected function dispatchVariableRoute(array $routeData, string $uri): ?array
     {
         foreach ($routeData as $data) {
-            if (! preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
+            assert(isset($data['suffix']));
+
+            if (preg_match($data['regex'], $uri . $data['suffix'], $matches) !== 1) {
                 continue;
             }
 
