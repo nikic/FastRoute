@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Dispatcher\Result\Matched;
+
 use function assert;
 use function end;
 use function preg_match;
@@ -10,7 +12,7 @@ use function preg_match;
 class CharCountBased extends RegexBasedAbstract
 {
     /** @inheritDoc */
-    protected function dispatchVariableRoute(array $routeData, string $uri): ?array
+    protected function dispatchVariableRoute(array $routeData, string $uri): ?Matched
     {
         foreach ($routeData as $data) {
             assert(isset($data['suffix']));
@@ -27,7 +29,11 @@ class CharCountBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $handler, $vars];
+            $result = new Matched();
+            $result->handler = $handler;
+            $result->variables = $vars;
+
+            return $result;
         }
 
         return null;

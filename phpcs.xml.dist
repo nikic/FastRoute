@@ -21,6 +21,10 @@
         <exclude-pattern>src/DataGenerator/RegexBasedAbstract*</exclude-pattern>
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter">
+        <exclude-pattern>src/Dispatcher/Result/*</exclude-pattern>
+    </rule>
+
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix">
         <exclude-pattern>src/BadRouteException*</exclude-pattern>
     </rule>
