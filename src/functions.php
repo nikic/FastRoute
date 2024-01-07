@@ -7,12 +7,11 @@ use FastRoute\Cache\FileCache;
 use LogicException;
 
 use function array_key_exists;
-use function assert;
 use function function_exists;
 use function is_string;
 
 if (! function_exists('FastRoute\simpleDispatcher')) {
-    /** @param array{routeParser?: string, dataGenerator?: string, dispatcher?: string, routeCollector?: string, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: string|Cache} $options */
+    /** @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<RouteCollector>, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: class-string<Cache>|Cache} $options */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         return \FastRoute\cachedDispatcher(
@@ -21,7 +20,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         );
     }
 
-    /** @param array{routeParser?: string, dataGenerator?: string, dispatcher?: string, routeCollector?: string, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: string|Cache} $options */
+    /** @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<RouteCollector>, cacheDisabled?: bool, cacheKey?: string, cacheDriver?: class-string<Cache>|Cache} $options */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
@@ -38,7 +37,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
                 new $options['routeParser'](),
                 new $options['dataGenerator']()
             );
-            assert($routeCollector instanceof RouteCollector);
+
             $routeDefinitionCallback($routeCollector);
 
             return $routeCollector->getData();
@@ -57,8 +56,6 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         if (is_string($cache)) {
             $cache = new $cache();
         }
-
-        assert($cache instanceof Cache);
 
         return new $options['dispatcher']($cache->get($options['cacheKey'], $loader));
     }
