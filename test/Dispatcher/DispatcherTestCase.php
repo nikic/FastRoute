@@ -5,6 +5,8 @@ namespace FastRoute\Test\Dispatcher;
 
 use Closure;
 use FastRoute\BadRouteException;
+use FastRoute\DataGenerator;
+use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
@@ -15,18 +17,22 @@ abstract class DispatcherTestCase extends TestCase
 {
     /**
      * Delegate dispatcher selection to child test classes
+     *
+     * @return class-string<Dispatcher>
      */
     abstract protected function getDispatcherClass(): string;
 
     /**
      * Delegate dataGenerator selection to child test classes
+     *
+     * @return class-string<DataGenerator>
      */
     abstract protected function getDataGeneratorClass(): string;
 
     /**
      * Set appropriate options for the specific Dispatcher class we're testing
      *
-     * @return array{dataGenerator: string, dispatcher: string}
+     * @return array{dataGenerator: class-string<DataGenerator>, dispatcher: class-string<Dispatcher>}
      */
     private function generateDispatcherOptions(): array
     {
