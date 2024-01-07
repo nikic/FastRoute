@@ -17,6 +17,7 @@ final class ApcuCache implements Cache
         $result = apcu_fetch($key, $itemFetched);
 
         if ($itemFetched && is_array($result)) {
+            // @phpstan-ignore-next-line because we won´t be able to validate the array shape in a performant way
             return $result;
         }
 
