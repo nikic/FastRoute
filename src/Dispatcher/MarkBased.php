@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\Dispatcher\Result\Matched;
+
 use function preg_match;
 
 class MarkBased extends RegexBasedAbstract
 {
     /** @inheritDoc */
-    protected function dispatchVariableRoute(array $routeData, string $uri): ?array
+    protected function dispatchVariableRoute(array $routeData, string $uri): ?Matched
     {
         foreach ($routeData as $data) {
             if (preg_match($data['regex'], $uri, $matches) !== 1) {
@@ -23,7 +25,11 @@ class MarkBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            return [self::FOUND, $handler, $vars];
+            $result = new Matched();
+            $result->handler = $handler;
+            $result->variables = $vars;
+
+            return $result;
         }
 
         return null;
