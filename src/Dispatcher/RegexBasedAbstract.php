@@ -11,6 +11,8 @@ use FastRoute\Dispatcher\Result\NotMatched;
 
 /**
  * @phpstan-import-type StaticRoutes from DataGenerator
+ * @phpstan-import-type DynamicRouteChunk from DataGenerator
+ * @phpstan-import-type DynamicRouteChunks from DataGenerator
  * @phpstan-import-type DynamicRoutes from DataGenerator
  * @phpstan-import-type RouteData from DataGenerator
  */
@@ -28,7 +30,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         [$this->staticRouteMap, $this->variableRouteData] = $data;
     }
 
-    /** @param array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}> $routeData */
+    /** @param DynamicRouteChunks $routeData */
     abstract protected function dispatchVariableRoute(array $routeData, string $uri): ?Matched;
 
     public function dispatch(string $httpMethod, string $uri): Matched|NotMatched|MethodNotAllowed

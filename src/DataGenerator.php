@@ -5,8 +5,9 @@ namespace FastRoute;
 
 /**
  * @phpstan-type StaticRoutes array<string, array<string, mixed>>
- * @phpstan-type DynamicRouteChunk array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}
- * @phpstan-type DynamicRoutes array<string, list<DynamicRouteChunk>>
+ * @phpstan-type DynamicRouteChunk array{regex: string, suffix?: string, routeMap: array<int|string, array{mixed, array<string, string>}>}
+ * @phpstan-type DynamicRouteChunks list<DynamicRouteChunk>
+ * @phpstan-type DynamicRoutes array<string, DynamicRouteChunks>
  * @phpstan-type RouteData array{StaticRoutes, DynamicRoutes}
  */
 interface DataGenerator
