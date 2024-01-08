@@ -5,6 +5,7 @@ namespace FastRoute\Cache;
 
 use Closure;
 use FastRoute\Cache;
+use FastRoute\DataGenerator;
 use RuntimeException;
 
 use function chmod;
@@ -22,6 +23,7 @@ use function var_export;
 
 use const LOCK_EX;
 
+/** @phpstan-import-type RouteData from DataGenerator */
 final class FileCache implements Cache
 {
     private const DIRECTORY_PERMISSIONS = 0775;
@@ -53,7 +55,7 @@ final class FileCache implements Cache
         return $data;
     }
 
-    /** @return array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>}|null */
+    /** @return RouteData|null */
     private static function readFileContents(string $path): ?array
     {
         // error suppression is faster than calling `file_exists()` + `is_file()` + `is_readable()`, especially because there's no need to error here
