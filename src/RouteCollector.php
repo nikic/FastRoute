@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+/** @phpstan-import-type RouteData from DataGenerator */
 class RouteCollector
 {
     protected string $currentGroupPrefix = '';
@@ -125,7 +126,7 @@ class RouteCollector
     /**
      * Returns the collected route data, as provided by the data generator.
      *
-     * @return array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>}
+     * @return RouteData
      */
     public function getData(): array
     {
