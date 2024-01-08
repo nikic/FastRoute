@@ -21,7 +21,7 @@ class CharCountBased extends RegexBasedAbstract
                 continue;
             }
 
-            [$handler, $varNames] = $data['routeMap'][end($matches)];
+            [$handler, $varNames, $extraParameters] = $data['routeMap'][end($matches)];
 
             $vars = [];
             $i = 0;
@@ -32,6 +32,7 @@ class CharCountBased extends RegexBasedAbstract
             $result = new Matched();
             $result->handler = $handler;
             $result->variables = $vars;
+            $result->extraParameters = $extraParameters;
 
             return $result;
         }

@@ -18,7 +18,7 @@ class GroupCountBased extends RegexBasedAbstract
                 continue;
             }
 
-            [$handler, $varNames] = $data['routeMap'][count($matches)];
+            [$handler, $varNames, $extraParameters] = $data['routeMap'][count($matches)];
 
             $vars = [];
             $i = 0;
@@ -29,6 +29,7 @@ class GroupCountBased extends RegexBasedAbstract
             $result = new Matched();
             $result->handler = $handler;
             $result->variables = $vars;
+            $result->extraParameters = $extraParameters;
 
             return $result;
         }

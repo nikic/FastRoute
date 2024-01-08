@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace FastRoute\Dispatcher\Result;
 
 use ArrayAccess;
+use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
 use OutOfBoundsException;
 use RuntimeException;
 
-/** @implements ArrayAccess<int, Dispatcher::FOUND|mixed|array<string, string>> */
+/**
+ * @phpstan-import-type ExtraParameters from DataGenerator
+ * @implements ArrayAccess<int, Dispatcher::FOUND|mixed|array<string, string>>
+ */
 final class Matched implements ArrayAccess
 {
     /** @readonly */
@@ -19,6 +23,12 @@ final class Matched implements ArrayAccess
      * @var array<string, string> $variables
      */
     public array $variables = [];
+
+    /**
+     * @readonly
+     * @var ExtraParameters
+     */
+    public array $extraParameters = [];
 
     public function offsetExists(mixed $offset): bool
     {

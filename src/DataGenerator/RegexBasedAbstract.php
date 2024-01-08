@@ -21,6 +21,7 @@ use function round;
  * @phpstan-import-type DynamicRouteChunk from DataGenerator
  * @phpstan-import-type DynamicRoutes from DataGenerator
  * @phpstan-import-type RouteData from DataGenerator
+ * @phpstan-import-type ExtraParameters from DataGenerator
  */
 abstract class RegexBasedAbstract implements DataGenerator
 {
@@ -40,12 +41,12 @@ abstract class RegexBasedAbstract implements DataGenerator
     abstract protected function processChunk(array $regexToRoutesMap): array;
 
     /** @inheritDoc */
-    public function addRoute(string $httpMethod, array $routeData, mixed $handler): void
+    public function addRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): void
     {
         if ($this->isStaticRoute($routeData)) {
-            $this->addStaticRoute($httpMethod, $routeData, $handler);
+            $this->addStaticRoute($httpMethod, $routeData, $handler, $extraParameters);
         } else {
-            $this->addVariableRoute($httpMethod, $routeData, $handler);
+            $this->addVariableRoute($httpMethod, $routeData, $handler, $extraParameters);
         }
     }
 
@@ -88,8 +89,11 @@ abstract class RegexBasedAbstract implements DataGenerator
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
-    /** @param array<string|array{0: string, 1:string}> $routeData */
-    private function addStaticRoute(string $httpMethod, array $routeData, mixed $handler): void
+    /**
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param ExtraParameters                          $extraParameters
+     */
+    private function addStaticRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters): void
     {
         $routeStr = $routeData[0];
         assert(is_string($routeStr));
@@ -106,13 +110,16 @@ abstract class RegexBasedAbstract implements DataGenerator
             }
         }
 
-        $this->staticRoutes[$httpMethod][$routeStr] = $handler;
+        $this->staticRoutes[$httpMethod][$routeStr] = [$handler, $extraParameters];
     }
 
-    /** @param array<string|array{0: string, 1:string}> $routeData */
-    private function addVariableRoute(string $httpMethod, array $routeData, mixed $handler): void
+    /**
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param ExtraParameters                          $extraParameters
+     */
+    private function addVariableRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters): void
     {
-        $route = Route::fromParsedRoute($httpMethod, $routeData, $handler);
+        $route = Route::fromParsedRoute($httpMethod, $routeData, $handler, $extraParameters);
         $regex = $route->regex;
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {

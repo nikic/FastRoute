@@ -37,7 +37,8 @@ abstract class RegexBasedAbstract implements Dispatcher
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $result = new Matched();
-            $result->handler = $this->staticRouteMap[$httpMethod][$uri];
+            $result->handler = $this->staticRouteMap[$httpMethod][$uri][0];
+            $result->extraParameters = $this->staticRouteMap[$httpMethod][$uri][1];
 
             return $result;
         }
@@ -53,7 +54,8 @@ abstract class RegexBasedAbstract implements Dispatcher
         if ($httpMethod === 'HEAD') {
             if (isset($this->staticRouteMap['GET'][$uri])) {
                 $result = new Matched();
-                $result->handler = $this->staticRouteMap['GET'][$uri];
+                $result->handler = $this->staticRouteMap['GET'][$uri][0];
+                $result->extraParameters = $this->staticRouteMap['GET'][$uri][1];
 
                 return $result;
             }
@@ -69,7 +71,8 @@ abstract class RegexBasedAbstract implements Dispatcher
         // If nothing else matches, try fallback routes
         if (isset($this->staticRouteMap['*'][$uri])) {
             $result = new Matched();
-            $result->handler = $this->staticRouteMap['*'][$uri];
+            $result->handler = $this->staticRouteMap['*'][$uri][0];
+            $result->extraParameters = $this->staticRouteMap['*'][$uri][1];
 
             return $result;
         }

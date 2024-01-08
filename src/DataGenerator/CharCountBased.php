@@ -27,7 +27,7 @@ class CharCountBased extends RegexBasedAbstract
             $suffix .= "\t";
 
             $regexes[] = '(?:' . $regex . '/(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
-            $routeMap[$suffix] = [$route->handler, $route->variables];
+            $routeMap[$suffix] = [$route->handler, $route->variables, $route->extraParameters];
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
