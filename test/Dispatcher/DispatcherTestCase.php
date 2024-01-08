@@ -7,6 +7,9 @@ use Closure;
 use FastRoute\BadRouteException;
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
+use FastRoute\Dispatcher\Result\Matched;
+use FastRoute\Dispatcher\Result\MethodNotAllowed;
+use FastRoute\Dispatcher\Result\NotMatched;
 use FastRoute\RouteCollector;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
@@ -55,6 +58,11 @@ abstract class DispatcherTestCase extends TestCase
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $info = $dispatcher->dispatch($method, $uri);
 
+        self::assertInstanceOf(Matched::class, $info);
+        self::assertSame($handler, $info->handler);
+        self::assertSame($argDict, $info->variables);
+
+        // BC-compatibility checks
         self::assertSame($dispatcher::FOUND, $info[0]);
         self::assertSame($handler, $info[1]);
         self::assertSame($argDict, $info[2]);
@@ -66,6 +74,10 @@ abstract class DispatcherTestCase extends TestCase
     {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
+
+        self::assertInstanceOf(NotMatched::class, $routeInfo);
+
+        // BC-compatibility checks
         self::assertArrayNotHasKey(
             1,
             $routeInfo,
@@ -85,6 +97,11 @@ abstract class DispatcherTestCase extends TestCase
     ): void {
         $dispatcher = simpleDispatcher($callback, $this->generateDispatcherOptions());
         $routeInfo = $dispatcher->dispatch($method, $uri);
+
+        self::assertInstanceOf(MethodNotAllowed::class, $routeInfo);
+        self::assertSame($availableMethods, $routeInfo->allowedMethods);
+
+        // BC-compatibility checks
         self::assertArrayHasKey(
             1,
             $routeInfo,
