@@ -17,7 +17,7 @@ class MarkBased extends RegexBasedAbstract
                 continue;
             }
 
-            [$handler, $varNames] = $data['routeMap'][$matches['MARK']];
+            [$handler, $varNames, $extraParameters] = $data['routeMap'][$matches['MARK']];
 
             $vars = [];
             $i = 0;
@@ -28,6 +28,7 @@ class MarkBased extends RegexBasedAbstract
             $result = new Matched();
             $result->handler = $handler;
             $result->variables = $vars;
+            $result->extraParameters = $extraParameters;
 
             return $result;
         }

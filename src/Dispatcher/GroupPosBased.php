@@ -25,7 +25,7 @@ class GroupPosBased extends RegexBasedAbstract
 
             assert(isset($i));
 
-            [$handler, $varNames] = $data['routeMap'][$i];
+            [$handler, $varNames, $extraParameters] = $data['routeMap'][$i];
 
             $vars = [];
             foreach ($varNames as $varName) {
@@ -35,6 +35,7 @@ class GroupPosBased extends RegexBasedAbstract
             $result = new Matched();
             $result->handler = $handler;
             $result->variables = $vars;
+            $result->extraParameters = $extraParameters;
 
             return $result;
         }

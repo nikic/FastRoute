@@ -7,19 +7,27 @@ use function is_string;
 use function preg_match;
 use function preg_quote;
 
+/** @phpstan-import-type ExtraParameters from DataGenerator */
 class Route
 {
-    /** @param array<string, string> $variables */
+    /**
+     * @param array<string, string> $variables
+     * @param ExtraParameters       $extraParameters
+     */
     public function __construct(
-        public string $httpMethod,
-        public mixed $handler,
-        public string $regex,
-        public array $variables,
+        public readonly string $httpMethod,
+        public readonly mixed $handler,
+        public readonly string $regex,
+        public readonly array $variables,
+        public readonly array $extraParameters,
     ) {
     }
 
-    /** @param array<string|array{0: string, 1:string}> $routeData */
-    public static function fromParsedRoute(string $httpMethod, array $routeData, mixed $handler): self
+    /**
+     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param ExtraParameters                          $extraParameters
+     */
+    public static function fromParsedRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): self
     {
         [$regex, $variables] = self::extractRegex($routeData);
 
@@ -28,6 +36,7 @@ class Route
             $handler,
             $regex,
             $variables,
+            $extraParameters,
         );
     }
 
