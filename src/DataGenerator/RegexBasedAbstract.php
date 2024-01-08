@@ -16,9 +16,15 @@ use function is_string;
 use function max;
 use function round;
 
+/**
+ * @phpstan-import-type StaticRoutes from DataGenerator
+ * @phpstan-import-type DynamicRouteChunk from DataGenerator
+ * @phpstan-import-type DynamicRoutes from DataGenerator
+ * @phpstan-import-type RouteData from DataGenerator
+ */
 abstract class RegexBasedAbstract implements DataGenerator
 {
-    /** @var array<string, array<string, mixed>> */
+    /** @var StaticRoutes */
     protected array $staticRoutes = [];
 
     /** @var array<string, array<string, Route>> */
@@ -29,7 +35,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @param array<string, Route> $regexToRoutesMap
      *
-     * @return array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}
+     * @return DynamicRouteChunk
      */
     abstract protected function processChunk(array $regexToRoutesMap): array;
 
@@ -53,7 +59,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         return [$this->staticRoutes, $this->generateVariableRouteData()];
     }
 
-    /** @return array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>> */
+    /** @return DynamicRoutes */
     private function generateVariableRouteData(): array
     {
         $data = [];
