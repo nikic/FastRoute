@@ -28,4 +28,4 @@ phpstan:
 
 .PHONY: phpbench
 phpbench:
-	@vendor/bin/phpbench run -l dots --report aggregate $(PHPBENCH_OPTIONS)
+	@vendor/bin/phpbench run -l dots --report aggregate --retry-threshold=15 $(PHPBENCH_OPTIONS)
