@@ -3,20 +3,26 @@ declare(strict_types=1);
 
 namespace FastRoute\Dispatcher;
 
+use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
 use FastRoute\Dispatcher\Result\Matched;
 use FastRoute\Dispatcher\Result\MethodNotAllowed;
 use FastRoute\Dispatcher\Result\NotMatched;
 
+/**
+ * @phpstan-import-type StaticRoutes from DataGenerator
+ * @phpstan-import-type DynamicRoutes from DataGenerator
+ * @phpstan-import-type RouteData from DataGenerator
+ */
 abstract class RegexBasedAbstract implements Dispatcher
 {
-    /** @var array<string, array<string, mixed>> */
+    /** @var StaticRoutes */
     protected array $staticRouteMap = [];
 
-    /** @var array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>> */
+    /** @var DynamicRoutes */
     protected array $variableRouteData = [];
 
-    /** @param array{0: array<string, array<string, mixed>>, 1: array<string, array<array{regex: string, suffix?: string, routeMap: array<int|string, array{0: mixed, 1: array<string, string>}>}>>} $data */
+    /** @param RouteData $data */
     public function __construct(array $data)
     {
         [$this->staticRouteMap, $this->variableRouteData] = $data;
