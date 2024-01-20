@@ -10,19 +10,27 @@ class RouteCollector
     /** @var DataGenerator */
     protected $dataGenerator;
 
+    /** @var ?RouteGenerator */
+    protected $routeGenerator;
+
     /** @var string */
     protected $currentGroupPrefix;
 
     /**
      * Constructs a route collector.
      *
-     * @param RouteParser   $routeParser
-     * @param DataGenerator $dataGenerator
+     * @param RouteParser     $routeParser
+     * @param DataGenerator   $dataGenerator
+     * @param ?RouteGenerator $routeGenerator
      */
-    public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)
-    {
+    public function __construct(
+        RouteParser $routeParser,
+        DataGenerator $dataGenerator,
+        RouteGenerator $routeGenerator = null
+    ) {
         $this->routeParser = $routeParser;
         $this->dataGenerator = $dataGenerator;
+        $this->routeGenerator = $routeGenerator;
         $this->currentGroupPrefix = '';
     }
 
@@ -43,6 +51,9 @@ class RouteCollector
             foreach ($routeDatas as $routeData) {
                 $this->dataGenerator->addRoute($method, $routeData, $handler);
             }
+        }
+        if (is_string($handler) && $this->routeGenerator) {
+            $this->routeGenerator->setInfo($handler, $route, $routeDatas);
         }
     }
 
