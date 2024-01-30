@@ -16,7 +16,7 @@ interface Dispatcher
     /**
      * Dispatches against the provided HTTP method verb and URI.
      *
-     * Returns array with one of the following formats:
+     * Returns an object that also has an array shape with one of the following formats:
      *
      *     [self::NOT_FOUND]
      *     [self::METHOD_NOT_ALLOWED, ['GET', 'OTHER_ALLOWED_METHODS']]
