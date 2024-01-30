@@ -102,7 +102,7 @@ Custom patterns for route placeholders cannot use capturing groups. For example 
 is not a valid placeholder, because `()` is a capturing group. Instead you can use either
 `{lang:en|de}` or `{lang:(?:en|de)}`.
 
-Furthermore parts of the route enclosed in `[...]` are considered optional, so that `/foo[bar]`
+Furthermore, parts of the route enclosed in `[...]` are considered optional, so that `/foo[bar]`
 will match both `/foo` and `/foobar`. Optional parts are only supported in a trailing position,
 not in the middle of a route.
 
@@ -239,7 +239,7 @@ interface Dispatcher {
 ```
 
 The route parser takes a route pattern string and converts it into an array of route infos, where
-each route info is again an array of it's parts. The structure is best understood using an example:
+each route info is again an array of its parts. The structure is best understood using an example:
 
     /* The route /user/{id:\d+}[/{name}] converts to the following array: */
     [
