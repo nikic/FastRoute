@@ -27,21 +27,23 @@ final class CachingTest extends TestCase
         $this->createDispatcher();
     }
 
-    public function createDispatcher(): Dispatcher
+    public function createDispatcher(string $optionName = 'cacheKey'): Dispatcher
     {
         return cachedDispatcher(
             static function (RouteCollector $collector): void {
                 $collector->get('/testing', ['test']);
                 $collector->get('/admin/{page}', ['admin-page']);
             },
-            ['cacheKey' => self::CACHE_FILE],
+            // @phpstan-ignore-next-line we're doing dynamic configuration...
+            [$optionName => self::CACHE_FILE],
         );
     }
 
     #[PHPUnit\Test]
-    public function dynamicRouteShouldMatch(): void
+    #[PHPUnit\DataProvider('possiblePropertyNames')]
+    public function dynamicRouteShouldMatch(string $propertyName): void
     {
-        $dispatcher = $this->createDispatcher();
+        $dispatcher = $this->createDispatcher($propertyName);
         $result = $dispatcher->dispatch('GET', '/admin/1234');
 
         self::assertSame(Dispatcher::FOUND, $result[0]);
@@ -50,9 +52,10 @@ final class CachingTest extends TestCase
     }
 
     #[PHPUnit\Test]
-    public function staticRouteShouldMatch(): void
+    #[PHPUnit\DataProvider('possiblePropertyNames')]
+    public function staticRouteShouldMatch(string $propertyName): void
     {
-        $dispatcher = $this->createDispatcher();
+        $dispatcher = $this->createDispatcher($propertyName);
         $result = $dispatcher->dispatch('GET', '/testing');
 
         self::assertSame(Dispatcher::FOUND, $result[0]);
@@ -60,11 +63,19 @@ final class CachingTest extends TestCase
     }
 
     #[PHPUnit\Test]
-    public function missingRoutShouldNotBeFound(): void
+    #[PHPUnit\DataProvider('possiblePropertyNames')]
+    public function missingRoutShouldNotBeFound(string $propertyName): void
     {
-        $dispatcher = $this->createDispatcher();
+        $dispatcher = $this->createDispatcher($propertyName);
         $result = $dispatcher->dispatch('GET', '/testing2');
 
         self::assertSame(Dispatcher::NOT_FOUND, $result[0]);
+    }
+
+    /** @return iterable<string, array{string}> */
+    public static function possiblePropertyNames(): iterable
+    {
+        yield 'v1' => ['cacheFile'];
+        yield 'v2' => ['cacheKey'];
     }
 }
