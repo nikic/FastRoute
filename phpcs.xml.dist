@@ -23,6 +23,7 @@
 
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter">
         <exclude-pattern>src/Dispatcher/Result/*</exclude-pattern>
+        <exclude-pattern>test/FastRouteTest.php</exclude-pattern>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix">
