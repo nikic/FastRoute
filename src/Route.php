@@ -9,26 +9,18 @@ use function preg_quote;
 
 class Route
 {
-    /** @param array<string, string> $variables */
-    public function __construct(
-        public string $httpMethod,
-        public mixed $handler,
-        public string $regex,
-        public array $variables,
-    ) {
-    }
+    public readonly string $regex;
+
+    /** @var array<string, string> $variables */
+    public readonly array $variables;
 
     /** @param array<string|array{0: string, 1:string}> $routeData */
-    public static function fromParsedRoute(string $httpMethod, array $routeData, mixed $handler): self
-    {
-        [$regex, $variables] = self::extractRegex($routeData);
-
-        return new self(
-            $httpMethod,
-            $handler,
-            $regex,
-            $variables,
-        );
+    public function __construct(
+        public readonly string $httpMethod,
+        array $routeData,
+        public readonly mixed $handler,
+    ) {
+        [$this->regex, $this->variables] = self::extractRegex($routeData);
     }
 
     /**

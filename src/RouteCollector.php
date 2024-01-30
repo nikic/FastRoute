@@ -8,8 +8,10 @@ class RouteCollector
 {
     protected string $currentGroupPrefix = '';
 
-    public function __construct(protected RouteParser $routeParser, protected DataGenerator $dataGenerator)
-    {
+    public function __construct(
+        protected readonly RouteParser $routeParser,
+        protected readonly DataGenerator $dataGenerator,
+    ) {
     }
 
     /**
