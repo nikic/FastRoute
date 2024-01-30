@@ -25,9 +25,6 @@
         "phpstan/phpstan-strict-rules": "^1.5",
         "phpunit/phpunit": "^10.3"
     },
-    "suggest": {
-        "ext-apcu": "To be able to use APCu cache driver"
-    },
     "autoload": {
         "psr-4": {
             "FastRoute\\": "src/"
