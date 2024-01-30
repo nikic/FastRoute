@@ -4,3 +4,7 @@ parameters:
         - benchmark
         - src
         - test
+
+    ignoreErrors:
+        # We're marking this as deprecated, there's no point in alerting ourselves here...
+        - '#Call to deprecated function FastRoute\\(cached|simple)Dispatcher.*#'
