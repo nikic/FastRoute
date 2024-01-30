@@ -10,34 +10,22 @@ use function preg_quote;
 /** @phpstan-import-type ExtraParameters from DataGenerator */
 class Route
 {
-    /**
-     * @param array<string, string> $variables
-     * @param ExtraParameters       $extraParameters
-     */
-    public function __construct(
-        public readonly string $httpMethod,
-        public readonly mixed $handler,
-        public readonly string $regex,
-        public readonly array $variables,
-        public readonly array $extraParameters,
-    ) {
-    }
+    public readonly string $regex;
+
+    /** @var array<string, string> $variables */
+    public readonly array $variables;
 
     /**
      * @param array<string|array{0: string, 1:string}> $routeData
      * @param ExtraParameters                          $extraParameters
      */
-    public static function fromParsedRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): self
-    {
-        [$regex, $variables] = self::extractRegex($routeData);
-
-        return new self(
-            $httpMethod,
-            $handler,
-            $regex,
-            $variables,
-            $extraParameters,
-        );
+    public function __construct(
+        public readonly string $httpMethod,
+        array $routeData,
+        public readonly mixed $handler,
+        public readonly array $extraParameters,
+    ) {
+        [$this->regex, $this->variables] = self::extractRegex($routeData);
     }
 
     /**

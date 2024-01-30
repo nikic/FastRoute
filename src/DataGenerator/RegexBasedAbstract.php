@@ -119,7 +119,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      */
     private function addVariableRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters): void
     {
-        $route = Route::fromParsedRoute($httpMethod, $routeData, $handler, $extraParameters);
+        $route = new Route($httpMethod, $routeData, $handler, $extraParameters);
         $regex = $route->regex;
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
