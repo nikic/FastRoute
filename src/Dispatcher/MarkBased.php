@@ -7,6 +7,7 @@ use FastRoute\Dispatcher\Result\Matched;
 
 use function preg_match;
 
+/** @final */
 class MarkBased extends RegexBasedAbstract
 {
     /** @inheritDoc */

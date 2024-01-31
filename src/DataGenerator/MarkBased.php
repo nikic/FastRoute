@@ -5,6 +5,7 @@ namespace FastRoute\DataGenerator;
 
 use function implode;
 
+/** @final */
 class MarkBased extends RegexBasedAbstract
 {
     protected function getApproxChunkSize(): int

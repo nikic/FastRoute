@@ -8,6 +8,7 @@ use function implode;
 use function max;
 use function str_repeat;
 
+/** @final */
 class GroupCountBased extends RegexBasedAbstract
 {
     protected function getApproxChunkSize(): int

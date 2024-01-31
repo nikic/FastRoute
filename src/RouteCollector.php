@@ -6,6 +6,7 @@ namespace FastRoute;
 /**
  * @phpstan-import-type RouteData from DataGenerator
  * @phpstan-import-type ExtraParameters from DataGenerator
+ * @final
  */
 class RouteCollector
 {

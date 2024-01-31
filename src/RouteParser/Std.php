@@ -26,6 +26,8 @@ use const PREG_SET_ORDER;
  * Parses route strings of the following form:
  *
  * "/user/{name}[/{id:[0-9]+}]"
+ *
+ * @final
  */
 class Std implements RouteParser
 {

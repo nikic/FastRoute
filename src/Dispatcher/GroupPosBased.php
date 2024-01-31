@@ -8,6 +8,7 @@ use FastRoute\Dispatcher\Result\Matched;
 use function assert;
 use function preg_match;
 
+/** @final */
 class GroupPosBased extends RegexBasedAbstract
 {
     /** @inheritDoc */

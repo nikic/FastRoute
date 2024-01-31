@@ -8,6 +8,7 @@ use FastRoute\Dispatcher\Result\Matched;
 use function count;
 use function preg_match;
 
+/** @final */
 class GroupCountBased extends RegexBasedAbstract
 {
     /** @inheritDoc */

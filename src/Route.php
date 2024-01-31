@@ -7,7 +7,11 @@ use function is_string;
 use function preg_match;
 use function preg_quote;
 
-/** @phpstan-import-type ExtraParameters from DataGenerator */
+/**
+ * @internal
+ *
+ * @phpstan-import-type ExtraParameters from DataGenerator
+ */
 class Route
 {
     public readonly string $regex;
