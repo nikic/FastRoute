@@ -17,6 +17,8 @@ use function max;
 use function round;
 
 /**
+ * @internal
+ *
  * @phpstan-import-type StaticRoutes from DataGenerator
  * @phpstan-import-type DynamicRouteChunk from DataGenerator
  * @phpstan-import-type DynamicRoutes from DataGenerator

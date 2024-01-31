@@ -10,6 +10,8 @@ use FastRoute\Dispatcher\Result\MethodNotAllowed;
 use FastRoute\Dispatcher\Result\NotMatched;
 
 /**
+ * @internal
+ *
  * @phpstan-import-type StaticRoutes from DataGenerator
  * @phpstan-import-type DynamicRouteChunk from DataGenerator
  * @phpstan-import-type DynamicRouteChunks from DataGenerator

@@ -9,6 +9,7 @@ use function assert;
 use function end;
 use function preg_match;
 
+/** @final */
 class CharCountBased extends RegexBasedAbstract
 {
     /** @inheritDoc */

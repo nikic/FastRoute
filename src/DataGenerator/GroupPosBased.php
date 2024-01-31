@@ -6,6 +6,7 @@ namespace FastRoute\DataGenerator;
 use function count;
 use function implode;
 
+/** @final */
 class GroupPosBased extends RegexBasedAbstract
 {
     protected function getApproxChunkSize(): int
