@@ -14,8 +14,8 @@ use function preg_match;
 use function preg_match_all;
 use function preg_split;
 use function rtrim;
+use function str_contains;
 use function strlen;
-use function strpos;
 use function substr;
 use function trim;
 
@@ -135,7 +135,7 @@ REGEX;
     private function guardAgainstCapturingGroupUsage(string $regex, string $variableName): void
     {
         // Needs to have at least a ( to contain a capturing group
-        if (strpos($regex, '(') === false) {
+        if (! str_contains($regex, '(')) {
             return;
         }
 
