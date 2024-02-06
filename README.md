@@ -27,7 +27,7 @@ Here's a basic usage example:
 
 require '/path/to/vendor/autoload.php';
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\ConfigureRoutes $r) {
     $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)
     $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
@@ -65,7 +65,7 @@ switch ($routeInfo[0]) {
 ### Defining routes
 
 The routes are defined by calling the `FastRoute\simpleDispatcher()` function, which accepts
-a callable taking a `FastRoute\RouteCollector` instance. The routes are added by calling
+a callable taking a `FastRoute\ConfigureRoutes` instance. The routes are added by calling
 `addRoute()` on the collector instance:
 
 ```php
@@ -147,7 +147,7 @@ Additionally, you can specify routes inside a group. All routes defined inside a
 For example, defining your routes as:
 
 ```php
-$r->addGroup('/admin', function (FastRoute\RouteCollector $r) {
+$r->addGroup('/admin', function (FastRoute\ConfigureRoutes $r) {
     $r->addRoute('GET', '/do-something', 'handler');
     $r->addRoute('GET', '/do-another-thing', 'handler');
     $r->addRoute('GET', '/do-something-else', 'handler');
@@ -173,7 +173,7 @@ routing data and construct the dispatcher from the cached information:
 ```php
 <?php
 
-$dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\cachedDispatcher(function(FastRoute\ConfigureRoutes $r) {
     $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
     $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
     $r->addRoute('GET', '/user/{name}', 'handler2');
@@ -275,7 +275,7 @@ through the options array:
 ```php
 <?php
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\ConfigureRoutes $r) {
     /* ... */
 }, [
     'routeParser' => 'FastRoute\\RouteParser\\Std',

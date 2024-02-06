@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace FastRoute\Test\Dispatcher;
 
+use FastRoute\ConfigureRoutes;
 use FastRoute\Dispatcher;
-use FastRoute\RouteCollector;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +30,7 @@ final class CachingTest extends TestCase
     public function createDispatcher(string $optionName = 'cacheKey'): Dispatcher
     {
         return cachedDispatcher(
-            static function (RouteCollector $collector): void {
+            static function (ConfigureRoutes $collector): void {
                 $collector->get('/testing', ['test']);
                 $collector->get('/admin/{page}', ['admin-page']);
             },

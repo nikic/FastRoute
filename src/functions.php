@@ -16,7 +16,8 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
      * @see FastRoute::recommendedSettings()
      * @see FastRoute::disableCache()
      *
-     * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<RouteCollector>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
+     * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
+     * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<ConfigureRoutes>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
      */
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
@@ -31,7 +32,8 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
      *
      * @see FastRoute::recommendedSettings()
      *
-     * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<RouteCollector>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
+     * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
+     * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<ConfigureRoutes>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
      */
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
@@ -52,7 +54,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
             $routeDefinitionCallback($routeCollector);
 
-            return $routeCollector->getData();
+            return $routeCollector->processedRoutes();
         };
 
         if ($options['cacheDisabled'] === true) {
