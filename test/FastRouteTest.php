@@ -16,9 +16,9 @@ final class FastRouteTest extends TestCase
     #[PHPUnit\Test]
     public function markShouldBeTheDefaultDispatcher(): void
     {
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
-            ->dispatcher('test');
+            ->dispatcher();
 
         self::assertInstanceOf(Dispatcher\MarkBased::class, $dispatcher);
     }
@@ -26,10 +26,10 @@ final class FastRouteTest extends TestCase
     #[PHPUnit\Test]
     public function canBeConfiguredToUseCharCountDispatcher(): void
     {
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
             ->useCharCountDispatcher()
-            ->dispatcher('test');
+            ->dispatcher();
 
         self::assertInstanceOf(Dispatcher\CharCountBased::class, $dispatcher);
     }
@@ -37,10 +37,10 @@ final class FastRouteTest extends TestCase
     #[PHPUnit\Test]
     public function canBeConfiguredToUseGroupPosDispatcher(): void
     {
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
             ->useGroupPosDispatcher()
-            ->dispatcher('test');
+            ->dispatcher();
 
         self::assertInstanceOf(Dispatcher\GroupPosBased::class, $dispatcher);
     }
@@ -48,10 +48,10 @@ final class FastRouteTest extends TestCase
     #[PHPUnit\Test]
     public function canBeConfiguredToUseGroupCountDispatcher(): void
     {
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
             ->useGroupCountDispatcher()
-            ->dispatcher('test');
+            ->dispatcher();
 
         self::assertInstanceOf(Dispatcher\GroupCountBased::class, $dispatcher);
     }
@@ -59,11 +59,11 @@ final class FastRouteTest extends TestCase
     #[PHPUnit\Test]
     public function canBeConfiguredToUseMarkDispatcher(): void
     {
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
             ->useCharCountDispatcher()
             ->useMarkDispatcher()
-            ->dispatcher('test');
+            ->dispatcher();
 
         self::assertInstanceOf(Dispatcher\MarkBased::class, $dispatcher);
     }
@@ -76,16 +76,16 @@ final class FastRouteTest extends TestCase
             public function get(string $key, callable $loader): array
             {
                 if ($key === 'test') {
-                    return [['GET' => ['/' => ['test2', ['test' => true]]]], []];
+                    return [['GET' => ['/' => ['test2', ['test' => true]]]], [], []];
                 }
 
                 throw new RuntimeException('This dummy implementation is not meant for other cases');
             }
         };
 
-        $dispatcher = FastRoute::recommendedSettings(self::routes(...))
-            ->withCache($cache)
-            ->dispatcher('test');
+        $dispatcher = FastRoute::recommendedSettings(self::routes(...), 'test2')
+            ->withCache($cache, 'test')
+            ->dispatcher();
 
         $result = $dispatcher->dispatch('GET', '/');
 
