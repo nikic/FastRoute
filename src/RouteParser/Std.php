@@ -27,6 +27,7 @@ use const PREG_SET_ORDER;
  *
  * "/user/{name}[/{id:[0-9]+}]"
  *
+ * @phpstan-import-type ParsedRoute from RouteParser
  * @final
  */
 class Std implements RouteParser
@@ -91,7 +92,7 @@ REGEX;
     /**
      * Parses a route string that does not contain optional segments.
      *
-     * @return array<string|array{0: string, 1:string}>
+     * @return ParsedRoute
      */
     private function parsePlaceholders(string $route): array
     {

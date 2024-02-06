@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace FastRoute;
 
 /**
+ * @phpstan-import-type ParsedRoute from RouteParser
  * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  * @phpstan-type StaticRoutes array<string, array<string, array{mixed, ExtraParameters}>>
  * @phpstan-type DynamicRouteChunk array{regex: string, suffix?: string, routeMap: array<int|string, array{mixed, array<string, string>, ExtraParameters}>}
@@ -21,8 +22,8 @@ interface DataGenerator
      * can be arbitrary data that will be returned when the route
      * matches.
      *
-     * @param array<string|array{0: string, 1:string}> $routeData
-     * @param ExtraParameters                          $extraParameters
+     * @param ParsedRoute     $routeData
+     * @param ExtraParameters $extraParameters
      */
     public function addRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): void;
 

@@ -6,6 +6,7 @@ namespace FastRoute\DataGenerator;
 use FastRoute\BadRouteException;
 use FastRoute\DataGenerator;
 use FastRoute\Route;
+use FastRoute\RouteParser;
 
 use function array_chunk;
 use function array_map;
@@ -24,6 +25,7 @@ use function round;
  * @phpstan-import-type DynamicRoutes from DataGenerator
  * @phpstan-import-type RouteData from DataGenerator
  * @phpstan-import-type ExtraParameters from DataGenerator
+ * @phpstan-import-type ParsedRoute from RouteParser
  */
 abstract class RegexBasedAbstract implements DataGenerator
 {
@@ -85,15 +87,15 @@ abstract class RegexBasedAbstract implements DataGenerator
         return $size;
     }
 
-    /** @param array<string|array{0: string, 1:string}> $routeData */
+    /** @param ParsedRoute $routeData */
     private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
     /**
-     * @param array<string|array{0: string, 1:string}> $routeData
-     * @param ExtraParameters                          $extraParameters
+     * @param ParsedRoute     $routeData
+     * @param ExtraParameters $extraParameters
      */
     private function addStaticRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters): void
     {
@@ -116,8 +118,8 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * @param array<string|array{0: string, 1:string}> $routeData
-     * @param ExtraParameters                          $extraParameters
+     * @param ParsedRoute     $routeData
+     * @param ExtraParameters $extraParameters
      */
     private function addVariableRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters): void
     {

@@ -11,6 +11,7 @@ use function preg_quote;
  * @internal
  *
  * @phpstan-import-type ExtraParameters from DataGenerator
+ * @phpstan-import-type ParsedRoute from RouteParser
  */
 class Route
 {
@@ -20,8 +21,8 @@ class Route
     public readonly array $variables;
 
     /**
-     * @param array<string|array{0: string, 1:string}> $routeData
-     * @param ExtraParameters                          $extraParameters
+     * @param ParsedRoute     $routeData
+     * @param ExtraParameters $extraParameters
      */
     public function __construct(
         public readonly string $httpMethod,
@@ -33,9 +34,9 @@ class Route
     }
 
     /**
-     * @param array<string|array{0: string, 1:string}> $routeData
+     * @param ParsedRoute $routeData
      *
-     * @return array{0: string, 1: array<string, string>}
+     * @return array{string, array<string, string>}
      */
     private static function extractRegex(array $routeData): array
     {

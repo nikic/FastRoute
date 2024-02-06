@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+/**
+ * @phpstan-type ParsedRoute array<string|array{string, string}>
+ * @phpstan-type ParsedRoutes list<ParsedRoute>
+ */
 interface RouteParser
 {
     /**
@@ -32,7 +36,7 @@ interface RouteParser
      *
      * @param string $route Route string to parse
      *
-     * @return list<array<string|array{0: string, 1:string}>> Array of route data arrays
+     * @return ParsedRoutes Array of route data arrays
      */
     public function parse(string $route): array;
 }
