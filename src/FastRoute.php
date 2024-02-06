@@ -6,8 +6,10 @@ namespace FastRoute;
 use Closure;
 use FastRoute\Cache\FileCache;
 
+use function assert;
 use function is_string;
 
+/** @phpstan-import-type RouteData from DataGenerator */
 final class FastRoute
 {
     /**
@@ -25,11 +27,12 @@ final class FastRoute
         private readonly string $dispatcher,
         private readonly string $routesConfiguration,
         private readonly Cache|string|null $cacheDriver,
+        private readonly ?string $cacheKey,
     ) {
     }
 
     /** @param Closure(ConfigureRoutes):void $routeDefinitionCallback */
-    public static function recommendedSettings(Closure $routeDefinitionCallback): self
+    public static function recommendedSettings(Closure $routeDefinitionCallback, string $cacheKey): self
     {
         return new self(
             $routeDefinitionCallback,
@@ -38,6 +41,7 @@ final class FastRoute
             Dispatcher\MarkBased::class,
             RouteCollector::class,
             FileCache::class,
+            $cacheKey,
         );
     }
 
@@ -50,11 +54,12 @@ final class FastRoute
             $this->dispatcher,
             $this->routesConfiguration,
             null,
+            null,
         );
     }
 
     /** @param Cache|class-string<Cache> $driver */
-    public function withCache(Cache|string $driver): self
+    public function withCache(Cache|string $driver, string $cacheKey): self
     {
         return new self(
             $this->routeDefinitionCallback,
@@ -63,6 +68,7 @@ final class FastRoute
             $this->dispatcher,
             $this->routesConfiguration,
             $driver,
+            $cacheKey,
         );
     }
 
@@ -99,10 +105,12 @@ final class FastRoute
             $dispatcher,
             $this->routesConfiguration,
             $this->cacheDriver,
+            $this->cacheKey,
         );
     }
 
-    public function dispatcher(string $cacheKey): Dispatcher
+    /** @return RouteData */
+    private function buildConfiguration(): array
     {
         $loader = function (): array {
             $configuredRoutes = new $this->routesConfiguration(
@@ -116,13 +124,20 @@ final class FastRoute
         };
 
         if ($this->cacheDriver === null) {
-            return new $this->dispatcher($loader());
+            return $loader();
         }
+
+        assert(is_string($this->cacheKey));
 
         $cache = is_string($this->cacheDriver)
             ? new $this->cacheDriver()
             : $this->cacheDriver;
 
-        return new $this->dispatcher($cache->get($cacheKey, $loader));
+        return $cache->get($this->cacheKey, $loader);
+    }
+
+    public function dispatcher(): Dispatcher
+    {
+        return new $this->dispatcher($this->buildConfiguration());
     }
 }
