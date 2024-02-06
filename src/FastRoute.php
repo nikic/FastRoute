@@ -11,11 +11,11 @@ use function is_string;
 final class FastRoute
 {
     /**
-     * @param Closure(RouteCollector):void   $routeDefinitionCallback
+     * @param Closure(ConfigureRoutes):void  $routeDefinitionCallback
      * @param class-string<RouteParser>      $routeParser
      * @param class-string<DataGenerator>    $dataGenerator
      * @param class-string<Dispatcher>       $dispatcher
-     * @param class-string<RouteCollector>   $routeCollector
+     * @param class-string<ConfigureRoutes>  $routesConfiguration
      * @param Cache|class-string<Cache>|null $cacheDriver
      */
     private function __construct(
@@ -23,12 +23,12 @@ final class FastRoute
         private readonly string $routeParser,
         private readonly string $dataGenerator,
         private readonly string $dispatcher,
-        private readonly string $routeCollector,
+        private readonly string $routesConfiguration,
         private readonly Cache|string|null $cacheDriver,
     ) {
     }
 
-    /** @param Closure(RouteCollector):void $routeDefinitionCallback */
+    /** @param Closure(ConfigureRoutes):void $routeDefinitionCallback */
     public static function recommendedSettings(Closure $routeDefinitionCallback): self
     {
         return new self(
@@ -48,7 +48,7 @@ final class FastRoute
             $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
-            $this->routeCollector,
+            $this->routesConfiguration,
             null,
         );
     }
@@ -61,7 +61,7 @@ final class FastRoute
             $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
-            $this->routeCollector,
+            $this->routesConfiguration,
             $driver,
         );
     }
@@ -97,7 +97,7 @@ final class FastRoute
             $this->routeParser,
             $dataGenerator,
             $dispatcher,
-            $this->routeCollector,
+            $this->routesConfiguration,
             $this->cacheDriver,
         );
     }
@@ -105,14 +105,14 @@ final class FastRoute
     public function dispatcher(string $cacheKey): Dispatcher
     {
         $loader = function (): array {
-            $collector = new $this->routeCollector(
+            $configuredRoutes = new $this->routesConfiguration(
                 new $this->routeParser(),
                 new $this->dataGenerator(),
             );
 
-            ($this->routeDefinitionCallback)($collector);
+            ($this->routeDefinitionCallback)($configuredRoutes);
 
-            return $collector->getData();
+            return $configuredRoutes->processedRoutes();
         };
 
         if ($this->cacheDriver === null) {

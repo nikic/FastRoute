@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Test;
 
+use FastRoute\ConfigureRoutes;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
@@ -59,7 +60,7 @@ final class RouteCollectorTest extends TestCase
         $r->put('/put', 'put');
         $r->options('/options', 'options');
 
-        $r->addGroup('/group-one', static function (RouteCollector $r): void {
+        $r->addGroup('/group-one', static function (ConfigureRoutes $r): void {
             $r->delete('/delete', 'delete');
             $r->get('/get', 'get');
             $r->head('/head', 'head');
@@ -68,7 +69,7 @@ final class RouteCollectorTest extends TestCase
             $r->put('/put', 'put');
             $r->options('/options', 'options');
 
-            $r->addGroup('/group-two', static function (RouteCollector $r): void {
+            $r->addGroup('/group-two', static function (ConfigureRoutes $r): void {
                 $r->delete('/delete', 'delete');
                 $r->get('/get', 'get');
                 $r->head('/head', 'head');
@@ -79,10 +80,10 @@ final class RouteCollectorTest extends TestCase
             });
         });
 
-        $r->addGroup('/admin', static function (RouteCollector $r): void {
+        $r->addGroup('/admin', static function (ConfigureRoutes $r): void {
             $r->get('-some-info', 'admin-some-info');
         });
-        $r->addGroup('/admin-', static function (RouteCollector $r): void {
+        $r->addGroup('/admin-', static function (ConfigureRoutes $r): void {
             $r->get('more-info', 'admin-more-info');
         });
 

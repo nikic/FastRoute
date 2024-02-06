@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace FastRoute\Test;
 
 use FastRoute\Cache;
+use FastRoute\ConfigureRoutes;
 use FastRoute\Dispatcher;
 use FastRoute\FastRoute;
-use FastRoute\RouteCollector;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -94,7 +94,7 @@ final class FastRouteTest extends TestCase
         self::assertSame(['test' => true], $result->extraParameters); // should use data from cache, not from loader
     }
 
-    private static function routes(RouteCollector $collector): void
+    private static function routes(ConfigureRoutes $collector): void
     {
         $collector->get('/', 'test');
     }

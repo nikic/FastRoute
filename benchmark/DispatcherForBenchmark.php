@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace FastRoute\Benchmark;
 
+use FastRoute\ConfigureRoutes;
 use FastRoute\DataGenerator;
 use FastRoute\Dispatcher;
-use FastRoute\RouteCollector;
 use RuntimeException;
 
 use function FastRoute\simpleDispatcher;
@@ -17,7 +17,7 @@ final class DispatcherForBenchmark
     public static function realLifeExample(string $dispatcher): Dispatcher
     {
         return simpleDispatcher(
-            static function (RouteCollector $routes): void {
+            static function (ConfigureRoutes $routes): void {
                 $routes->addRoute('GET', '/', ['name' => 'home']);
                 $routes->addRoute('GET', '/page/{page_slug:[a-zA-Z0-9\-]+}', ['name' => 'page.show']);
                 $routes->addRoute('GET', '/about-us', ['name' => 'about-us']);
@@ -68,7 +68,7 @@ final class DispatcherForBenchmark
     public static function manyRoutes(string $dispatcher, int $routeCount = 400): Dispatcher
     {
         return simpleDispatcher(
-            static function (RouteCollector $routes) use ($routeCount): void {
+            static function (ConfigureRoutes $routes) use ($routeCount): void {
                 for ($i = 0; $i < $routeCount; ++$i) {
                     $routes->addRoute('GET', '/abc' . $i, ['name' => 'static-' . $i]);
                     $routes->addRoute('GET', '/abc{foo}/' . $i, ['name' => 'not-static-' . $i]);
