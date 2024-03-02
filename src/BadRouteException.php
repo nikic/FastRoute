@@ -8,7 +8,7 @@ use LogicException;
 use function sprintf;
 
 /** @final */
-class BadRouteException extends LogicException
+class BadRouteException extends LogicException implements Exception
 {
     public static function alreadyRegistered(string $route, string $method): self
     {
