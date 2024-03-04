@@ -4,12 +4,10 @@ declare(strict_types=1);
 namespace FastRoute\Cache;
 
 use FastRoute\Cache;
-use FastRoute\DataGenerator;
 use Psr\SimpleCache\CacheInterface;
 
 use function is_array;
 
-/** @phpstan-import-type RouteData from DataGenerator */
 final class Psr16Cache implements Cache
 {
     public function __construct(private readonly CacheInterface $cache)

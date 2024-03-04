@@ -9,9 +9,12 @@ use FastRoute\Cache\FileCache;
 use function assert;
 use function is_string;
 
-/** @phpstan-import-type RouteData from DataGenerator */
+/** @phpstan-import-type ProcessedData from ConfigureRoutes */
 final class FastRoute
 {
+    /** @var ProcessedData|null */
+    private ?array $processedConfiguration = null;
+
     /**
      * @param Closure(ConfigureRoutes):void  $routeDefinitionCallback
      * @param class-string<RouteParser>      $routeParser
@@ -109,7 +112,7 @@ final class FastRoute
         );
     }
 
-    /** @return RouteData */
+    /** @return ProcessedData */
     private function buildConfiguration(): array
     {
         $loader = function (): array {
