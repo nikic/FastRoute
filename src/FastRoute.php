@@ -22,6 +22,7 @@ final class FastRoute
      * @param class-string<Dispatcher>       $dispatcher
      * @param class-string<ConfigureRoutes>  $routesConfiguration
      * @param Cache|class-string<Cache>|null $cacheDriver
+     * @param non-empty-string|null          $cacheKey
      */
     private function __construct(
         private readonly Closure $routeDefinitionCallback,
@@ -34,7 +35,10 @@ final class FastRoute
     ) {
     }
 
-    /** @param Closure(ConfigureRoutes):void $routeDefinitionCallback */
+    /**
+     * @param Closure(ConfigureRoutes):void $routeDefinitionCallback
+     * @param non-empty-string              $cacheKey
+     */
     public static function recommendedSettings(Closure $routeDefinitionCallback, string $cacheKey): self
     {
         return new self(
@@ -61,7 +65,10 @@ final class FastRoute
         );
     }
 
-    /** @param Cache|class-string<Cache> $driver */
+    /**
+     * @param Cache|class-string<Cache> $driver
+     * @param non-empty-string          $cacheKey
+     */
     public function withCache(Cache|string $driver, string $cacheKey): self
     {
         return new self(
