@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute\Test;
 
+use FastRoute\BadRouteException;
 use FastRoute\ConfigureRoutes;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
@@ -115,6 +116,46 @@ final class RouteCollectorTest extends TestCase
 
         self::assertObjectHasProperty('routes', $dataGenerator);
         self::assertSame($expected, $dataGenerator->routes);
+    }
+
+    #[PHPUnit\Test]
+    public function namedRoutesShouldBeRegistered(): void
+    {
+        $dataGenerator = self::dummyDataGenerator();
+
+        $r = new RouteCollector(new Std(), $dataGenerator);
+        $r->get('/', 'index-handler', ['_name' => 'index']);
+        $r->get('/users/me', 'fetch-user-handler', ['_name' => 'users.fetch']);
+
+        self::assertSame(['index' => [['/']], 'users.fetch' => [['/users/me']]], $r->processedRoutes()[2]);
+    }
+
+    #[PHPUnit\Test]
+    public function cannotDefineRouteWithEmptyName(): void
+    {
+        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+
+        $this->expectException(BadRouteException::class);
+        $r->get('/', 'index-handler', ['_name' => '']);
+    }
+
+    #[PHPUnit\Test]
+    public function cannotDefineRouteWithInvalidTypeAsName(): void
+    {
+        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+
+        $this->expectException(BadRouteException::class);
+        $r->get('/', 'index-handler', ['_name' => false]);
+    }
+
+    #[PHPUnit\Test]
+    public function cannotDefineDuplicatedRouteName(): void
+    {
+        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+
+        $this->expectException(BadRouteException::class);
+        $r->get('/', 'index-handler', ['_name' => 'index']);
+        $r->get('/users/me', 'fetch-user-handler', ['_name' => 'index']);
     }
 
     private static function dummyDataGenerator(): DataGenerator

@@ -3,14 +3,23 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+use function array_key_exists;
+use function array_reverse;
+use function is_string;
+
 /**
  * @phpstan-import-type ProcessedData from ConfigureRoutes
  * @phpstan-import-type ExtraParameters from DataGenerator
+ * @phpstan-import-type RoutesForUriGeneration from GenerateUri
+ * @phpstan-import-type ParsedRoutes from RouteParser
  * @final
  */
 class RouteCollector implements ConfigureRoutes
 {
     protected string $currentGroupPrefix = '';
+
+    /** @var RoutesForUriGeneration */
+    private array $namedRoutes = [];
 
     public function __construct(
         protected readonly RouteParser $routeParser,
@@ -31,6 +40,24 @@ class RouteCollector implements ConfigureRoutes
                 $this->dataGenerator->addRoute($method, $parsedRoute, $handler, $extraParameters);
             }
         }
+
+        if (array_key_exists(self::ROUTE_NAME, $extraParameters)) {
+            $this->registerNamedRoute($extraParameters[self::ROUTE_NAME], $parsedRoutes);
+        }
+    }
+
+    /** @param ParsedRoutes $parsedRoutes */
+    private function registerNamedRoute(mixed $name, array $parsedRoutes): void
+    {
+        if (! is_string($name) || $name === '') {
+            throw BadRouteException::invalidRouteName($name);
+        }
+
+        if (array_key_exists($name, $this->namedRoutes)) {
+            throw BadRouteException::namedRouteAlreadyDefined($name);
+        }
+
+        $this->namedRoutes[$name] = array_reverse($parsedRoutes);
     }
 
     public function addGroup(string $prefix, callable $callback): void
@@ -92,7 +119,10 @@ class RouteCollector implements ConfigureRoutes
     /** @inheritDoc */
     public function processedRoutes(): array
     {
-        return $this->dataGenerator->getData();
+        $data =  $this->dataGenerator->getData();
+        $data[] = $this->namedRoutes;
+
+        return $data;
     }
 
     /**

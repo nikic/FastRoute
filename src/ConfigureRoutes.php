@@ -7,7 +7,8 @@ namespace FastRoute;
  * @phpstan-import-type StaticRoutes from DataGenerator
  * @phpstan-import-type DynamicRoutes from DataGenerator
  * @phpstan-import-type ExtraParameters from DataGenerator
- * @phpstan-type ProcessedData array{StaticRoutes, DynamicRoutes}
+ * @phpstan-import-type RoutesForUriGeneration from GenerateUri
+ * @phpstan-type ProcessedData array{StaticRoutes, DynamicRoutes, RoutesForUriGeneration}
  */
 interface ConfigureRoutes
 {

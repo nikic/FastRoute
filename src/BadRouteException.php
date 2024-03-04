@@ -6,6 +6,7 @@ namespace FastRoute;
 use LogicException;
 
 use function sprintf;
+use function var_export;
 
 /** @final */
 class BadRouteException extends LogicException implements Exception
@@ -13,6 +14,16 @@ class BadRouteException extends LogicException implements Exception
     public static function alreadyRegistered(string $route, string $method): self
     {
         return new self(sprintf('Cannot register two routes matching "%s" for method "%s"', $route, $method));
+    }
+
+    public static function namedRouteAlreadyDefined(string $name): self
+    {
+        return new self(sprintf('Cannot register two routes under the name "%s"', $name));
+    }
+
+    public static function invalidRouteName(mixed $name): self
+    {
+        return new self(sprintf('Route name must be a non-empty string, "%s" given', var_export($name, true)));
     }
 
     public static function shadowedByVariableRoute(string $route, string $shadowedRegex, string $method): self
