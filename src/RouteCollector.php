@@ -24,7 +24,7 @@ class RouteCollector implements ConfigureRoutes
         $route = $this->currentGroupPrefix . $route;
         $parsedRoutes = $this->routeParser->parse($route);
 
-        $extraParameters = ['_route' => $route] + $extraParameters;
+        $extraParameters = [self::ROUTE_REGEX => $route] + $extraParameters;
 
         foreach ((array) $httpMethod as $method) {
             foreach ($parsedRoutes as $parsedRoute) {
