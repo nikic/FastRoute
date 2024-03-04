@@ -9,6 +9,9 @@ namespace FastRoute;
  */
 interface ConfigureRoutes
 {
+    public const ROUTE_NAME = '_name';
+    public const ROUTE_REGEX = '_route';
+
     /**
      * Registers a new route.
      *
