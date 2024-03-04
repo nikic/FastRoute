@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace FastRoute;
 
 /**
- * @phpstan-import-type RouteData from DataGenerator
+ * @phpstan-import-type StaticRoutes from DataGenerator
+ * @phpstan-import-type DynamicRoutes from DataGenerator
  * @phpstan-import-type ExtraParameters from DataGenerator
+ * @phpstan-type ProcessedData array{StaticRoutes, DynamicRoutes}
  */
 interface ConfigureRoutes
 {
@@ -104,7 +106,7 @@ interface ConfigureRoutes
     /**
      * Returns the processed aggregated route data.
      *
-     * @return RouteData
+     * @return ProcessedData
      */
     public function processedRoutes(): array;
 }

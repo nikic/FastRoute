@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace FastRoute;
 
 /**
- * @phpstan-import-type RouteData from DataGenerator
+ * @phpstan-import-type ProcessedData from ConfigureRoutes
  * @phpstan-import-type ExtraParameters from DataGenerator
  * @final
  */
@@ -100,7 +100,7 @@ class RouteCollector implements ConfigureRoutes
      *
      * @see ConfigureRoutes::processedRoutes()
      *
-     * @return RouteData
+     * @return ProcessedData
      */
     public function getData(): array
     {

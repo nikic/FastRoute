@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
-/** @phpstan-import-type RouteData from DataGenerator */
+/** @phpstan-import-type ProcessedData from ConfigureRoutes */
 interface Cache
 {
     /**
-     * @param callable():RouteData $loader
+     * @param callable():ProcessedData $loader
      *
-     * @return RouteData
+     * @return ProcessedData
      */
     public function get(string $key, callable $loader): array;
 }
