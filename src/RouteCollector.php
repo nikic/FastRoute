@@ -12,7 +12,6 @@ use function is_string;
  * @phpstan-import-type ExtraParameters from DataGenerator
  * @phpstan-import-type RoutesForUriGeneration from GenerateUri
  * @phpstan-import-type ParsedRoutes from RouteParser
- * @final
  */
 class RouteCollector implements ConfigureRoutes
 {

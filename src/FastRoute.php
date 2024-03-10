@@ -20,7 +20,7 @@ final class FastRoute
      * @param class-string<RouteParser>      $routeParser
      * @param class-string<DataGenerator>    $dataGenerator
      * @param class-string<Dispatcher>       $dispatcher
-     * @param class-string<ConfigureRoutes>  $routesConfiguration
+     * @param class-string<ConfigureRoutes>  $configureRoutes
      * @param class-string<GenerateUri>      $uriGenerator
      * @param Cache|class-string<Cache>|null $cacheDriver
      * @param non-empty-string|null          $cacheKey
@@ -30,7 +30,7 @@ final class FastRoute
         private readonly string $routeParser,
         private readonly string $dataGenerator,
         private readonly string $dispatcher,
-        private readonly string $routesConfiguration,
+        private readonly string $configureRoutes,
         private readonly string $uriGenerator,
         private readonly Cache|string|null $cacheDriver,
         private readonly ?string $cacheKey,
@@ -62,7 +62,7 @@ final class FastRoute
             $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
-            $this->routesConfiguration,
+            $this->configureRoutes,
             $this->uriGenerator,
             null,
             null,
@@ -80,7 +80,7 @@ final class FastRoute
             $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
-            $this->routesConfiguration,
+            $this->configureRoutes,
             $this->uriGenerator,
             $driver,
             $cacheKey,
@@ -118,7 +118,24 @@ final class FastRoute
             $this->routeParser,
             $dataGenerator,
             $dispatcher,
-            $this->routesConfiguration,
+            $this->configureRoutes,
+            $this->uriGenerator,
+            $this->cacheDriver,
+            $this->cacheKey,
+        );
+    }
+
+    /**
+     * @param class-string<ConfigureRoutes> $configureRoutes
+     */
+    public function useCustomConfigureRoutes(string $configureRoutes): self
+    {
+        return new self(
+            $this->routeDefinitionCallback,
+            $this->routeParser,
+            $this->dataGenerator,
+            $this->dispatcher,
+            $configureRoutes,
             $this->uriGenerator,
             $this->cacheDriver,
             $this->cacheKey,
@@ -133,7 +150,7 @@ final class FastRoute
             $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
-            $this->routesConfiguration,
+            $this->configureRoutes,
             $uriGenerator,
             $this->cacheDriver,
             $this->cacheKey,
@@ -141,21 +158,16 @@ final class FastRoute
     }
 
     /** @return ProcessedData */
-    private function buildConfiguration(): array
+    public function processedConfiguration(): array
     {
         if ($this->processedConfiguration !== null) {
             return $this->processedConfiguration;
         }
 
         $loader = function (): array {
-            $configuredRoutes = new $this->routesConfiguration(
-                new $this->routeParser(),
-                new $this->dataGenerator(),
-            );
-
-            ($this->routeDefinitionCallback)($configuredRoutes);
-
-            return $configuredRoutes->processedRoutes();
+            $configureRoutes = $this->configureRoutes();
+            ($this->routeDefinitionCallback)($configureRoutes);
+            return $configureRoutes->processedRoutes();
         };
 
         if ($this->cacheDriver === null) {
@@ -171,13 +183,21 @@ final class FastRoute
         return $this->processedConfiguration = $cache->get($this->cacheKey, $loader);
     }
 
+    public function configureRoutes(): ConfigureRoutes
+    {
+        return new $this->configureRoutes(
+            new $this->routeParser(),
+            new $this->dataGenerator(),
+        );
+    }
+
     public function dispatcher(): Dispatcher
     {
-        return new $this->dispatcher($this->buildConfiguration());
+        return new $this->dispatcher($this->processedConfiguration());
     }
 
     public function uriGenerator(): GenerateUri
     {
-        return new $this->uriGenerator($this->buildConfiguration()[2]);
+        return new $this->uriGenerator($this->processedConfiguration()[2]);
     }
 }
