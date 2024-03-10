@@ -8,6 +8,7 @@ use FastRoute\ConfigureRoutes;
 use FastRoute\Dispatcher;
 use FastRoute\FastRoute;
 use FastRoute\GenerateUri;
+use FastRoute\RouteCollector;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -108,6 +109,16 @@ final class FastRouteTest extends TestCase
             ->uriGenerator();
 
         self::assertInstanceOf(GenerateUri\FromProcessedConfiguration::class, $uriGenerator);
+    }
+
+    #[PHPUnit\Test]
+    public function configureRoutesCanBeOverridden(): void
+    {
+        $configureRoutes = FastRoute::recommendedSettings(self::routes(...), 'test')
+            ->useCustomConfigureRoutes(FakeRouteCollector::class)
+            ->configureRoutes();
+
+        self::assertInstanceOf(FakeRouteCollector::class, $configureRoutes);
     }
 
     #[PHPUnit\Test]
