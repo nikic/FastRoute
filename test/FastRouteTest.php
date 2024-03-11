@@ -119,6 +119,11 @@ final class FastRouteTest extends TestCase
             {
                 return '';
             }
+
+            public function with(array $processedConfiguration): self
+            {
+                return clone $this;
+            }
         };
 
         $uriGenerator = FastRoute::recommendedSettings(self::routes(...), 'test')

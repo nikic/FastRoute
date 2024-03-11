@@ -173,11 +173,13 @@ final class FastRoute
 
     public function dispatcher(): Dispatcher
     {
-        return new $this->dispatcher($this->buildConfiguration());
+        $dispatcher = new $this->dispatcher();
+        return $dispatcher->with($this->buildConfiguration());
     }
 
     public function uriGenerator(): GenerateUri
     {
-        return new $this->uriGenerator($this->buildConfiguration()[2]);
+        $uriGenerator = new $this->uriGenerator();
+        return $uriGenerator->with($this->buildConfiguration()[2]);
     }
 }
