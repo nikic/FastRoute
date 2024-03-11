@@ -150,12 +150,12 @@ final class FastRoute
         $loader = function (): array {
             $configuredRoutes = new $this->routesConfiguration(
                 new $this->routeParser(),
-                new $this->dataGenerator(),
             );
 
             ($this->routeDefinitionCallback)($configuredRoutes);
 
-            return $configuredRoutes->processedRoutes();
+            $dataGenerator = new $this->dataGenerator();
+            return $configuredRoutes->processedRoutes($dataGenerator);
         };
 
         if ($this->cacheDriver === null) {

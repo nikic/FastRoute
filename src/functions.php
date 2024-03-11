@@ -49,12 +49,11 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         $loader = static function () use ($routeDefinitionCallback, $options): array {
             $routeCollector = new $options['routeCollector'](
                 new $options['routeParser'](),
-                new $options['dataGenerator']()
             );
 
             $routeDefinitionCallback($routeCollector);
-
-            return $routeCollector->processedRoutes();
+            $dataGenerator = new $options['dataGenerator']();
+            return $routeCollector->processedRoutes($dataGenerator);
         };
 
         if ($options['cacheDisabled'] === true) {
