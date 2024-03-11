@@ -128,7 +128,7 @@ final class FastRouteTest extends TestCase
 
         $uriGenerator = FastRoute::recommendedSettings(self::routes(...), 'test')
             ->disableCache()
-            ->withUriGenerator($generator::class)
+            ->withUriGenerator($generator)
             ->uriGenerator();
 
         self::assertInstanceOf($generator::class, $uriGenerator);
