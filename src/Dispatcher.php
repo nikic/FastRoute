@@ -13,6 +13,8 @@ interface Dispatcher
     public const FOUND = 1;
     public const METHOD_NOT_ALLOWED = 2;
 
+    public function with(array $processedData): self;
+
     /**
      * Dispatches against the provided HTTP method verb and URI.
      *

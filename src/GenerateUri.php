@@ -12,6 +12,8 @@ use FastRoute\GenerateUri\UriCouldNotBeGenerated;
  */
 interface GenerateUri
 {
+    public function with(array $processedConfiguration): self;
+
     /**
      * @param UriSubstitutions $substitutions
      *

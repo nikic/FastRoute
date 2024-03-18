@@ -109,5 +109,5 @@ interface ConfigureRoutes
      *
      * @return ProcessedData
      */
-    public function processedRoutes(): array;
+    public function processedRoutes(DataGenerator $dataGenerator): array;
 }
