@@ -133,6 +133,7 @@ final class FromProcessedConfigurationTest extends TestCase
         };
 
         $protoGenerateUri = new GenerateUri\FromProcessedConfiguration();
+
         return $protoGenerateUri->with(array_map($parseRoutes, $routeMap));
     }
 }

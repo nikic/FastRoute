@@ -13,7 +13,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     /**
      * @deprecated since v2.0 and will be removed in v3.0
      *
-     * @see FastRoute::recommendedSettings()
+     * @see FastRoute::recommended()
      * @see FastRoute::disableCache()
      *
      * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
@@ -30,7 +30,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     /**
      * @deprecated since v2.0 and will be removed in v3.0
      *
-     * @see FastRoute::recommendedSettings()
+     * @see FastRoute::recommended()
      *
      * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
      * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<ConfigureRoutes>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
@@ -53,6 +53,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
             $routeDefinitionCallback($routeCollector);
             $dataGenerator = new $options['dataGenerator']();
+
             return $routeCollector->processedRoutes($dataGenerator);
         };
 

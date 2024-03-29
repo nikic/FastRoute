@@ -32,6 +32,7 @@ abstract class RegexBasedAbstract implements Dispatcher
         $clone = clone $this;
         $clone->staticRouteMap = $data[0];
         $clone->variableRouteData = $data[1];
+
         return $clone;
     }
 

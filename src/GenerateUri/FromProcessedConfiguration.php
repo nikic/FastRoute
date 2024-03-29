@@ -20,13 +20,15 @@ use function preg_match;
  */
 final class FromProcessedConfiguration implements GenerateUri
 {
-    /** @param RoutesForUriGeneration $processedConfiguration */
+    /** @var RoutesForUriGeneration $processedConfiguration */
     private array $processedConfiguration = [];
 
+    /** @param RoutesForUriGeneration $processedConfiguration */
     public function with(array $processedConfiguration): self
     {
         $clone = clone $this;
         $clone->processedConfiguration = $processedConfiguration;
+
         return $clone;
     }
 

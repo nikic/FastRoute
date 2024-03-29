@@ -7,12 +7,14 @@ use FastRoute\Dispatcher\Result\Matched;
 use FastRoute\Dispatcher\Result\MethodNotAllowed;
 use FastRoute\Dispatcher\Result\NotMatched;
 
+/** @phpstan-import-type ParsedRoutes from RouteParser */
 interface Dispatcher
 {
     public const NOT_FOUND = 0;
     public const FOUND = 1;
     public const METHOD_NOT_ALLOWED = 2;
 
+    /** @param ParsedRoutes $processedData */
     public function with(array $processedData): self;
 
     /**

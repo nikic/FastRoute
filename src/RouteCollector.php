@@ -21,6 +21,7 @@ class RouteCollector implements ConfigureRoutes
     /** @var RoutesForUriGeneration */
     private array $namedRoutes = [];
 
+    /** @var mixed[] */
     private array $addedRoutes = [];
 
     public function __construct(
@@ -125,6 +126,7 @@ class RouteCollector implements ConfigureRoutes
 
         $data =  $dataGenerator->getData();
         $data[] = $this->namedRoutes;
+
         return $data;
     }
 
