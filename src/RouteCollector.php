@@ -28,7 +28,7 @@ class RouteCollector implements ConfigureRoutes
     }
 
     /** @inheritDoc */
-    public function addRoute(string|array $httpMethod, string $route, mixed $handler, array $extraParameters = []): void
+    public function addRoute(string|array $httpMethod, string $route, mixed $handler, array $extraParameters = []): static
     {
         $route = $this->currentGroupPrefix . $route;
         $parsedRoutes = $this->routeParser->parse($route);
@@ -44,6 +44,8 @@ class RouteCollector implements ConfigureRoutes
         if (array_key_exists(self::ROUTE_NAME, $extraParameters)) {
             $this->registerNamedRoute($extraParameters[self::ROUTE_NAME], $parsedRoutes);
         }
+
+        return $this;
     }
 
     /** @param ParsedRoutes $parsedRoutes */
@@ -60,60 +62,62 @@ class RouteCollector implements ConfigureRoutes
         $this->namedRoutes[$name] = array_reverse($parsedRoutes);
     }
 
-    public function addGroup(string $prefix, callable $callback): void
+    public function addGroup(string $prefix, callable $callback): static
     {
         $previousGroupPrefix = $this->currentGroupPrefix;
         $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
+
+        return $this;
     }
 
     /** @inheritDoc */
-    public function any(string $route, mixed $handler, array $extraParameters = []): void
+    public function any(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('*', $route, $handler, $extraParameters);
+        return $this->addRoute('*', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function get(string $route, mixed $handler, array $extraParameters = []): void
+    public function get(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('GET', $route, $handler, $extraParameters);
+        return $this->addRoute('GET', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function post(string $route, mixed $handler, array $extraParameters = []): void
+    public function post(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('POST', $route, $handler, $extraParameters);
+        return $this->addRoute('POST', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function put(string $route, mixed $handler, array $extraParameters = []): void
+    public function put(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('PUT', $route, $handler, $extraParameters);
+        return $this->addRoute('PUT', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function delete(string $route, mixed $handler, array $extraParameters = []): void
+    public function delete(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('DELETE', $route, $handler, $extraParameters);
+        return $this->addRoute('DELETE', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function patch(string $route, mixed $handler, array $extraParameters = []): void
+    public function patch(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('PATCH', $route, $handler, $extraParameters);
+        return $this->addRoute('PATCH', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function head(string $route, mixed $handler, array $extraParameters = []): void
+    public function head(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('HEAD', $route, $handler, $extraParameters);
+        return $this->addRoute('HEAD', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
-    public function options(string $route, mixed $handler, array $extraParameters = []): void
+    public function options(string $route, mixed $handler, array $extraParameters = []): static
     {
-        $this->addRoute('OPTIONS', $route, $handler, $extraParameters);
+        return $this->addRoute('OPTIONS', $route, $handler, $extraParameters);
     }
 
     /** @inheritDoc */
