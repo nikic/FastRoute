@@ -52,5 +52,10 @@
         "branch-alias": {
             "dev-master": "2.0-dev"
         }
+    },
+    "scripts": {
+        "phpbench": "@php vendor/bin/phpbench run",
+        "phpstan": "@php vendor/bin/phpstan",
+        "phpunit": "@php vendor/bin/phpunit"
     }
 }
