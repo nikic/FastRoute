@@ -59,6 +59,8 @@
     },
     "scripts": {
         "phpbench": "@php vendor/bin/phpbench run",
+        "phpcbf": "@php vendor/bin/phpcbf",
+        "phpcs": "@php vendor/bin/phpcs",
         "phpstan": "@php vendor/bin/phpstan",
         "phpunit": "@php vendor/bin/phpunit"
     }
