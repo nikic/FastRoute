@@ -11,7 +11,6 @@ use FastRoute\RouteParser\Std;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
-use function assert;
 use function count;
 use function is_string;
 
@@ -20,17 +19,17 @@ final class RouteCollectorTest extends TestCase
     #[PHPUnit\Test]
     public function shortcutsCanBeUsedToRegisterRoutes(): void
     {
-        $dataGenerator = self::dummyDataGenerator();
-        $r = new RouteCollector(new Std(), $dataGenerator);
+        $r = self::routeCollector();
 
-        $r->any('/any', 'any');
-        $r->delete('/delete', 'delete');
-        $r->get('/get', 'get');
-        $r->head('/head', 'head');
-        $r->patch('/patch', 'patch');
-        $r->post('/post', 'post');
-        $r->put('/put', 'put');
-        $r->options('/options', 'options');
+        $r
+            ->any('/any', 'any')
+            ->delete('/delete', 'delete')
+            ->get('/get', 'get')
+            ->head('/head', 'head')
+            ->patch('/patch', 'patch')
+            ->post('/post', 'post')
+            ->put('/put', 'put')
+            ->options('/options', 'options');
 
         $expected = [
             ['*', '/any', 'any', ['_route' => '/any']],
@@ -43,47 +42,49 @@ final class RouteCollectorTest extends TestCase
             ['OPTIONS', '/options', 'options', ['_route' => '/options']],
         ];
 
-        self::assertObjectHasProperty('routes', $dataGenerator);
-        self::assertSame($expected, $dataGenerator->routes);
+        self::assertSame($expected, $r->processedRoutes()[0]);
     }
 
     #[PHPUnit\Test]
     public function routesCanBeGrouped(): void
     {
-        $dataGenerator = self::dummyDataGenerator();
-        $r = new RouteCollector(new Std(), $dataGenerator);
+        $r = self::routeCollector();
 
-        $r->delete('/delete', 'delete');
-        $r->get('/get', 'get');
-        $r->head('/head', 'head');
-        $r->patch('/patch', 'patch');
-        $r->post('/post', 'post');
-        $r->put('/put', 'put');
-        $r->options('/options', 'options');
+        $r
+            ->delete('/delete', 'delete')
+            ->get('/get', 'get')
+            ->head('/head', 'head')
+            ->patch('/patch', 'patch')
+            ->post('/post', 'post')
+            ->put('/put', 'put')
+            ->options('/options', 'options');
 
-        $r->addGroup('/group-one', static function (ConfigureRoutes $r): void {
-            $r->delete('/delete', 'delete');
-            $r->get('/get', 'get');
-            $r->head('/head', 'head');
-            $r->patch('/patch', 'patch');
-            $r->post('/post', 'post');
-            $r->put('/put', 'put');
-            $r->options('/options', 'options');
+        $r->addGroup('/group-one', static function (ConfigureRoutes $r1): void {
+            $r1
+                ->delete('/delete', 'delete')
+                ->get('/get', 'get')
+                ->head('/head', 'head')
+                ->patch('/patch', 'patch')
+                ->post('/post', 'post')
+                ->put('/put', 'put')
+                ->options('/options', 'options');
 
-            $r->addGroup('/group-two', static function (ConfigureRoutes $r): void {
-                $r->delete('/delete', 'delete');
-                $r->get('/get', 'get');
-                $r->head('/head', 'head');
-                $r->patch('/patch', 'patch');
-                $r->post('/post', 'post');
-                $r->put('/put', 'put');
-                $r->options('/options', 'options');
+            $r1->addGroup('/group-two', static function (ConfigureRoutes $r2): void {
+                $r2
+                    ->delete('/delete', 'delete')
+                    ->get('/get', 'get')
+                    ->head('/head', 'head')
+                    ->patch('/patch', 'patch')
+                    ->post('/post', 'post')
+                    ->put('/put', 'put')
+                    ->options('/options', 'options');
             });
         });
 
         $r->addGroup('/admin', static function (ConfigureRoutes $r): void {
             $r->get('-some-info', 'admin-some-info');
         });
+
         $r->addGroup('/admin-', static function (ConfigureRoutes $r): void {
             $r->get('more-info', 'admin-more-info');
         });
@@ -114,16 +115,14 @@ final class RouteCollectorTest extends TestCase
             ['GET', '/admin-more-info', 'admin-more-info', ['_route' => '/admin-more-info']],
         ];
 
-        self::assertObjectHasProperty('routes', $dataGenerator);
-        self::assertSame($expected, $dataGenerator->routes);
+        self::assertSame($expected, $r->processedRoutes()[0]);
     }
 
     #[PHPUnit\Test]
     public function namedRoutesShouldBeRegistered(): void
     {
-        $dataGenerator = self::dummyDataGenerator();
+        $r = self::routeCollector();
 
-        $r = new RouteCollector(new Std(), $dataGenerator);
         $r->get('/', 'index-handler', ['_name' => 'index']);
         $r->get('/users/me', 'fetch-user-handler', ['_name' => 'users.fetch']);
 
@@ -133,29 +132,37 @@ final class RouteCollectorTest extends TestCase
     #[PHPUnit\Test]
     public function cannotDefineRouteWithEmptyName(): void
     {
-        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+        $r = self::routeCollector();
 
         $this->expectException(BadRouteException::class);
+
         $r->get('/', 'index-handler', ['_name' => '']);
     }
 
     #[PHPUnit\Test]
     public function cannotDefineRouteWithInvalidTypeAsName(): void
     {
-        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+        $r = self::routeCollector();
 
         $this->expectException(BadRouteException::class);
+
         $r->get('/', 'index-handler', ['_name' => false]);
     }
 
     #[PHPUnit\Test]
     public function cannotDefineDuplicatedRouteName(): void
     {
-        $r = new RouteCollector(new Std(), self::dummyDataGenerator());
+        $r = self::routeCollector();
 
         $this->expectException(BadRouteException::class);
+
         $r->get('/', 'index-handler', ['_name' => 'index']);
         $r->get('/users/me', 'fetch-user-handler', ['_name' => 'index']);
+    }
+
+    private static function routeCollector(): ConfigureRoutes
+    {
+        return new RouteCollector(new Std(), self::dummyDataGenerator());
     }
 
     private static function dummyDataGenerator(): DataGenerator
@@ -163,18 +170,18 @@ final class RouteCollectorTest extends TestCase
         return new class implements DataGenerator
         {
             /** @var list<array{string, string, mixed, array<string, bool|float|int|string>}> */
-            public array $routes = [];
+            private array $routes = [];
 
             /** @inheritDoc */
             public function getData(): array
             {
-                return [[], []];
+                return [$this->routes, []];
             }
 
             /** @inheritDoc */
             public function addRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): void
             {
-                assert(count($routeData) === 1 && is_string($routeData[0]));
+                TestCase::assertTrue(count($routeData) === 1 && is_string($routeData[0]));
 
                 $this->routes[] = [$httpMethod, $routeData[0], $handler, $extraParameters];
             }
