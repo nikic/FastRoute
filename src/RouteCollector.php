@@ -31,7 +31,7 @@ class RouteCollector implements ConfigureRoutes
     public function addRoute(string|array $httpMethod, string $route, mixed $handler, array $extraParameters = []): void
     {
         $route = $this->currentGroupPrefix . $route;
-        $parsedRoutes = $this->routeParser->parse($route);
+        $parsedRoutes = array_reverse($this->routeParser->parse($route));
 
         $extraParameters = [self::ROUTE_REGEX => $route] + $extraParameters;
 
