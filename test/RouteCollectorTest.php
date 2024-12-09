@@ -90,6 +90,25 @@ class RouteCollectorTest extends TestCase
 
         $this->assertSame($expected, $r->routes);
     }
+
+    public function testOptionalRoutesCanBeUsed(): void
+    {
+        $r = new DummyRouteCollector();
+
+        $r->head('/head[/{optional}]', 'headHandler');
+        $r->get('/get[/{optional}/hello]', 'getHandler');
+        $r->post('/post[/{optional:.*}]', 'postHandler');
+        $r->delete('/delete[/{optional:.*}/hello]', 'deleteHandler');
+
+        $expected = [
+            ['HEAD', '/head[/{optional}]', 'headHandler'],
+            ['GET', '/get[/{optional}/hello]', 'getHandler'],
+            ['POST', '/post[/{optional:.*}]', 'postHandler'],
+            ['DELETE', '/delete[/{optional:.*}/hello]', 'deleteHandler'],
+        ];
+
+        self::assertSame($expected, $r->routes);
+    }
 }
 
 class DummyRouteCollector extends RouteCollector
