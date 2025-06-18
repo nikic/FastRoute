@@ -13,7 +13,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     /**
      * @deprecated since v2.0 and will be removed in v3.0
      *
-     * @see FastRoute::recommendedSettings()
+     * @see FastRoute::recommended()
      * @see FastRoute::disableCache()
      *
      * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
@@ -30,7 +30,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
     /**
      * @deprecated since v2.0 and will be removed in v3.0
      *
-     * @see FastRoute::recommendedSettings()
+     * @see FastRoute::recommended()
      *
      * @param callable(ConfigureRoutes):void                                                                                                                                                                                                                                                           $routeDefinitionCallback
      * @param array{routeParser?: class-string<RouteParser>, dataGenerator?: class-string<DataGenerator>, dispatcher?: class-string<Dispatcher>, routeCollector?: class-string<ConfigureRoutes>, cacheDisabled?: bool, cacheKey?: string, cacheFile?: string, cacheDriver?: class-string<Cache>|Cache} $options
@@ -49,16 +49,18 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         $loader = static function () use ($routeDefinitionCallback, $options): array {
             $routeCollector = new $options['routeCollector'](
                 new $options['routeParser'](),
-                new $options['dataGenerator']()
             );
 
             $routeDefinitionCallback($routeCollector);
+            $dataGenerator = new $options['dataGenerator']();
 
-            return $routeCollector->processedRoutes();
+            return $routeCollector->processedRoutes($dataGenerator);
         };
 
+        $protoDispatcher = new $options['dispatcher']();
+
         if ($options['cacheDisabled'] === true) {
-            return new $options['dispatcher']($loader());
+            return $protoDispatcher->with($loader());
         }
 
         $cacheKey = $options['cacheKey'] ?? $options['cacheFile'] ?? null;
@@ -73,6 +75,6 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             $cache = new $cache();
         }
 
-        return new $options['dispatcher']($cache->get($cacheKey, $loader));
+        return $protoDispatcher->with($cache->get($cacheKey, $loader));
     }
 }

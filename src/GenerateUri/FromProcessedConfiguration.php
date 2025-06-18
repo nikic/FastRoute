@@ -20,9 +20,16 @@ use function preg_match;
  */
 final class FromProcessedConfiguration implements GenerateUri
 {
+    /** @var RoutesForUriGeneration $processedConfiguration */
+    private array $processedConfiguration = [];
+
     /** @param RoutesForUriGeneration $processedConfiguration */
-    public function __construct(private readonly array $processedConfiguration)
+    public function with(array $processedConfiguration): self
     {
+        $clone = clone $this;
+        $clone->processedConfiguration = $processedConfiguration;
+
+        return $clone;
     }
 
     /** @inheritDoc */

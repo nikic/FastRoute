@@ -27,9 +27,13 @@ abstract class RegexBasedAbstract implements Dispatcher
     protected array $variableRouteData = [];
 
     /** @param RouteData $data */
-    public function __construct(array $data)
+    public function with(array $data): self
     {
-        [$this->staticRouteMap, $this->variableRouteData] = $data;
+        $clone = clone $this;
+        $clone->staticRouteMap = $data[0];
+        $clone->variableRouteData = $data[1];
+
+        return $clone;
     }
 
     /** @param DynamicRouteChunks $routeData */

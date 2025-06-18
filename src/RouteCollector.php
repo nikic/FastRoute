@@ -21,9 +21,11 @@ class RouteCollector implements ConfigureRoutes
     /** @var RoutesForUriGeneration */
     private array $namedRoutes = [];
 
+    /** @var mixed[] */
+    private array $addedRoutes = [];
+
     public function __construct(
         protected readonly RouteParser $routeParser,
-        protected readonly DataGenerator $dataGenerator,
     ) {
     }
 
@@ -32,12 +34,11 @@ class RouteCollector implements ConfigureRoutes
     {
         $route = $this->currentGroupPrefix . $route;
         $parsedRoutes = $this->routeParser->parse($route);
-
         $extraParameters = [self::ROUTE_REGEX => $route] + $extraParameters;
 
         foreach ((array) $httpMethod as $method) {
             foreach ($parsedRoutes as $parsedRoute) {
-                $this->dataGenerator->addRoute($method, $parsedRoute, $handler, $extraParameters);
+                $this->addedRoutes[] = [$method, $parsedRoute, $handler, $extraParameters];
             }
         }
 
@@ -117,9 +118,13 @@ class RouteCollector implements ConfigureRoutes
     }
 
     /** @inheritDoc */
-    public function processedRoutes(): array
+    public function processedRoutes(DataGenerator $dataGenerator): array
     {
-        $data =  $this->dataGenerator->getData();
+        foreach ($this->addedRoutes as $addedRoute) {
+            $dataGenerator->addRoute(...$addedRoute);
+        }
+
+        $data =  $dataGenerator->getData();
         $data[] = $this->namedRoutes;
 
         return $data;
