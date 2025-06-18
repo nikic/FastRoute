@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FastRoute;
 
+use FastRoute\GenerateUri\GeneratedUri;
 use FastRoute\GenerateUri\UriCouldNotBeGenerated;
 
 /**
@@ -17,5 +18,5 @@ interface GenerateUri
      *
      * @throws UriCouldNotBeGenerated
      */
-    public function forRoute(string $name, array $substitutions = []): string;
+    public function forRoute(string $name, array $substitutions = []): GeneratedUri;
 }
