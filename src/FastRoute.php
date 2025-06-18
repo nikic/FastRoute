@@ -17,7 +17,6 @@ final class FastRoute
 
     /**
      * @param Closure(ConfigureRoutes):void  $routeDefinitionCallback
-     * @param class-string<RouteParser>      $routeParser
      * @param class-string<DataGenerator>    $dataGenerator
      * @param class-string<Dispatcher>       $dispatcher
      * @param class-string<ConfigureRoutes>  $routesConfiguration
@@ -25,15 +24,14 @@ final class FastRoute
      * @param Cache|class-string<Cache>|null $cacheDriver
      * @param non-empty-string|null          $cacheKey
      */
-    private function __construct(
-        private readonly Closure $routeDefinitionCallback,
-        private readonly string $routeParser,
-        private readonly string $dataGenerator,
-        private readonly string $dispatcher,
-        private readonly string $routesConfiguration,
-        private readonly string $uriGenerator,
-        private readonly Cache|string|null $cacheDriver,
-        private readonly ?string $cacheKey,
+    public function __construct(
+        private Closure $routeDefinitionCallback,
+        private DataGenerator $dataGenerator,
+        private Dispatcher $dispatcher,
+        private ConfigureRoutes $routesConfiguration,
+        private GenerateUri $uriGenerator,
+        private ?Cache $cacheDriver,
+        private ?string $cacheKey,
     ) {
     }
 
@@ -45,12 +43,11 @@ final class FastRoute
     {
         return new self(
             $routeDefinitionCallback,
-            RouteParser\Std::class,
-            DataGenerator\MarkBased::class,
-            Dispatcher\MarkBased::class,
-            RouteCollector::class,
-            GenerateUri\FromProcessedConfiguration::class,
-            FileCache::class,
+            new DataGenerator\MarkBased(),
+            new Dispatcher\MarkBased(),
+            new RouteCollector(new RouteParser\Std()),
+            new GenerateUri\FromProcessedConfiguration,
+            new FileCache(),
             $cacheKey,
         );
     }
@@ -59,7 +56,6 @@ final class FastRoute
     {
         return new self(
             $this->routeDefinitionCallback,
-            $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
             $this->routesConfiguration,
@@ -73,11 +69,10 @@ final class FastRoute
      * @param Cache|class-string<Cache> $driver
      * @param non-empty-string          $cacheKey
      */
-    public function withCache(Cache|string $driver, string $cacheKey): self
+    public function withCache(Cache $driver, string $cacheKey): self
     {
         return new self(
             $this->routeDefinitionCallback,
-            $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
             $this->routesConfiguration,
@@ -89,33 +84,32 @@ final class FastRoute
 
     public function useCharCountDispatcher(): self
     {
-        return $this->useCustomDispatcher(DataGenerator\CharCountBased::class, Dispatcher\CharCountBased::class);
+        return $this->useCustomDispatcher(new DataGenerator\CharCountBased(), new Dispatcher\CharCountBased());
     }
 
     public function useGroupCountDispatcher(): self
     {
-        return $this->useCustomDispatcher(DataGenerator\GroupCountBased::class, Dispatcher\GroupCountBased::class);
+        return $this->useCustomDispatcher(new DataGenerator\GroupCountBased(), new Dispatcher\GroupCountBased());
     }
 
     public function useGroupPosDispatcher(): self
     {
-        return $this->useCustomDispatcher(DataGenerator\GroupPosBased::class, Dispatcher\GroupPosBased::class);
+        return $this->useCustomDispatcher(new DataGenerator\GroupPosBased(), new Dispatcher\GroupPosBased());
     }
 
     public function useMarkDispatcher(): self
     {
-        return $this->useCustomDispatcher(DataGenerator\MarkBased::class, Dispatcher\MarkBased::class);
+        return $this->useCustomDispatcher(new DataGenerator\MarkBased(), new Dispatcher\MarkBased());
     }
 
     /**
      * @param class-string<DataGenerator> $dataGenerator
      * @param class-string<Dispatcher>    $dispatcher
      */
-    public function useCustomDispatcher(string $dataGenerator, string $dispatcher): self
+    public function useCustomDispatcher(DataGenerator $dataGenerator, Dispatcher $dispatcher): self
     {
         return new self(
             $this->routeDefinitionCallback,
-            $this->routeParser,
             $dataGenerator,
             $dispatcher,
             $this->routesConfiguration,
@@ -126,11 +120,10 @@ final class FastRoute
     }
 
     /** @param class-string<GenerateUri> $uriGenerator */
-    public function withUriGenerator(string $uriGenerator): self
+    public function withUriGenerator(GenerateUri $uriGenerator): self
     {
         return new self(
             $this->routeDefinitionCallback,
-            $this->routeParser,
             $this->dataGenerator,
             $this->dispatcher,
             $this->routesConfiguration,
@@ -148,14 +141,8 @@ final class FastRoute
         }
 
         $loader = function (): array {
-            $configuredRoutes = new $this->routesConfiguration(
-                new $this->routeParser(),
-                new $this->dataGenerator(),
-            );
-
-            ($this->routeDefinitionCallback)($configuredRoutes);
-
-            return $configuredRoutes->processedRoutes();
+            ($this->routeDefinitionCallback)($this->routesConfiguration);
+            return $this->routesConfiguration->processedRoutes($this->dataGenerator);
         };
 
         if ($this->cacheDriver === null) {
@@ -164,20 +151,16 @@ final class FastRoute
 
         assert(is_string($this->cacheKey));
 
-        $cache = is_string($this->cacheDriver)
-            ? new $this->cacheDriver()
-            : $this->cacheDriver;
-
-        return $this->processedConfiguration = $cache->get($this->cacheKey, $loader);
+        return $this->processedConfiguration = $this->cacheDriver->get($this->cacheKey, $loader);
     }
 
     public function dispatcher(): Dispatcher
     {
-        return new $this->dispatcher($this->buildConfiguration());
+        return $this->dispatcher->with($this->buildConfiguration());
     }
 
     public function uriGenerator(): GenerateUri
     {
-        return new $this->uriGenerator($this->buildConfiguration()[2]);
+        return $this->uriGenerator->with($this->buildConfiguration()[2]);
     }
 }

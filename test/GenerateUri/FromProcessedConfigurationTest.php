@@ -152,6 +152,7 @@ final class FromProcessedConfigurationTest extends TestCase
             return array_reverse((new RouteParser\Std())->parse($route));
         };
 
-        return new GenerateUri\FromProcessedConfiguration(array_map($parseRoutes, $routeMap));
+        $protoGenerateUri = new GenerateUri\FromProcessedConfiguration();
+        return $protoGenerateUri->with(array_map($parseRoutes, $routeMap));
     }
 }

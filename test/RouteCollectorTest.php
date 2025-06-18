@@ -43,6 +43,7 @@ final class RouteCollectorTest extends TestCase
             ['OPTIONS', '/options', 'options', ['_route' => '/options']],
         ];
 
+        $r->processedRoutes($dataGenerator);
         self::assertObjectHasProperty('routes', $dataGenerator);
         self::assertSame($expected, $dataGenerator->routes);
     }
@@ -51,7 +52,7 @@ final class RouteCollectorTest extends TestCase
     public function routesCanBeGrouped(): void
     {
         $dataGenerator = self::dummyDataGenerator();
-        $r = new RouteCollector(new Std(), $dataGenerator);
+        $r = new RouteCollector(new Std());
 
         $r->delete('/delete', 'delete');
         $r->get('/get', 'get');
@@ -114,6 +115,7 @@ final class RouteCollectorTest extends TestCase
             ['GET', '/admin-more-info', 'admin-more-info', ['_route' => '/admin-more-info']],
         ];
 
+        $r->processedRoutes($dataGenerator);
         self::assertObjectHasProperty('routes', $dataGenerator);
         self::assertSame($expected, $dataGenerator->routes);
     }
@@ -123,11 +125,11 @@ final class RouteCollectorTest extends TestCase
     {
         $dataGenerator = self::dummyDataGenerator();
 
-        $r = new RouteCollector(new Std(), $dataGenerator);
+        $r = new RouteCollector(new Std());
         $r->get('/', 'index-handler', ['_name' => 'index']);
         $r->get('/users/me', 'fetch-user-handler', ['_name' => 'users.fetch']);
 
-        self::assertSame(['index' => [['/']], 'users.fetch' => [['/users/me']]], $r->processedRoutes()[2]);
+        self::assertSame(['index' => [['/']], 'users.fetch' => [['/users/me']]], $r->processedRoutes($dataGenerator)[2]);
     }
 
     #[PHPUnit\Test]
