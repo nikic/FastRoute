@@ -5,6 +5,7 @@ namespace FastRoute\Test\GenerateUri;
 
 use FastRoute\GenerateUri;
 use FastRoute\RouteParser;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
@@ -63,22 +64,22 @@ final class FromProcessedConfigurationTest extends TestCase
     {
         $generator = self::routeGeneratorFor(['archive.fetch' => '/archive/{username}[/{year}[/{month}[/{day}]]]']);
 
-        self::assertSame(
+        self::assertEquals(
             '/archive/test',
             $generator->forRoute('archive.fetch', ['username' => 'test']),
         );
 
-        self::assertSame(
+        self::assertEquals(
             '/archive/test/2024',
             $generator->forRoute('archive.fetch', ['username' => 'test', 'year' => '2024']),
         );
 
-        self::assertSame(
+        self::assertEquals(
             '/archive/test/2024/02',
             $generator->forRoute('archive.fetch', ['username' => 'test', 'year' => '2024', 'month' => '02']),
         );
 
-        self::assertSame(
+        self::assertEquals(
             '/archive/test/2024/02/01',
             $generator->forRoute(
                 'archive.fetch',
@@ -92,7 +93,7 @@ final class FromProcessedConfigurationTest extends TestCase
     {
         $generator = self::routeGeneratorFor(['post.fetch-special' => '/post/a-special-post']);
 
-        self::assertSame('/post/a-special-post', $generator->forRoute('post.fetch-special'));
+        self::assertEquals('/post/a-special-post', $generator->forRoute('post.fetch-special'));
     }
 
     #[PHPUnit\Test]
@@ -100,7 +101,7 @@ final class FromProcessedConfigurationTest extends TestCase
     {
         $generator = self::routeGeneratorFor(['post.fetch' => '/post/{id}']);
 
-        self::assertSame(
+        self::assertEquals(
             '/post/@something-that needs to be encoded 😁',
             $generator->forRoute('post.fetch', ['id' => '@something-that needs to be encoded 😁']),
         );
@@ -111,9 +112,28 @@ final class FromProcessedConfigurationTest extends TestCase
     {
         $generator = self::routeGeneratorFor(['post.fetch' => '/post/{id}']);
 
-        self::assertSame(
+        self::assertEquals(
             '/post/%40something%20that%20needs%20to%20be%20encoded%20%F0%9F%98%81',
             $generator->forRoute('post.fetch', ['id' => '%40something%20that%20needs%20to%20be%20encoded%20%F0%9F%98%81']),
+        );
+    }
+
+    #[PHPUnit\Test]
+    public function nonProcessedParametersAreRetrievable(): void
+    {
+        $generator = self::routeGeneratorFor(['post.fetch' => '/post/{id}']);
+        $generatedUri = $generator->forRoute('post.fetch', ['id' => 'testing', 'foo' => 'bar', 'baz' => 'foo']);
+
+        self::assertSame('/post/testing', $generatedUri->path);
+        self::assertSame(['foo' => 'bar', 'baz' => 'foo'], $generatedUri->unmatchedSubstitutions);
+        self::assertSame(
+            'https://api.my-company.dev:8080/post/testing?foo=bar&baz=foo',
+            (string) $generatedUri->asUri(
+                (new Uri())
+                    ->withScheme('https')
+                    ->withHost('api.my-company.dev')
+                    ->withPort(8080),
+            ),
         );
     }
 
@@ -122,7 +142,7 @@ final class FromProcessedConfigurationTest extends TestCase
     {
         $generator = self::routeGeneratorFor(['post.fetch' => '/post/{id:[\w\-\%]+}']);
 
-        self::assertSame('/post/bar-測試', $generator->forRoute('post.fetch', ['id' => 'bar-測試']));
+        self::assertEquals('/post/bar-測試', $generator->forRoute('post.fetch', ['id' => 'bar-測試']));
     }
 
     /** @param non-empty-array<non-empty-string, non-empty-string> $routeMap */

@@ -26,7 +26,7 @@ final class FromProcessedConfiguration implements GenerateUri
     }
 
     /** @inheritDoc */
-    public function forRoute(string $name, array $substitutions = []): string
+    public function forRoute(string $name, array $substitutions = []): GeneratedUri
     {
         if (! array_key_exists($name, $this->processedConfiguration)) {
             throw UriCouldNotBeGenerated::routeIsUndefined($name);
@@ -79,7 +79,7 @@ final class FromProcessedConfiguration implements GenerateUri
      * @param ParsedRoute      $parsedRoute
      * @param UriSubstitutions $substitutions
      */
-    private function generatePath(string $route, array $parsedRoute, array $substitutions): string
+    private function generatePath(string $route, array $parsedRoute, array $substitutions): GeneratedUri
     {
         $path = '';
 
@@ -97,8 +97,11 @@ final class FromProcessedConfiguration implements GenerateUri
             }
 
             $path .= $substitutions[$parameterName];
+            unset($substitutions[$parameterName]);
         }
 
-        return $path;
+        assert($path !== '');
+
+        return new GeneratedUri($path, $substitutions);
     }
 }

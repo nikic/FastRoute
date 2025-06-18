@@ -8,6 +8,7 @@ use FastRoute\ConfigureRoutes;
 use FastRoute\Dispatcher;
 use FastRoute\FastRoute;
 use FastRoute\GenerateUri;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -115,9 +116,9 @@ final class FastRouteTest extends TestCase
     {
         $generator = new class () implements GenerateUri {
             /** @inheritDoc */
-            public function forRoute(string $name, array $substitutions = []): string
+            public function forRoute(string $name, array $substitutions = []): GenerateUri\GeneratedUri
             {
-                return '';
+                return new GenerateUri\GeneratedUri('/', $substitutions);
             }
         };
 
@@ -159,10 +160,11 @@ final class FastRouteTest extends TestCase
         self::assertInstanceOf(Dispatcher\Result\Matched::class, $dispatcher->dispatch('POST', '/users/lcobucci'));
         self::assertInstanceOf(Dispatcher\Result\Matched::class, $dispatcher->dispatch('GET', '/posts/1234'));
 
-        self::assertSame('/users/lcobucci', $uriGenerator->forRoute('users', ['name' => 'lcobucci']));
-        self::assertSame('/posts/1234', $uriGenerator->forRoute('posts.fetch', ['id' => '1234']));
-        self::assertSame('/articles/2024', $uriGenerator->forRoute('articles.fetch', ['year' => '2024']));
-        self::assertSame('/articles/2024/02', $uriGenerator->forRoute('articles.fetch', ['year' => '2024', 'month' => '02']));
-        self::assertSame('/articles/2024/02/15', $uriGenerator->forRoute('articles.fetch', ['year' => '2024', 'month' => '02', 'day' => '15']));
+        self::assertEquals('/users/lcobucci', $uriGenerator->forRoute('users', ['name' => 'lcobucci']));
+        self::assertEquals('/posts/1234', $uriGenerator->forRoute('posts.fetch', ['id' => '1234']));
+        self::assertEquals('/articles/2024', $uriGenerator->forRoute('articles.fetch', ['year' => '2024']));
+        self::assertEquals('/articles/2024/02', $uriGenerator->forRoute('articles.fetch', ['year' => '2024', 'month' => '02']));
+        self::assertEquals('/articles/2024/02/15', $uriGenerator->forRoute('articles.fetch', ['year' => '2024', 'month' => '02', 'day' => '15']));
+        self::assertSame('/articles/2024/02/15?extra=value', (string) $uriGenerator->forRoute('articles.fetch', ['year' => '2024', 'month' => '02', 'day' => '15', 'extra' => 'value'])->asUri(new Uri()));
     }
 }
