@@ -329,6 +329,18 @@ abstract class DispatcherTestCase extends TestCase
         };
 
         yield 'options method is supported' => ['OPTIONS', '/about', $callback, 'handler0', [], ['_route' => '/about']];
+
+        $callback = static function (ConfigureRoutes $r): void {
+            $r->addRoute('GET', '/about[/{aboutwhat}[/location]]', 'handler0');
+        };
+
+        yield 'Paths can be placed after an optional placeholder' => ['GET', '/about/some/location', $callback, 'handler0', ['aboutwhat' => 'some'], ['_route' => '/about[/{aboutwhat}[/location]]']];
+
+        $callback = static function (ConfigureRoutes $r): void {
+            $r->addRoute('GET', '/about[/{aboutwhat:.*}[/location]]', 'handler0');
+        };
+
+        yield 'Paths can be placed after an unlimited optional placeholder' => ['GET', '/about/the/nested/location', $callback, 'handler0', ['aboutwhat' => 'the/nested'], ['_route' => '/about[/{aboutwhat:.*}[/location]]']];
     }
 
     /** @return iterable<string, array{string, string, Closure(ConfigureRoutes):void}> */

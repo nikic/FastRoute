@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
 
 use function array_map;
-use function array_reverse;
 
 /** @phpstan-import-type ParsedRoutes from RouteParser */
 final class FromProcessedConfigurationTest extends TestCase
@@ -149,7 +148,7 @@ final class FromProcessedConfigurationTest extends TestCase
     private static function routeGeneratorFor(array $routeMap): GenerateUri
     {
         $parseRoutes = static function (string $route): array {
-            return array_reverse((new RouteParser\Std())->parse($route));
+            return (new RouteParser\Std())->parse($route);
         };
 
         return new GenerateUri\FromProcessedConfiguration(array_map($parseRoutes, $routeMap));

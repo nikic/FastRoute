@@ -119,6 +119,26 @@ final class RouteCollectorTest extends TestCase
     }
 
     #[PHPUnit\Test]
+    public function optionalRoutesCanBeUsed(): void
+    {
+        $dataGenerator = self::dummyNestedDataGenerator();
+        $r = new RouteCollector(new Std(), $dataGenerator);
+
+        $r->any('/any[/{optional}]', 'optional');
+        $r->get('/any[/{optional}/hello]', 'optional');
+
+        $expected = [
+            ['*', ['/any/', ['optional', '[^/]+']], 'optional', ['_route' => '/any[/{optional}]']],
+            ['*', ['/any'], 'optional', ['_route' => '/any[/{optional}]']],
+            ['GET', ['/any/', ['optional', '[^/]+'], '/hello'], 'optional', ['_route' => '/any[/{optional}/hello]']],
+            ['GET', ['/any'], 'optional', ['_route' => '/any[/{optional}/hello]']],
+        ];
+
+        self::assertObjectHasProperty('routes', $dataGenerator);
+        self::assertSame($expected, $dataGenerator->routes);
+    }
+
+    #[PHPUnit\Test]
     public function namedRoutesShouldBeRegistered(): void
     {
         $dataGenerator = self::dummyDataGenerator();
@@ -177,6 +197,37 @@ final class RouteCollectorTest extends TestCase
                 assert(count($routeData) === 1 && is_string($routeData[0]));
 
                 $this->routes[] = [$httpMethod, $routeData[0], $handler, $extraParameters];
+            }
+        };
+    }
+
+    private static function dummyNestedDataGenerator(): DataGenerator
+    {
+        return new class implements DataGenerator
+        {
+            /** @var list<array{string, array<string|array{string, string}>, mixed, array<string, bool|float|int|string>}> */
+            public array $routes = [];
+
+            /** @inheritDoc */
+            public function getData(): array
+            {
+                return [[], []];
+            }
+
+            /** @inheritDoc */
+            public function addRoute(string $httpMethod, array $routeData, mixed $handler, array $extraParameters = []): void
+            {
+                $route = [$httpMethod];
+
+                $subroute = [];
+                foreach ($routeData as $data) {
+                    $subroute[] = $data;
+                }
+                $route[] = $subroute;
+
+                $route[] = $handler;
+                $route[] = $extraParameters;
+                $this->routes[] = $route;
             }
         };
     }

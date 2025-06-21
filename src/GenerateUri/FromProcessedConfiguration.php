@@ -8,6 +8,7 @@ use FastRoute\RouteParser;
 
 use function array_key_exists;
 use function array_keys;
+use function array_reverse;
 use function assert;
 use function count;
 use function is_string;
@@ -34,7 +35,7 @@ final class FromProcessedConfiguration implements GenerateUri
 
         $missingParameters = [];
 
-        foreach ($this->processedConfiguration[$name] as $parsedRoute) {
+        foreach (array_reverse($this->processedConfiguration[$name]) as $parsedRoute) {
             $missingParameters = $this->missingParameters($parsedRoute, $substitutions);
 
             // Only attempt to generate the path if we have the necessary info
