@@ -23,14 +23,14 @@ interface ConfigureRoutes
      * @param string|string[] $httpMethod
      * @param ExtraParameters $extraParameters
      */
-    public function addRoute(string|array $httpMethod, string $route, mixed $handler, array $extraParameters = []): void;
+    public function addRoute(string|array $httpMethod, string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Create a route group with a common prefix.
      *
      * All routes created by the passed callback will have the given group prefix prepended.
      */
-    public function addGroup(string $prefix, callable $callback): void;
+    public function addGroup(string $prefix, callable $callback): static;
 
     /**
      * Adds a fallback route to the collection
@@ -39,7 +39,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function any(string $route, mixed $handler, array $extraParameters = []): void;
+    public function any(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a GET route to the collection
@@ -48,7 +48,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function get(string $route, mixed $handler, array $extraParameters = []): void;
+    public function get(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a POST route to the collection
@@ -57,7 +57,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function post(string $route, mixed $handler, array $extraParameters = []): void;
+    public function post(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a PUT route to the collection
@@ -66,7 +66,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function put(string $route, mixed $handler, array $extraParameters = []): void;
+    public function put(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a DELETE route to the collection
@@ -75,7 +75,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function delete(string $route, mixed $handler, array $extraParameters = []): void;
+    public function delete(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a PATCH route to the collection
@@ -84,7 +84,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function patch(string $route, mixed $handler, array $extraParameters = []): void;
+    public function patch(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds a HEAD route to the collection
@@ -93,7 +93,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function head(string $route, mixed $handler, array $extraParameters = []): void;
+    public function head(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Adds an OPTIONS route to the collection
@@ -102,7 +102,7 @@ interface ConfigureRoutes
      *
      * @param ExtraParameters $extraParameters
      */
-    public function options(string $route, mixed $handler, array $extraParameters = []): void;
+    public function options(string $route, mixed $handler, array $extraParameters = []): static;
 
     /**
      * Returns the processed aggregated route data.

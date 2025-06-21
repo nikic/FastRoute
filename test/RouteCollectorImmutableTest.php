@@ -6,7 +6,7 @@ namespace FastRoute\Test;
 use FastRoute\BadRouteException;
 use FastRoute\ConfigureRoutes;
 use FastRoute\DataGenerator;
-use FastRoute\RouteCollector;
+use FastRoute\RouteCollectorImmutable;
 use FastRoute\RouteParser\Std;
 use PHPUnit\Framework\Attributes as PHPUnit;
 use PHPUnit\Framework\TestCase;
@@ -14,14 +14,14 @@ use PHPUnit\Framework\TestCase;
 use function count;
 use function is_string;
 
-final class RouteCollectorTest extends TestCase
+final class RouteCollectorImmutableTest extends TestCase
 {
     #[PHPUnit\Test]
     public function shortcutsCanBeUsedToRegisterRoutes(): void
     {
         $r = self::routeCollector();
 
-        $r
+        $immutable = $r
             ->any('/any', 'any')
             ->delete('/delete', 'delete')
             ->get('/get', 'get')
@@ -42,7 +42,7 @@ final class RouteCollectorTest extends TestCase
             ['OPTIONS', '/options', 'options', ['_route' => '/options']],
         ];
 
-        self::assertSame($expected, $r->processedRoutes()[0]);
+        self::assertSame($expected, $immutable->processedRoutes()[0]);
     }
 
     #[PHPUnit\Test]
@@ -50,7 +50,7 @@ final class RouteCollectorTest extends TestCase
     {
         $r = self::routeCollector();
 
-        $r
+        $immutable = $r
             ->delete('/delete', 'delete')
             ->get('/get', 'get')
             ->head('/head', 'head')
@@ -59,8 +59,8 @@ final class RouteCollectorTest extends TestCase
             ->put('/put', 'put')
             ->options('/options', 'options');
 
-        $r->addGroup('/group-one', static function (ConfigureRoutes $r1): void {
-            $r1
+        $immutable = $immutable->addGroup('/group-one', static function (ConfigureRoutes $r1): ConfigureRoutes {
+            $immutable1 = $r1
                 ->delete('/delete', 'delete')
                 ->get('/get', 'get')
                 ->head('/head', 'head')
@@ -69,8 +69,8 @@ final class RouteCollectorTest extends TestCase
                 ->put('/put', 'put')
                 ->options('/options', 'options');
 
-            $r1->addGroup('/group-two', static function (ConfigureRoutes $r2): void {
-                $r2
+            return $immutable1->addGroup('/group-two', static function (ConfigureRoutes $r2): ConfigureRoutes {
+                return $r2
                     ->delete('/delete', 'delete')
                     ->get('/get', 'get')
                     ->head('/head', 'head')
@@ -81,12 +81,12 @@ final class RouteCollectorTest extends TestCase
             });
         });
 
-        $r->addGroup('/admin', static function (ConfigureRoutes $r): void {
-            $r->get('-some-info', 'admin-some-info');
+        $immutable = $immutable->addGroup('/admin', static function (ConfigureRoutes $r): ConfigureRoutes {
+            return $r->get('-some-info', 'admin-some-info');
         });
 
-        $r->addGroup('/admin-', static function (ConfigureRoutes $r): void {
-            $r->get('more-info', 'admin-more-info');
+        $immutable = $immutable->addGroup('/admin-', static function (ConfigureRoutes $r): ConfigureRoutes {
+            return $r->get('more-info', 'admin-more-info');
         });
 
         $expected = [
@@ -115,7 +115,7 @@ final class RouteCollectorTest extends TestCase
             ['GET', '/admin-more-info', 'admin-more-info', ['_route' => '/admin-more-info']],
         ];
 
-        self::assertSame($expected, $r->processedRoutes()[0]);
+        self::assertSame($expected, $immutable->processedRoutes()[0]);
     }
 
     #[PHPUnit\Test]
@@ -123,10 +123,10 @@ final class RouteCollectorTest extends TestCase
     {
         $r = self::routeCollector();
 
-        $r->get('/', 'index-handler', ['_name' => 'index']);
-        $r->get('/users/me', 'fetch-user-handler', ['_name' => 'users.fetch']);
+        $immutable = $r->get('/', 'index-handler', ['_name' => 'index']);
+        $immutable = $immutable->get('/users/me', 'fetch-user-handler', ['_name' => 'users.fetch']);
 
-        self::assertSame(['index' => [['/']], 'users.fetch' => [['/users/me']]], $r->processedRoutes()[2]);
+        self::assertSame(['index' => [['/']], 'users.fetch' => [['/users/me']]], $immutable->processedRoutes()[2]);
     }
 
     #[PHPUnit\Test]
@@ -156,13 +156,13 @@ final class RouteCollectorTest extends TestCase
 
         $this->expectException(BadRouteException::class);
 
-        $r->get('/', 'index-handler', ['_name' => 'index']);
-        $r->get('/users/me', 'fetch-user-handler', ['_name' => 'index']);
+        $immutable = $r->get('/', 'index-handler', ['_name' => 'index']);
+        $immutable->get('/users/me', 'fetch-user-handler', ['_name' => 'index']);
     }
 
     private static function routeCollector(): ConfigureRoutes
     {
-        return new RouteCollector(new Std(), self::dummyDataGenerator());
+        return new RouteCollectorImmutable(new Std(), self::dummyDataGenerator());
     }
 
     private static function dummyDataGenerator(): DataGenerator
