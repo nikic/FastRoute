@@ -27,12 +27,7 @@ class GroupCountBased extends RegexBasedAbstract
                 $vars[$varName] = $matches[++$i];
             }
 
-            $result = new Matched();
-            $result->handler = $handler;
-            $result->variables = $vars;
-            $result->extraParameters = $extraParameters;
-
-            return $result;
+            return new Matched($handler, $vars, $extraParameters);
         }
 
         return null;

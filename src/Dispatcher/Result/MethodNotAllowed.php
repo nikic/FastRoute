@@ -9,13 +9,13 @@ use OutOfBoundsException;
 use RuntimeException;
 
 /** @implements ArrayAccess<int, Dispatcher::METHOD_NOT_ALLOWED|non-empty-list<string>> */
-final class MethodNotAllowed implements ArrayAccess
+final readonly class MethodNotAllowed implements ArrayAccess
 {
-    /**
-     * @readonly
-     * @var non-empty-list<string> $allowedMethods
-     */
-    public array $allowedMethods;
+    /** @param non-empty-list<string> $allowedMethods */
+    public function __construct(
+        public array $allowedMethods,
+    ) {
+    }
 
     public function offsetExists(mixed $offset): bool
     {

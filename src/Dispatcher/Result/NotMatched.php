@@ -9,7 +9,7 @@ use OutOfBoundsException;
 use RuntimeException;
 
 /** @implements ArrayAccess<int, Dispatcher::NOT_FOUND> */
-final class NotMatched implements ArrayAccess
+final readonly class NotMatched implements ArrayAccess
 {
     public function offsetExists(mixed $offset): bool
     {

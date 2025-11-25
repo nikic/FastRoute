@@ -13,22 +13,18 @@ use RuntimeException;
  * @phpstan-import-type ExtraParameters from DataGenerator
  * @implements ArrayAccess<int, Dispatcher::FOUND|mixed|array<string, string>>
  */
-final class Matched implements ArrayAccess
+final readonly class Matched implements ArrayAccess
 {
-    /** @readonly */
-    public mixed $handler;
-
     /**
-     * @readonly
-     * @var array<string, string> $variables
+     * @param array<string, string> $variables
+     * @param ExtraParameters       $extraParameters
      */
-    public array $variables = [];
-
-    /**
-     * @readonly
-     * @var ExtraParameters
-     */
-    public array $extraParameters = [];
+    public function __construct(
+        public mixed $handler,
+        public array $variables = [],
+        public array $extraParameters = [],
+    ) {
+    }
 
     public function offsetExists(mixed $offset): bool
     {

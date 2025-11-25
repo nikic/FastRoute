@@ -38,11 +38,11 @@ abstract class RegexBasedAbstract implements Dispatcher
     public function dispatch(string $httpMethod, string $uri): Matched|NotMatched|MethodNotAllowed
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
-            $result = new Matched();
-            $result->handler = $this->staticRouteMap[$httpMethod][$uri][0];
-            $result->extraParameters = $this->staticRouteMap[$httpMethod][$uri][1];
-
-            return $result;
+            return new Matched(
+                $this->staticRouteMap[$httpMethod][$uri][0],
+                [],
+                $this->staticRouteMap[$httpMethod][$uri][1],
+            );
         }
 
         if (isset($this->variableRouteData[$httpMethod])) {
@@ -55,11 +55,11 @@ abstract class RegexBasedAbstract implements Dispatcher
         // For HEAD requests, attempt fallback to GET
         if ($httpMethod === 'HEAD') {
             if (isset($this->staticRouteMap['GET'][$uri])) {
-                $result = new Matched();
-                $result->handler = $this->staticRouteMap['GET'][$uri][0];
-                $result->extraParameters = $this->staticRouteMap['GET'][$uri][1];
-
-                return $result;
+                return new Matched(
+                    $this->staticRouteMap['GET'][$uri][0],
+                    [],
+                    $this->staticRouteMap['GET'][$uri][1],
+                );
             }
 
             if (isset($this->variableRouteData['GET'])) {
@@ -72,11 +72,11 @@ abstract class RegexBasedAbstract implements Dispatcher
 
         // If nothing else matches, try fallback routes
         if (isset($this->staticRouteMap['*'][$uri])) {
-            $result = new Matched();
-            $result->handler = $this->staticRouteMap['*'][$uri][0];
-            $result->extraParameters = $this->staticRouteMap['*'][$uri][1];
-
-            return $result;
+            return new Matched(
+                $this->staticRouteMap['*'][$uri][0],
+                [],
+                $this->staticRouteMap['*'][$uri][1],
+            );
         }
 
         if (isset($this->variableRouteData['*'])) {
@@ -112,10 +112,7 @@ abstract class RegexBasedAbstract implements Dispatcher
 
         // If there are no allowed methods the route simply does not exist
         if ($allowedMethods !== []) {
-            $result = new MethodNotAllowed();
-            $result->allowedMethods = $allowedMethods;
-
-            return $result;
+            return new MethodNotAllowed($allowedMethods);
         }
 
         return new NotMatched();
