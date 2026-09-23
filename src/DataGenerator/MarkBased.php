@@ -24,7 +24,11 @@ class MarkBased extends RegexBasedAbstract
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
             $routeMap[$markName] = [$route->handler, $route->variables, $route->extraParameters];
 
-            ++$markName;
+            if (function_exists('str_increment')) {
+                $markName = str_increment($markName);
+            } else {
+                ++$markName;
+            }
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
