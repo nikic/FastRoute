@@ -18,7 +18,11 @@ class MarkBased extends RegexBasedAbstract
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
             $routeMap[$markName] = [$route->handler, $route->variables];
 
-            ++$markName;
+            if (PHP_VERSION_ID >= 80300) {
+                $markName = str_increment($markName);
+            } else {
+                ++$markName;
+            }
         }
 
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';

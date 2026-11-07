@@ -6,11 +6,11 @@ class CharCountBasedTest extends DispatcherTest
 {
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\CharCountBased';
+        return \FastRoute\Dispatcher\CharCountBased::class;
     }
 
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\CharCountBased';
+        return \FastRoute\DataGenerator\CharCountBased::class;
     }
 }

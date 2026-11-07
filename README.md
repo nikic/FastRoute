@@ -7,13 +7,17 @@ implementation works and why it is fast.][blog_post]
 Install
 -------
 
-To install with composer:
+For PHP 7.2.5 and above, install with composer 2.3:
 
 ```sh
 composer require nikic/fast-route
 ```
 
-Requires PHP 5.4 or newer.
+For PHP 5.4 to 7.2.4, install with composer 2.2 LTS:
+
+```sh
+COMPOSER=composer-2.2.json composer require nikic/fast-route
+```
 
 Usage
 -----

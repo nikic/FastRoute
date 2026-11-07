@@ -6,11 +6,11 @@ class GroupPosBasedTest extends DispatcherTest
 {
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\GroupPosBased';
+        return \FastRoute\Dispatcher\GroupPosBased::class;
     }
 
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\GroupPosBased';
+        return \FastRoute\DataGenerator\GroupPosBased::class;
     }
 }
