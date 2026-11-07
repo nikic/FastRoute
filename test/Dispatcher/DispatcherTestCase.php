@@ -329,6 +329,19 @@ abstract class DispatcherTestCase extends TestCase
         };
 
         yield 'options method is supported' => ['OPTIONS', '/about', $callback, 'handler0', [], ['_route' => '/about']];
+
+        $callback = static function (ConfigureRoutes $r): void {
+            $r->addRoute('GET', '/{x:a*}', 'handler0');
+        };
+
+        yield 'placeholder matching the empty string' => ['GET', '/', $callback, 'handler0', ['x' => ''], ['_route' => '/{x:a*}']];
+
+        $callback = static function (ConfigureRoutes $r): void {
+            $r->addRoute('GET', '/page/{rest:.*}', 'handler0');
+            $r->addRoute('GET', '/user/{id:\d+}', 'handler1');
+        };
+
+        yield 'empty placeholder match does not fall through to the next route' => ['GET', '/page/', $callback, 'handler0', ['rest' => ''], ['_route' => '/page/{rest:.*}']];
     }
 
     /** @return iterable<string, array{string, string, Closure(ConfigureRoutes):void}> */
