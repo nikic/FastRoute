@@ -4,7 +4,7 @@ namespace FastRoute\Dispatcher;
 
 class MarkBasedTest extends DispatcherTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         preg_match('/(*MARK:A)a/', 'a', $matches);
         if (!isset($matches['MARK'])) {
@@ -14,11 +14,11 @@ class MarkBasedTest extends DispatcherTest
 
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\MarkBased';
+        return \FastRoute\Dispatcher\MarkBased::class;
     }
 
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\MarkBased';
+        return \FastRoute\DataGenerator\MarkBased::class;
     }
 }
