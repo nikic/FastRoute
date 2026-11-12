@@ -8,6 +8,8 @@ use FastRoute\Dispatcher\Result\Matched;
 use function assert;
 use function preg_match;
 
+use const PREG_UNMATCHED_AS_NULL;
+
 /** @final */
 class GroupPosBased extends RegexBasedAbstract
 {
@@ -15,13 +17,14 @@ class GroupPosBased extends RegexBasedAbstract
     protected function dispatchVariableRoute(array $routeData, string $uri): ?Matched
     {
         foreach ($routeData as $data) {
-            if (preg_match($data['regex'], $uri, $matches) !== 1) {
+            if (preg_match($data['regex'], $uri, $matches, PREG_UNMATCHED_AS_NULL) !== 1) {
                 continue;
             }
 
-            // find first non-empty match
+            // find the first participating group; a group that matched the
+            // empty string is '' and must not be skipped
             // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFor
-            for ($i = 1; $matches[$i] === ''; ++$i) {
+            for ($i = 1; $matches[$i] === null; ++$i) {
             }
 
             assert(isset($i));
@@ -30,7 +33,10 @@ class GroupPosBased extends RegexBasedAbstract
 
             $vars = [];
             foreach ($varNames as $varName) {
-                $vars[$varName] = $matches[$i++];
+                $value = $matches[$i++];
+                assert($value !== null);
+
+                $vars[$varName] = $value;
             }
 
             $result = new Matched();
