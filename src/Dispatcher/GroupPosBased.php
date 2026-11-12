@@ -33,7 +33,10 @@ class GroupPosBased extends RegexBasedAbstract
 
             $vars = [];
             foreach ($varNames as $varName) {
-                $vars[$varName] = $matches[$i++];
+                $value = $matches[$i++];
+                assert($value !== null);
+
+                $vars[$varName] = $value;
             }
 
             $result = new Matched();
