@@ -7,8 +7,9 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         syntaxCheck="false"
          bootstrap="test/bootstrap.php"
+         verbose="true"
+         cacheResultFile=".phpunit.cache/test-results"
         >
     <testsuites>
         <testsuite name="FastRoute Tests">
@@ -16,9 +17,10 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
-            <directory>./src/</directory>
-        </whitelist>
-    </filter>
+    <coverage cacheDirectory=".phpunit.cache/code-coverage"
+              processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>
