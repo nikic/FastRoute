@@ -12,12 +12,12 @@ class GroupPosBased extends RegexBasedAbstract
     protected function dispatchVariableRoute($routeData, $uri)
     {
         foreach ($routeData as $data) {
-            if (!preg_match($data['regex'], $uri, $matches)) {
+            if (!preg_match($data['regex'], $uri, $matches, PREG_UNMATCHED_AS_NULL)) {
                 continue;
             }
 
             // find first non-empty match
-            for ($i = 1; '' === $matches[$i]; ++$i);
+            for ($i = 1; null === $matches[$i]; ++$i);
 
             list($handler, $varNames) = $data['routeMap'][$i];
 
